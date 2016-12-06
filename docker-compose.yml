@@ -18,6 +18,9 @@ services:
       - ./development/hub/metadata/saml20-sp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-hosted.php
       - ./development/hub/metadata/sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/sp-remote.php
 
+      # Overrice the initial SSOService.php file, to ensure this module is used
+      - ./sspoverrides/www_saml2_idp/SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
+
       # Utilize this module's files
       - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib
       - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
