@@ -22,7 +22,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
      */
     protected function log($message)
     {
-        SimpleSAML_Logger::info('SsphubIdPDisco.'.$this->instance.': '.$message);
+        SimpleSAML_Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
     }
 
     /**
@@ -40,7 +40,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         $metadataPath = __DIR__ . '/../../../metadata/';
 
-        $sessionDataType = 'ssphub:authentication';
+        $sessionDataType = 'sildisco:authentication';
         $sessionKey = 'spentityid';
         $spEntityId = $this->session->getData($sessionDataType, $sessionKey);
 
@@ -52,12 +52,13 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         if (sizeof($idpList) == 1) {
             $this->log(
-                'Choice made ['.$idpList[0].'] (Redirecting the user back. returnIDParam='.
+                'Choice made [' . array_keys($idpList)[0] . '] (Redirecting the user back. returnIDParam='.
                 $this->returnIdParam.')'
             );
+
             \SimpleSAML\Utils\HTTP::redirectTrustedURL(
                 $this->returnURL,
-                array($this->returnIdParam => $idpList[0])
+                array($this->returnIdParam => array_keys($idpList)[0])
             );
         }
 
