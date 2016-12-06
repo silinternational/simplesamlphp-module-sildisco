@@ -394,7 +394,7 @@ class sspmod_sildisco_IdP_SAML2 {
                  */
 
                 $session = SimpleSAML_Session::getSessionFromRequest();
-                $sessionDataType = 'ssphub:authentication';
+                $sessionDataType = 'sildisco:authentication';
                 $spIdKey = 'spentityid';
                 $session->setData($sessionDataType, $spIdKey, $spEntityId);
 
