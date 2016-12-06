@@ -21,5 +21,7 @@ $metadata['http://ssp-hub-idp2.local:8086'] = array(
 	 * Authentication source to use. Must be one that is configured in
 	 * 'config/authsources.php'.
 	 */
-	'auth' => 'mock-auth',
+	'auth' => 'admin',
+
+    'forSps' => ['http://ssp-hub-sp3.local'],
 );
