@@ -22,6 +22,4 @@ $metadata['http://ssp-hub-idp2.local:8086'] = array(
 	 * 'config/authsources.php'.
 	 */
 	'auth' => 'admin',
-
-    'forSps' => ['http://ssp-hub-sp3.local'],
 );
