@@ -6,7 +6,7 @@
  * Attribute filter for adding Idps to the session
  *
  */
-class sspmod_ssphub_Auth_Process_TrackIdps extends SimpleSAML_Auth_ProcessingFilter {
+class sspmod_sildisco_Auth_Process_TrackIdps extends SimpleSAML_Auth_ProcessingFilter {
 
     /**
      * Apply filter to save IDPs to session.

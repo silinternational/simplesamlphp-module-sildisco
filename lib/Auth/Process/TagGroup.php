@@ -7,7 +7,7 @@ use Sil\SspUtils\AuthSourcesUtils;
  * Attribute filter for prefixing group names
  *
  */
-class sspmod_ssphub_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFilter {
+class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFilter {
 
     /**
      * Apply filter to copy attributes.

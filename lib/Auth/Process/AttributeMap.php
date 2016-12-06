@@ -6,7 +6,7 @@
  * @author Olav Morken, UNINETT AS.
  * @package simpleSAMLphp
  */
-class sspmod_ssphub_Auth_Process_AttributeMap extends SimpleSAML_Auth_ProcessingFilter {
+class sspmod_sildisco_Auth_Process_AttributeMap extends SimpleSAML_Auth_ProcessingFilter {
 
 	/**
 	 * Assosiative array with the mappings of attribute names.
