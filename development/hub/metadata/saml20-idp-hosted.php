@@ -17,14 +17,17 @@ $metadata['ssp-hub.local'] = array(
 	'privatekey' => 'ssp-hub.pem',
 	'certificate' => 'ssp-hub.crt',
 
+    // User the SSOService.php file provided by the sildisco module
+    'SingleSignOnService' => '/module.php/sildisco/idp/SSOService.php',
+
 	/*
 	 * Authentication source to use. Must be one that is configured in
 	 * 'config/authsources.php'.
 	 */
-	'auth' => 'auth-choices',
+	'auth' => 'hub-discovery',
     'authproc' => [
         95 => [
-                  'class' =>'ssphub:TrackIdps',
+                  'class' =>'sildisco:TrackIdps',
               ]
     ],
 );
