@@ -1,13 +1,13 @@
 <?php
 
 // added by GTIS for use below
-use Sil\SspUtils\AuthSourcesUtils;
+use Sil\SspUtils\DiscoUtils;
 
 
 /**
  * IdP implementation for SAML 2.0 protocol.
  *
- * Copied from the built-in simplesamlphp module with an addition. 
+ * Copied from the built-in simplesamlphp module with an addition.
  *  See comment below about GTIS.
  *
  * @package SimpleSAMLphp
@@ -379,17 +379,17 @@ class sspmod_sildisco_IdP_SAML2 {
                  * to authenticate through any of the IDP's that have so far
                  * been used for authentication.
                  *
-                 * This is called from ...www/ssphub/idp/SSOService.php.  In order
+                 * This is called from ...www/sildisco/idp/SSOService.php.  In order
                  * for that to happen, the SP's idp-remote.php entry for
                  * the hub needs to use
-                 * .../ssphub/idp/SSOService.php for the SingleSignOnService entry
+                 * .../sildisco/idp/SSOService.php for the SingleSignOnService entry
                  *
                  * In order for this for this to avoid forcing authentication
                  * in every case, the hub's saml20-idp-hosted.php entry needs
                  * to include an authproc entry that adds each authenticating
                  * IDP to a list in the session.
                  * That list should be found in ...
-                 *    sessionDataType: 'ssphub:authentication'
+                 *    sessionDataType: 'sildisco:authentication'
                  *    sessionKey: 'authenticated_idps'
                  */
 
@@ -400,17 +400,17 @@ class sspmod_sildisco_IdP_SAML2 {
 
                 if ( ! $forceAuthn ) {
 
-                    $sessionDataType = 'ssphub:authentication';
+                    $sessionDataType = 'sildisco:authentication';
                     $sessionKey = 'authenticated_idps';
                     $authenticatedIdps = $session->getData($sessionDataType, $sessionKey);
-                    if ($authenticatedIdps) {
-                        $authSourcesConfig = SimpleSAML_Configuration::getConfig('authsources.php');
-                        $authSourcesConfig = $authSourcesConfig->toArray();
 
-                        $allowedIdps = AuthSourcesUtils::getIdpsForSpNoAuthState(
-                            $authSourcesConfig,
-                            $spEntityId,
-                            $spMetadata->toArray()
+                    if ($authenticatedIdps) {
+                        $metadataPath = __DIR__ . '/../../../../metadata/';
+
+                        $allowedIdps = DiscoUtils::getReducedIdpList(
+                            $authenticatedIdps,
+                            $metadataPath,
+                            $spEntityId
                         );
 
                         $overlappingIdps = array_intersect($authenticatedIdps, $allowedIdps);
