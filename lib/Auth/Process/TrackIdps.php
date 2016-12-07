@@ -15,9 +15,8 @@ class sspmod_sildisco_Auth_Process_TrackIdps extends SimpleSAML_Auth_ProcessingF
      */
     public function process(&$request) {
         // get the authenticating Idp and add it to the list of previous ones
-        $auth = new SimpleSAML_Auth_Simple("ssp-hub");
         $session = SimpleSAML_Session::getSessionFromRequest();
-        $sessionDataType = "ssphub:authentication";
+        $sessionDataType = "sildisco:authentication";
         $sessionKey = "authenticated_idps";
     
         $sessionValue = $session->getData($sessionDataType, $sessionKey);
@@ -27,7 +26,10 @@ class sspmod_sildisco_Auth_Process_TrackIdps extends SimpleSAML_Auth_ProcessingF
     
         // Will we need to wrap the idp in htmlspecialchars()
         $authIdps = $session->getAuthData("hub-discovery", "saml:AuthenticatingAuthority");
-        $sessionValue[] = $authIdps[0];
+
+        if ( ! in_array($authIdps[0], $sessionValue)) {
+            $sessionValue[] = $authIdps[0];
+        }
     
         $session->setData($sessionDataType, $sessionKey, $sessionValue); 
     }        
