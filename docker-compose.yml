@@ -1,8 +1,9 @@
 version: "2"
 services:
   hub:
-    image: silintl/ssp-base
+    build: .
     volumes:
+
       - ./development/run.sh:/data/run.sh
 
       # Utilize custom certs 
