@@ -14,7 +14,7 @@
     "php": ">=5.4",
     "roave/security-advisories": "dev-master",
     "simplesamlphp/composer-module-installer": "^1.1.5",
-    "silinternational/ssp-base": "dev-develop",
+    "simplesamlphp/simplesamlphp": "^1.14.10",
     "silinternational/php-env": "^0.2.0",
     "silinternational/ssp-utilities": "dev-develop"
   },
