@@ -398,6 +398,9 @@ class sspmod_sildisco_IdP_SAML2 {
                 $spIdKey = 'spentityid';
                 $session->setData($sessionDataType, $spIdKey, $spEntityId);
 
+                $metadataPath = __DIR__ . '/../../../../metadata';
+                $IDPList = array_keys(DiscoUtils::getIdpsForSp($spEntityId, $metadataPath));
+
                 if ( ! $forceAuthn ) {
 
                     $sessionDataType = 'sildisco:authentication';
@@ -413,8 +416,8 @@ class sspmod_sildisco_IdP_SAML2 {
                             $spEntityId
                         );
 
-                        $overlappingIdps = array_intersect($authenticatedIdps, $allowedIdps);
-                        if ( ! $overlappingIdps) {
+                        if ( ! $allowedIdps) {
+                            $IDPList = Null;
                             $forceAuthn = True;
                         }
                     } else { // If there are no authenticated IDPs
