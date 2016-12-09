@@ -515,11 +515,11 @@ $config = [
         ],
 
         // If no attributes are requested in the SP metadata, then these will be sent through
-        50 => [
-            'class' => 'core:AttributeLimit',
-            'default' => TRUE,
-            'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
-        ],
+//        50 => [
+  //          'class' => 'core:AttributeLimit',
+    //        'default' => TRUE,
+      //      'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
+        //],
         
         // Use the uid value to populate the nameid entry       
         60 => [
