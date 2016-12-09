@@ -45,9 +45,11 @@ class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFi
          * if there is a name entry, use that value.  Otherwise,
          * use the IDP's entity id.
          */
-        if (isset($idpEntry[self::IDP_CODE_KEY])) {
+        if (isset($idpEntry[self::IDP_CODE_KEY]) &&
+                is_string($idpEntry[self::IDP_CODE_KEY])) {
             $idp = $idpEntry[self::IDP_CODE_KEY];
-        } else if (isset($idpEntry[self::IDP_NAME_KEY])) {
+        } else if (isset($idpEntry[self::IDP_NAME_KEY]) &&
+                is_string($idpEntry[self::IDP_NAME_KEY])) {
             $idp = $idpEntry[self::IDP_NAME_KEY];
         } else {
             $idp = $samlIDP;
