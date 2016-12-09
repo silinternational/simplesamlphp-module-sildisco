@@ -1,13 +1,17 @@
 <?php
 
 
-use Sil\SspUtils\AuthSourcesUtils;
+use Sil\SspUtils\Metadata;
 
 /**
  * Attribute filter for prefixing group names
  *
  */
 class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFilter {
+
+    const IDP_NAME_KEY = 'name'; // the metadata key for the IDP's name
+
+    const IDP_CODE_KEY = 'IDPCode'; // the metadata key for the IDP's code (i.e. short name)
 
     /**
      * Apply filter to copy attributes.
@@ -27,25 +31,29 @@ class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFi
             return;
         }
 
-        // Get the potential IDPs from authsources.php
-        try {
-            $configPath = __DIR__ . '/../../../../../config';
-            $authSourcesConfig = AuthSourcesUtils::getAuthSourcesConfig($configPath);
-            $authIdps = AuthSourcesUtils::getIdpsFromAuthSources($authSourcesConfig);
-            $idpCodes = array_flip($authIdps);
-        } catch (\Exception $e) {
-            $idpCodes = [];
-        }
+        // Get the potential IDPs from idp remote metadata
+        $metadataPath = __DIR__ . '/../../../../../metadata';
+        $idpEntries = \Sil\SspUtils\Metadata::getIdpMetadataEntries($metadataPath);
         
         $newGroups = array();
         $samlIDP = $request["saml:sp:IdP"];
 
-        if (isset($idpCodes[$samlIDP])) {
-            $idp = $idpCodes[$samlIDP];
+        $idpEntry = $idpEntries[$samlIDP];
+
+        /*
+         *  If the IDP metadata has an IDPCode entry, use that value.  Otherwise,
+         * if there is a name entry, use that value.  Otherwise,
+         * use the IDP's entity id.
+         */
+        if (isset($idpEntry[self::IDP_CODE_KEY])) {
+            $idp = $idpEntry[self::IDP_CODE_KEY];
+        } else if (isset($idpEntry[self::IDP_NAME_KEY])) {
+            $idp = $idpEntry[self::IDP_NAME_KEY];
         } else {
             $idp = $samlIDP;
         }
 
+        $idp = str_replace(' ', '_', $idp);
         $delimiter = '|';
 
         foreach($attributes[$oid4member] as $group) {
