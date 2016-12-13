@@ -25,6 +25,7 @@ services:
       # Utilize this module's files
       - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib
       - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
+      - ./tests:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/tests
 
       # Configure the debugger
       - ./development/hub/run-debug.sh:/data/run-debug.sh
