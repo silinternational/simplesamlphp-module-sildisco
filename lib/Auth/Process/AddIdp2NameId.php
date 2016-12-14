@@ -15,22 +15,25 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
     const DELIMITER = '@'; // The symbol between the NameID proper and the Idp code.
 
-    const NAMEID_ATTR = 'saml:NameID'; // The attribute key for the NameID
+    const NAMEID_ATTR = 'saml:sp:NameID'; // The key for the NameID
 
     const VALUE_KEY = 'Value';  // The value key for the NamedID entry
 
     const ERROR_PREFIX = "AddIdp2NameId: "; // Text to go at the beginning of error messages
 
 
-    public function appendIdp(&$entry, $idpCode) {
+    public function appendIdp(&$state, $idpCode) {
 
-        if ( ! isset($entry[self::VALUE_KEY])) {
-            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
-                self::VALUE_KEY . "' key in NameID entry  for  " .
-                self::IDP_CODE_KEY . ".");
+        foreach ($state[self::NAMEID_ATTR] as &$nextEntry) {
+
+            if (!isset($nextEntry[self::VALUE_KEY])) {
+                throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
+                    self::VALUE_KEY . "' key in NameID entry  for  " .
+                    $idpCode . "."
+                );
+            }
+            $nextEntry[self::VALUE_KEY] = $nextEntry[self::VALUE_KEY] . self::DELIMITER . $idpCode;
         }
-
-        $entry[self::VALUE_KEY] = self::VALUE_KEY . self::DELIMITER . $idpCode;
     }
 
 
@@ -47,8 +50,8 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
         $samlIDP = $state[self::IDP_KEY];
 
-        if ( ! isset($state['Attributes'][self::NAMEID_ATTR]) ||
-            count($state['Attributes'][self::NAMEID_ATTR]) === 0) {
+        if ( ! isset($state[self::NAMEID_ATTR]) ||
+            count($state[self::NAMEID_ATTR]) === 0) {
             SimpleSAML_Logger::warning(
                 self::NAMEID_ATTR . ' attribute not available from ' .
                 $samlIDP . '.'
@@ -58,26 +61,37 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
         // Get the potential IDPs from idp remote metadata
         $metadataPath = __DIR__ . '/../../../../../metadata';
+
+        // If a unit test sends a different metadataPath, use it
+        if (isset($state['metadataPath'])) {
+            $metadataPath = $state['metadataPath'];
+        }
         $idpEntries = \Sil\SspUtils\Metadata::getIdpMetadataEntries($metadataPath);
 
         $idpEntry = $idpEntries[$samlIDP];
 
+        // The IDP metadata must have an IDPCode entry
         if ( ! isset($idpEntry[self::IDP_CODE_KEY])) {
             throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing required metadata entry: " .
                                                  self::IDP_CODE_KEY . ".");
         }
 
+        // IDPCode must be a non-empty string
         if ( ! is_string($idpEntry[self::IDP_CODE_KEY])) {
             throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Required metadata " .
-                "entry, " . self::IDP_CODE_KEY . ", must be a string.");
+                "entry, " . self::IDP_CODE_KEY . ", must be a non-empty string.");
+        }
+
+        // IDPCode must not have special characters in it
+        if ( ! preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
+            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Required metadata " .
+                "entry, " . self::IDP_CODE_KEY . ", must not be empty or contain anything except " .
+                "letters, numbers, hyphens and underscores.");
         }
 
         $idpCode = $idpEntry[self::IDP_CODE_KEY];
 
-        foreach ($state['Attributes'][self::NAMEID_ATTR] as $nextFormat => $nextEntry) {
-            self::appendIdp($nextEntry, $idpCode);
-        }
-
+        self::appendIdp($state, $idpCode);
     }
 
 }
