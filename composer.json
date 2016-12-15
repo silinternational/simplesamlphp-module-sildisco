@@ -1,7 +1,7 @@
 {
   "name": "silinternational/simplesamlphp-module-sildisco",
   "description": "IdP Discovery module for simpleSAMLphp with extra business logic",
-  "type": "library",
+  "type": "simplesamlphp-module",
   "license": "MIT",
   "authors": [
     {
