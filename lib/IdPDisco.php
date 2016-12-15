@@ -1,5 +1,6 @@
 <?php
 
+use Sil\SspUtils\AnnouncementUtils;
 use Sil\SspUtils\DiscoUtils;
 
 /**
@@ -70,6 +71,8 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->data['returnIDParam'] = $this->returnIdParam;
         $t->data['entityID'] = $this->spEntityId;
         $t->data['urlpattern'] = htmlspecialchars(\SimpleSAML\Utils\HTTP::getSelfURLNoQuery());
+        $t->data['announcement'] = AnnouncementUtils::getSimpleAnnouncement();
+
         $t->show();
     }
 
