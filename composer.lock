@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "4d3aee756b9911531962c7972a11d4da",
+    "hash": "e65679daebc0e1991715f09bbffd97cc",
     "content-hash": "1bb6a647293f6f6307b5f89cafab2e36",
     "packages": [
         {
@@ -264,12 +264,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/ssp-utilities.git",
-                "reference": "934ab927b1cc8d1b476712e92086252bd65fe616"
+                "reference": "273e448048f998e77106262514589a2b3d790f11"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/ssp-utilities/zipball/934ab927b1cc8d1b476712e92086252bd65fe616",
-                "reference": "934ab927b1cc8d1b476712e92086252bd65fe616",
+                "url": "https://api.github.com/repos/silinternational/ssp-utilities/zipball/273e448048f998e77106262514589a2b3d790f11",
+                "reference": "273e448048f998e77106262514589a2b3d790f11",
                 "shasum": ""
             },
             "require": {
@@ -298,7 +298,7 @@
                 }
             ],
             "description": "SimpleSAMLphp related utility classes",
-            "time": "2016-12-08 13:58:50"
+            "time": "2016-12-16 14:39:05"
         },
         {
             "name": "simplesamlphp/composer-module-installer",
