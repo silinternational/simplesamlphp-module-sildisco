@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "b3d1ab92eacf6059b24e760e207ad232",
-    "content-hash": "aab4f85b3606925097028deb8c15c6b3",
+    "hash": "e65679daebc0e1991715f09bbffd97cc",
+    "content-hash": "1bb6a647293f6f6307b5f89cafab2e36",
     "packages": [
         {
             "name": "psr/log",
@@ -60,12 +60,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/Roave/SecurityAdvisories.git",
-                "reference": "4c6b8ff984571203431e6116d2bdfaccc764d942"
+                "reference": "7f0d17c75373fa03b7425e7d8bb141a814d814ab"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/4c6b8ff984571203431e6116d2bdfaccc764d942",
-                "reference": "4c6b8ff984571203431e6116d2bdfaccc764d942",
+                "url": "https://api.github.com/repos/Roave/SecurityAdvisories/zipball/7f0d17c75373fa03b7425e7d8bb141a814d814ab",
+                "reference": "7f0d17c75373fa03b7425e7d8bb141a814d814ab",
                 "shasum": ""
             },
             "conflict": {
@@ -115,7 +115,7 @@
                 "silverstripe/framework": ">=3,<3.3",
                 "silverstripe/userforms": "<3",
                 "simplesamlphp/saml2": ">=1.9,<1.9.1|>=1.10,<1.10.3|>=2.3,<2.3.3",
-                "simplesamlphp/simplesamlphp": "<1.14.4",
+                "simplesamlphp/simplesamlphp": "<1.14.11",
                 "simplesamlphp/simplesamlphp-module-infocard": "<1.0.1",
                 "socalnick/scn-social-auth": "<1.15.2",
                 "swiftmailer/swiftmailer": ">=4,<4.99.99|>=5,<5.2.1",
@@ -183,7 +183,7 @@
                 }
             ],
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
-            "time": "2016-12-13 08:08:47"
+            "time": "2016-12-19 13:03:54"
         },
         {
             "name": "robrichards/xmlseclibs",
