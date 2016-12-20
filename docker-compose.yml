@@ -11,7 +11,7 @@ services:
 
       # Utilize custom configs
       - ./development/hub/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
-      - ./development/hub/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
+#      - ./development/hub/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
 
       # Utilize custom metadata
       - ./development/hub/metadata/idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/idp-remote.php
@@ -39,6 +39,7 @@ services:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
+      - ENABLE_HUB_AUTHPROCS=true
 
   idp1:
     image: silintl/ssp-base

@@ -265,12 +265,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/ssp-utilities.git",
-                "reference": "273e448048f998e77106262514589a2b3d790f11"
+                "reference": "741e95e7b258874d6646357fb314f49c0ea7f36f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/ssp-utilities/zipball/273e448048f998e77106262514589a2b3d790f11",
-                "reference": "273e448048f998e77106262514589a2b3d790f11",
+                "url": "https://api.github.com/repos/silinternational/ssp-utilities/zipball/741e95e7b258874d6646357fb314f49c0ea7f36f",
+                "reference": "741e95e7b258874d6646357fb314f49c0ea7f36f",
                 "shasum": ""
             },
             "require": {
@@ -299,7 +299,7 @@
                 }
             ],
             "description": "SimpleSAMLphp related utility classes",
-            "time": "2016-12-16 14:39:05"
+            "time": "2016-12-20 15:08:50"
         },
         {
             "name": "simplesamlphp/composer-module-installer",
