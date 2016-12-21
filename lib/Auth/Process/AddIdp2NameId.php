@@ -25,14 +25,19 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
     public function appendIdp(&$state, $idpCode) {
 
         foreach ($state[self::NAMEID_ATTR] as &$nextEntry) {
-
-            if (!isset($nextEntry[self::VALUE_KEY])) {
-                throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
-                    self::VALUE_KEY . "' key in NameID entry  for  " .
-                    $idpCode . "."
-                );
+            $suffix = self::DELIMITER . $idpCode;
+            
+            if (is_string($nextEntry)) {
+                $nextEntry .= $suffix;
+            } else {
+                if (!isset($nextEntry[self::VALUE_KEY])) {
+                    throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
+                        self::VALUE_KEY . "' key in NameID entry  for  " .
+                        $idpCode . "."
+                    );
+                }
+                $nextEntry[self::VALUE_KEY] = $nextEntry[self::VALUE_KEY] . $suffix;
             }
-            $nextEntry[self::VALUE_KEY] = $nextEntry[self::VALUE_KEY] . self::DELIMITER . $idpCode;
         }
     }
 
