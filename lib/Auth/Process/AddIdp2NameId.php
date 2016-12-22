@@ -15,30 +15,100 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
     const DELIMITER = '@'; // The symbol between the NameID proper and the Idp code.
 
-    const NAMEID_ATTR = 'saml:sp:NameID'; // The key for the NameID
+    const SP_NAMEID_ATTR = 'saml:sp:NameID'; // The key for the NameID
 
     const VALUE_KEY = 'Value';  // The value key for the NamedID entry
 
     const ERROR_PREFIX = "AddIdp2NameId: "; // Text to go at the beginning of error messages
 
+    const FORMAT_KEY = 'Format';
 
-    public function appendIdp(&$state, $idpCode) {
+    /**
+     * What NameQualifier should be used.
+     * Can be one of:
+     *  - a string: The qualifier to use.
+     *  - FALSE: Do not include a NameQualifier. This is the default.
+     *  - TRUE: Use the IdP entity ID.
+     *
+     * @var string|bool
+     */
+    private $nameQualifier;
 
-        foreach ($state[self::NAMEID_ATTR] as &$nextEntry) {
-            $suffix = self::DELIMITER . $idpCode;
-            
-            if (is_string($nextEntry)) {
-                $nextEntry .= $suffix;
-            } else {
-                if (!isset($nextEntry[self::VALUE_KEY])) {
-                    throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
-                        self::VALUE_KEY . "' key in NameID entry  for  " .
-                        $idpCode . "."
-                    );
-                }
-                $nextEntry[self::VALUE_KEY] = $nextEntry[self::VALUE_KEY] . $suffix;
-            }
+
+    /**
+     * What SPNameQualifier should be used.
+     * Can be one of:
+     *  - a string: The qualifier to use.
+     *  - FALSE: Do not include a SPNameQualifier.
+     *  - TRUE: Use the SP entity ID. This is the default.
+     *
+     * @var string|bool
+     */
+    private $spNameQualifier;
+
+
+    /**
+     * The format of this NameID.
+     *
+     * This property must be initialized the subclass.
+     *
+     * @var string
+     */
+    protected $format;
+
+
+    /**
+     * Initialize this filter, parse configuration.
+     *
+     * @param array $config  Configuration information about this filter.
+     * @param mixed $reserved  For future use.
+     */
+    public function __construct($config, $reserved) {
+        parent::__construct($config, $reserved);
+        assert('is_array($config)');
+
+        if (isset($config['NameQualifier'])) {
+            $this->nameQualifier = $config['NameQualifier'];
+        } else {
+            $this->nameQualifier = FALSE;
         }
+
+        if (isset($config['SPNameQualifier'])) {
+            $this->spNameQualifier = $config['SPNameQualifier'];
+        } else {
+            $this->spNameQualifier = TRUE;
+        }
+
+        $this->format = Null;
+        if ( ! empty($config[self::FORMAT_KEY])) {
+            $this->format = (string) $config[self::FORMAT_KEY];
+        }
+    }
+
+    /**
+     * @param $value array|string The NameID string or array (with a Value entry)
+     * @param $idpCode string
+     * @return array|string
+     * @throws SimpleSAML_Error_Exception
+     */
+    public function appendIdp($value, $idpCode) {
+
+        $suffix = self::DELIMITER . $idpCode;
+
+        if (is_string($value)) {
+            $value .= $suffix;
+            return $value;
+        }
+
+        if (!isset($value[self::VALUE_KEY])) {
+            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
+                self::VALUE_KEY . "' key in NameID entry  for  " .
+                $idpCode . "."
+            );
+        }
+
+        $value[self::VALUE_KEY] = $value[self::VALUE_KEY] . $suffix;
+        return $value;
     }
 
 
@@ -49,16 +119,12 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
      */
     public function process(&$state) {
         assert('is_array($state)');
-        assert('is_string($this->format)');
-        assert('array_key_exists("Attributes", $state)');
-
 
         $samlIDP = $state[self::IDP_KEY];
 
-        if ( ! isset($state[self::NAMEID_ATTR]) ||
-            count($state[self::NAMEID_ATTR]) === 0) {
+        if (empty($state[self::SP_NAMEID_ATTR])) {
             SimpleSAML_Logger::warning(
-                self::NAMEID_ATTR . ' attribute not available from ' .
+                self::SP_NAMEID_ATTR . ' attribute not available from ' .
                 $samlIDP . '.'
             );
             return;
@@ -96,7 +162,19 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
         $idpCode = $idpEntry[self::IDP_CODE_KEY];
 
-        self::appendIdp($state, $idpCode);
+        $nameId = $state[self::SP_NAMEID_ATTR];
+        $nameId = self::appendIdp($nameId, $idpCode);
+
+        $format =  'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
+
+        if ( ! empty($this->format)) {
+            $format = $this->format;
+        } elseif ( ! empty($nameId[self::FORMAT_KEY])) {
+            $format = $nameId[self::FORMAT_KEY];
+        }
+
+        $state['saml:NameID'][$format] = $nameId;
+
     }
 
 }

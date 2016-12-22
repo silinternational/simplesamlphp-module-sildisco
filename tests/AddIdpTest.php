@@ -81,21 +81,20 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
     public function testAddIdp2NameId_GoodString()
     {
         $config = ['test' => ['value1', 'value2']];
-        $request = [
+        $state = [
             'saml:sp:IdP' => 'idp-good',
-            'saml:sp:NameID' => [
-                'Tester1_SmithA',
-                'Tester1_SmithB',
-            ],
+            'saml:sp:NameID' => 'Tester1_SmithA',
             'Attributes' => [],
             'metadataPath' => __DIR__ . '/fixtures/metadata/',
         ];
 
-        $results = self::processAddIdp2NameId($config, $request);
-        $expected = $results;
-        $expected['saml:sp:NameID'][0] = 'Tester1_SmithA@idp-good';
-        $expected['saml:sp:NameID'][1] = 'Tester1_SmithB@idp-good';
+        $newNameID = $state['saml:sp:NameID'];
+        $newNameID = 'Tester1_SmithA@idp-good';
 
+        $expected = $state;
+        $expected['saml:NameID']['urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'] = $newNameID;
+
+        $results = self::processAddIdp2NameId($config, $state);
         $this->assertEquals($expected, $results);
     }
     /*
@@ -107,25 +106,21 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
         $state = [
             'saml:sp:IdP' => 'idp-good',
             'saml:sp:NameID' => [
-                [
-                    'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
-                    'Value' => 'Tester1_SmithA',
-                    'SPNameQualifier' => 'http://ssp-hub-sp.local',
-                ],
-                [
-                    'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:transient',
-                    'Value' => 'Tester1_SmithB',
-                    'SPNameQualifier' => 'http://ssp-hub-sp.local',
-                ],
+                'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:transient',
+                'Value' => 'Tester1_SmithA',
+                'SPNameQualifier' => 'http://ssp-hub-sp.local',
             ],
             'Attributes' => [],
             'metadataPath' => __DIR__ . '/fixtures/metadata/',
         ];
 
+        $newNameID = $state['saml:sp:NameID'];
+        $newNameID['Value'] = 'Tester1_SmithA@idp-good';
+
+        $expected = $state;
+        $expected['saml:NameID']['urn:oasis:names:tc:SAML:1.1:nameid-format:transient'] = $newNameID;
+
         $results = self::processAddIdp2NameId($config, $state);
-        $expected = $results;
-        $expected['saml:sp:NameID'][0]['Value'] = 'Tester1_SmithA@idp-good';
-        $expected['saml:sp:NameID'][1]['Value'] = 'Tester1_SmithB@idp-good';
 
         $this->assertEquals($expected, $results);
     }
