@@ -542,12 +542,8 @@ $config = [
         //    'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
 //        ],
         
-        // Use the uid value to populate the nameid entry       
-        60 => [
-            'class' => 'saml:AttributeNameID',
-            'attribute' => 'uid',
-            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
-        ],
+        // Append the Idp to the Name Id
+        60 => 'sildisco:AddIdp2NameId',
 
         /*
          * Search attribute "distinguishedName" for pattern and replaces if found
