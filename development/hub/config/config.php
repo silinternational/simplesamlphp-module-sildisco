@@ -789,9 +789,9 @@ $config = [
      * the 'certificate' and 'privatekey' option in the metadata will be used.
      * if those aren't set, signing of metadata will fail.
      */
-    'metadata.sign.privatekey' => 'ssp-hub.pem',
+    'metadata.sign.privatekey' => 'saml.pem',
     'metadata.sign.privatekey_pass' => null,
-    'metadata.sign.certificate' => 'ssp-hub.crt',
+    'metadata.sign.certificate' => 'saml.crt',
 
 
     /*
