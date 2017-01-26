@@ -18,7 +18,7 @@ $metadata['ssp-hub.local'] = array(
 	'certificate' => 'saml.crt',
 
     // User the SSOService.php file provided by the sildisco module
-    'SingleSignOnService' => 'sp-hub.local/module.php/sildisco/idp/SSOService.php',
+    'SingleSignOnService' => 'http://ssp-hub.local/saml2/idp/SSOService.php',
 
 	/*
 	 * Authentication source to use. Must be one that is configured in
