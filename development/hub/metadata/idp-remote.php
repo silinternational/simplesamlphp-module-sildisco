@@ -15,7 +15,7 @@ return [
         'metadata-set' => 'saml20-idp-remote',
         'entityid' => 'http://ssp-hub-idp.local:8085',
         'name' => 'IdP 1',
-        'IDPCode' => 'IDP1',
+        'IDPNamespace' => 'IDP1',
         'description'          => 'Local IDP for testing SSP Hub',
 
         'SingleSignOnService'  => 'http://ssp-hub-idp.local:8085/saml2/idp/SSOService.php',
@@ -34,7 +34,7 @@ return [
         'metadata-set' => 'saml20-idp-remote',
         'entityid' => 'http://ssp-hub-idp2.local:8086',
         'name' => 'IdP 2',
-        'IDPCode' => 'IDP2',
+        'IDPNamespace' => 'IDP2',
         'description'          => 'Local IDP2 for testing SSP Hub',
 
         'SingleSignOnService'  => 'http://ssp-hub-idp2.local:8086/saml2/idp/SSOService.php',

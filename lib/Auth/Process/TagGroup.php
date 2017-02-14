@@ -11,7 +11,8 @@ class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFi
 
     const IDP_NAME_KEY = 'name'; // the metadata key for the IDP's name
 
-    const IDP_CODE_KEY = 'IDPCode'; // the metadata key for the IDP's code (i.e. short name)
+    // the metadata key for the IDP's Namespace code (i.e. short name to be prefixed to groups)
+    const IDP_CODE_KEY = 'IDPNamespace'; 
 
     
     public function prependIdp2Groups($attributes, $attributeLabel, $idpLabel) {
@@ -59,7 +60,7 @@ class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFi
         $idpEntry = $idpEntries[$samlIDP];
 
         /*
-         *  If the IDP metadata has an IDPCode entry, use that value.  Otherwise,
+         *  If the IDP metadata has an IDPNamespace entry, use that value.  Otherwise,
          * if there is a name entry, use that value.  Otherwise,
          * use the IDP's entity id.
          */

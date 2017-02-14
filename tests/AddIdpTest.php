@@ -34,10 +34,10 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * Test with IdP metadata not having an IDPCode entry
+     * Test with IdP metadata not having an IDPNamespace entry
      * @expectedException SimpleSAML_Error_Exception
      */
-    public function testAddIdp2NameId_NoIDPCode()
+    public function testAddIdp2NameId_NoIDPNamespace()
     {
         $this->setExpectedException('SimpleSAML_Error_Exception');
         $config = [ 'test' => ['value1', 'value2'], ];
@@ -48,10 +48,10 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
 
 
     /*
-     * Test with IdP metadata not having an IDPCode entry
+     * Test with IdP metadata not having an IDPNamespace entry
      * @expectedException SimpleSAML_Error_Exception
      */
-    public function testAddIdp2NameId_EmptyIDPCode()
+    public function testAddIdp2NameId_EmptyIDPNamespace()
     {
         $this->setExpectedException('SimpleSAML_Error_Exception');
         $config = [ 'test' => ['value1', 'value2'], ];
@@ -60,10 +60,10 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
     }
 
     /*
-     * Test with IdP metadata not having an IDPCode entry
+     * Test with IdP metadata not having an IDPNamespace entry
      * @expectedException SimpleSAML_Error_Exception
      */
-    public function testAddIdp2NameId_BadIDPCode()
+    public function testAddIdp2NameId_BadIDPNamespace()
     {
         $this->setExpectedException('SimpleSAML_Error_Exception');
         $config = [
@@ -76,7 +76,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
 
 
     /*
-     * Test with IdP metadata having a good IDPCode entry
+     * Test with IdP metadata having a good IDPNamespace entry
      */
     public function testAddIdp2NameId_GoodString()
     {
@@ -89,7 +89,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
         ];
 
         $newNameID = $state['saml:sp:NameID'];
-        $newNameID = 'Tester1_SmithA@idp-good';
+        $newNameID = 'Tester1_SmithA@idpGood';
 
         $expected = $state;
         $expected['saml:NameID']['urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified'] = $newNameID;
@@ -98,7 +98,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
         $this->assertEquals($expected, $results);
     }
     /*
-     * Test with IdP metadata having a good IDPCode entry
+     * Test with IdP metadata having a good IDPNamespace entry
      */
     public function testAddIdp2NameId_GoodArray()
     {
@@ -115,7 +115,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
         ];
 
         $newNameID = $state['saml:sp:NameID'];
-        $newNameID['Value'] = 'Tester1_SmithA@idp-good';
+        $newNameID['Value'] = 'Tester1_SmithA@idpGood';
 
         $expected = $state;
         $expected['saml:NameID']['urn:oasis:names:tc:SAML:1.1:nameid-format:transient'] = $newNameID;
