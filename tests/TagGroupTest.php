@@ -82,4 +82,25 @@ class TagGroupTest extends PHPUnit_Framework_TestCase
         $results = self::processTagGroup($config, $request);
         $this->assertEquals($expected, $results);
     }
+
+    /*
+     * Test with oid key for groups
+     * @expectedException SimpleSAML_Error_Exception
+     */
+    public function testTagGroup_IdpGood()
+    {
+        $config = [ 'test' => ['value1', 'value2'], ];
+        $request = [
+            "saml:sp:IdP" => 'idp-good',
+            "Attributes" => [
+                'urn:oid:2.5.4.31' => ['ADMINS'],
+            ],
+            'metadataPath' => __DIR__ . '/fixtures/metadata/',
+        ];
+
+        $expected = $request;
+        $expected["Attributes"]['urn:oid:2.5.4.31'] = ['idp|idpGood|ADMINS'];
+        $results = self::processTagGroup($config, $request);
+        $this->assertEquals($expected, $results);
+    }
 }
