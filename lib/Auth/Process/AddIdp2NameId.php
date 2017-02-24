@@ -4,7 +4,12 @@
 use Sil\SspUtils\Metadata;
 
 /**
- * Attribute filter for prefixing group names
+ * Attribute filter for appending IDPNamespace to the NameID.
+ * The IdP must have a IDPNamespace entry in its metadata.
+ *
+ * Also, for this to work, the SP needs to include a line in its 
+ * authsources.php file in the IdP's entry ...
+ *   'NameIDPolicy' => "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
  *
  */
 class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_ProcessingFilter {
