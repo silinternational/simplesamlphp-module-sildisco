@@ -162,3 +162,50 @@ services:
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
+      
+  hub4tests:
+    build: .
+    volumes:
+
+      - ./development/run.sh:/data/run.sh
+
+      # Utilize custom certs 
+      - ./development/hub4tests/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
+
+      # Utilize custom configs
+      - ./development/hub4tests/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
+#      - ./development/hub4tests/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
+
+      # Utilize custom metadata
+      - ./development/hub4tests/metadata/idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/idp-remote.php
+      - ./development/hub4tests/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
+      - ./development/hub4tests/metadata/saml20-sp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-hosted.php
+      - ./development/hub4tests/metadata/sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/sp-remote.php
+
+      # Override the initial SSOService.php file, to ensure this module is used
+      - ./sspoverrides/www_saml2_idp/SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
+
+      # Utilize this module's files
+      - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib
+      - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
+      - ./tests:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/tests
+
+      # Configure the debugger
+      - ./development/hub4tests/run-debug.sh:/data/run-debug.sh
+    command: /data/run.sh 
+    ports:
+      - "8090:80"
+    environment:
+      - ADMIN_EMAIL=john_doe@there.com
+      - ADMIN_PASS=1234qwer
+      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECURE_COOKIE=false
+      - ADMIN_PROTECT_INDEX_PAGE=false
+      - SHOW_SAML_ERRORS=true
+      - ENABLE_HUB_AUTHPROCS=true     
+
+
+  browser_test:
+    build: ./development/browser_test/
+    ports:
+      - "8091:80"      
