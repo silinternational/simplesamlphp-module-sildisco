@@ -192,7 +192,7 @@ services:
 
       # Configure the debugger
       - ./development/hub4tests/run-debug.sh:/data/run-debug.sh
-    command: /data/run.sh 
+    command: /data/run-debug.sh 
     ports:
       - "8090:80"
     environment:
@@ -207,5 +207,8 @@ services:
 
   browser_test:
     build: ./development/browser_test/
+    volumes:
+      - ./development/codeception.yml:/data/codeception.yml
+      - ./development/codeception/tests:/data/tests
     ports:
       - "8091:80"      
