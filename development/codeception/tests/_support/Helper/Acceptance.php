@@ -6,14 +6,9 @@ namespace Helper;
 
 class Acceptance extends \Codeception\Module
 {
-    public function setMaxRedirects($limit) {
-        $this->getModule('PhpBrowser')->client->setMaxRedirects($limit);
-    }
     
-    public function showWebPage() {
-        echo PHP_EOL . "Current Web Page" .
-             $this->getModule('PhpBrowser')->_getResponseContent() . 
-             PHP_EOL;
+    public function savePageSource() {
+        $this->getModule('WebDriver')->_savePageSource(codecept_output_dir().'pageSource_1.html');
     }
     
     public function getElements($identifier) {
