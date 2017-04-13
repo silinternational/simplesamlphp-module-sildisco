@@ -1,95 +1,44 @@
 <?php 
 
+$waitTime = 10;
+
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Ensure I can login to Sp1 through Idp1 and must login to Sp2 through Idp2.');
-$I->setMaxRedirects(999);
-$I->amOnPage('http://sp1');
-$I->see('SimpleSAMLphp installation page');
-//$I->showWebPage();
+
+// Start at sp1
+$I->amOnUrl('http://sp1');
+$I->waitForText('About SimpleSAMLphp', $waitTime);
+
 $I->click('Authentication');
 $I->click('Test configured authentication sources');
-$I->see('Test authentication sources');
+$I->waitForText('Test authentication sources', $waitTime);
 
 // Go to the hub
 $I->click('hub4tests');
+$I->waitForText('IdP 1', $waitTime);
+
 $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
-$I->see('Select your identity provider');
 
-// Use Idp1 for Authentication
+// Use idp1 for Authentication
 $I->click(["name" => "idp_http://ssp-hub-idp.local:8085"]);
-$I->see("Enter your username and password");
-
-
-// $I->showWebPage();
-
+$I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'a');
+$I->click('//*[@id="regularsubmit"]/td[3]/button');
 
-// $I->showWebPage();
-
-// $formAction = 'http://idp1/module.php/core/loginuserpass.php';
-$AuthState = $I->grabValueFrom(['name' => 'AuthState']);
+$I->waitForText("test_admin@idp1.org", $waitTime);
 
 
-// $I->sendPOST(
-        // $formAction, 
-        // [
-            // 'username' => 'admin',
-            // 'password' => 'a',
-            // 'AuthState' => $AuthState,
-        // ], 
-        // []
-    // );
+// Start at sp2. Go through hub to idp2
+$I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
 
+$I->waitForText("Enter your username and password", $waitTime);
 
-// $I->amOnPage('http://sp1/module.php/core/authenticate.php?as=hub4tests');
-// $I->showWebPage();
+$I->fillField('password', 'b');
+$I->click('//*[@id="regularsubmit"]/td[3]/button');
 
-$I->click("Login");
+$I->waitForText("@IDP2", $waitTime);
 
-
-$SAMLResponse = $I->grabValueFrom(['name' => 'SAMLResponse']);
-$formAction = 'http://hub4tests/module.php/saml/sp/saml2-acs.php/hub-discovery';
-$I->sendPOST(
-        $formAction, 
-        [
-            'SAMLResponse' => $SAMLResponse,
-        ], 
-        []
-    );
-
-$SAMLResponse = $I->grabValueFrom(['name' => 'SAMLResponse']);
-$formAction = 'http://sp1/module.php/saml/sp/saml2-acs.php/hub-discovery';
-$I->sendPOST(
-        $formAction, 
-        [
-            'SAMLResponse' => $SAMLResponse,
-        ], 
-        []
-    );
-    
-// POST to the hub
-// $formAction = $I->grabAttributeFrom('form', 'action');
-// $I->assertTextContains('hub-discovery', $formAction);
-
-// $samlResponse = $I->grabValueFrom(['name' => 'SAMLResponse']);
-// $I->sendPOST($formAction, ['SAMLResponse' => $samlResponse], []);
-// $I->showWebPage();
-
-// POST to Sp1
-// $formAction = 'http://sp1/module.php/saml/sp/saml2-acs.php/hub4tests';
-// $samlResponse2 = $I->grabValueFrom(['name' => 'SAMLResponse']);
-// $I->sendPOST($formAction, ['SAMLResponse' => $samlResponse2], []);
-
-// $I->showWebPage();
-
-
-// $I->submitForm('form', ['SAMLResponse' => $samlResponse]);
-
-// $I->click("Submit");
-
-
-// $formAction = 'http://sp1/module.php/saml/sp/saml2-acs.php/hub4tests';
-// $samlResponse2 = $I->grabValueFrom(['name' => 'SAMLResponse']);
-// $I->amOnPage('http://sp1/module.php/core/authenticate.php?as=hub4tests');
-$I->showWebPage();
+// See that going to sp3 results in immediate authentication to idp1
+$I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
+$I->waitForText("test_admin@idp1.org", $waitTime);
