@@ -7,9 +7,13 @@
 class_name: AcceptanceTester
 modules:
     enabled:
-        - PhpBrowser:
-            url: http://sp1
+        - WebDriver:
+           url: 'http://localhost/'
+           browser: phantomjs 
+           host: phantomjs  # same as the name in docker-compose.yml
+           port: 4444          
+           window_size: "maximize"  # Needed to ensure all elements are "visible" to phantomjs
+           restart: true
         - \Helper\Acceptance
-        - REST:
-            depends: PhpBrowser
-            url: http://sp1
+
+         
