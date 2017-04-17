@@ -1,0 +1,77 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0" />
+<script type="text/javascript" src="/resources/script.js"></script>
+<title>No SAML response provided</title>
+
+	<link rel="stylesheet" type="text/css" href="/resources/default.css" />
+	<link rel="icon" type="image/icon" href="/resources/icons/favicon.ico" />
+
+<script type="text/javascript" src="/resources/clipboard.min.js"></script>
+
+	
+	<meta name="robots" content="noindex, nofollow" />
+	
+
+<!-- head --><meta name="robots" content="noindex, nofollow" />
+<meta name="googlebot" content="noarchive, nofollow" /><!-- /head --></head>
+<body>
+
+<div id="wrap">
+	
+	<div id="header">
+		<h1><a style="text-decoration: none; color: white" href="/">No SAML response provided</a></h1>
+	</div>
+
+	
+	<div id="languagebar">English | <a href="http://sp1/module.php/saml/sp/saml2-acs.php/hub4tests?language=es">Español</a> | <a href="http://sp1/module.php/saml/sp/saml2-acs.php/hub4tests?language=fr">Français</a> | <a href="http://sp1/module.php/saml/sp/saml2-acs.php/hub4tests?language=pt">Português</a></div>	<div id="content">
+
+
+
+    <h2>No SAML response provided</h2>
+You accessed the Assertion Consumer Service interface, but did not provide a SAML Authentication Response. Please note that this endpoint is not intended to be accessed directly.    <div class="trackidtext">
+        <p>If you report this error, please also report this tracking number which makes it possible to locate your session in the logs available to the system administrator:</p>
+        <div class="input-group" style="width: 1em;">
+            <pre id="trackid" class="input-left">8deaba0bd2</pre>
+            <button data-clipboard-target="#trackid" id="btntrackid" class="btnaddonright">
+                <img src="/resources/icons/clipboard.svg"
+                     alt="Copy to clipboard" />
+            </button>
+        </div>
+    </div>
+    <h2>Debug information</h2>
+    <p>The debug information below may be of interest to the administrator / help desk:</p>
+
+    <div style="border: 1px solid #eee; padding: 1em; font-size: x-small">
+        <p style="margin: 1px">SimpleSAML_Error_Error: ACSPARAMS</p>
+        <pre style="padding: 1em; font-family: monospace;">Backtrace:
+1 /data/vendor/simplesamlphp/simplesamlphp/modules/saml/www/sp/saml2-acs.php:21 (require)
+0 /data/vendor/simplesamlphp/simplesamlphp/www/module.php:137 (N/A)
+Caused by: Exception: Unable to find the current binding.
+Backtrace:
+2 /data/vendor/simplesamlphp/saml2/src/SAML2/Binding.php:97 (SAML2_Binding::getCurrentBinding)
+1 /data/vendor/simplesamlphp/simplesamlphp/modules/saml/www/sp/saml2-acs.php:16 (require)
+0 /data/vendor/simplesamlphp/simplesamlphp/www/module.php:137 (N/A)</pre>
+    </div>
+    <h2 style="clear: both">How to get help</h2>
+    <p>This error probably is due to some unexpected behaviour or to misconfiguration of SimpleSAMLphp. Contact the administrator of this login service, and send them the error message above.</p>
+    <script type="text/javascript">
+        var clipboard = new Clipboard('#btntrackid');
+    </script>
+	</div><!-- #content -->
+	<div id="footer">
+		<hr />
+
+		<img src="/resources/icons/ssplogo-fish-small.png" alt="Small fish logo" style="float: right" />		
+		Copyright &copy; 2007-2016 <a href="http://uninett.no/">UNINETT AS</a>
+		
+		<br style="clear: right" />
+	
+	</div><!-- #footer -->
+
+</div><!-- #wrap -->
+
+</body>
+</html>

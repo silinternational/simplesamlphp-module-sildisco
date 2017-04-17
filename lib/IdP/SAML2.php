@@ -371,18 +371,12 @@ class sspmod_sildisco_IdP_SAML2 {
                 $sessionLostURL = \SimpleSAML\Utils\HTTP::addURLParameters(
             \SimpleSAML\Utils\HTTP::getSelfURLNoQuery(),
                         $sessionLostParams);
-
                 /*
                  * Added by GTIS.
                  * This code is intended to ensure that a session from a new SP
                  * will be forced to reauthenticate if that SP is not allowed
                  * to authenticate through any of the IDP's that have so far
                  * been used for authentication.
-                 *
-                 * This is called from ...www/sildisco/idp/SSOService.php.  In order
-                 * for that to happen, the SP's idp-remote.php entry for
-                 * the hub needs to use
-                 * .../sildisco/idp/SSOService.php for the SingleSignOnService entry
                  *
                  * In order for this for this to avoid forcing authentication
                  * in every case, the hub's saml20-idp-hosted.php entry needs
@@ -391,31 +385,37 @@ class sspmod_sildisco_IdP_SAML2 {
                  * That list should be found in ...
                  *    sessionDataType: 'sildisco:authentication'
                  *    sessionKey: 'authenticated_idps'
+                 *
+                 * Another feature is that it forces the user to the discovery page,
+                 * if the SP is allowed to use more than one IDP.  The reason for this
+                 * is that we want the user to be able to pick which of his ID's
+                 * to use for this session.  The way it is carried out is by expiring
+                 * the user's session on the hub. (It does not log the user out from 
+                 * any of the IDP's.)
+                 *
                  */
-
                 $session = SimpleSAML_Session::getSessionFromRequest();
                 $sessionDataType = 'sildisco:authentication';
                 $spIdKey = 'spentityid';
                 $session->setData($sessionDataType, $spIdKey, $spEntityId);
-
                 $metadataPath = __DIR__ . '/../../../../metadata';
                 $IDPList = array_keys(DiscoUtils::getIdpsForSp($spEntityId, $metadataPath));
-
                 if ( ! $forceAuthn ) {
-
                     $sessionDataType = 'sildisco:authentication';
                     $sessionKey = 'authenticated_idps';
                     $authenticatedIdps = $session->getData($sessionDataType, $sessionKey);
-
+                    
+                    if (count($IDPList) > 1) {
+                        $session->setAuthorityExpire('hub-discovery', 1);
+                        $session->save();                             
+                    }  
                     if ($authenticatedIdps) {
                         $metadataPath = __DIR__ . '/../../../../metadata/';
-
                         $allowedIdps = DiscoUtils::getReducedIdpList(
                             $authenticatedIdps,
                             $metadataPath,
                             $spEntityId
                         );
-
                         if ( ! $allowedIdps) {
                             $IDPList = Null;
                             $forceAuthn = True;
@@ -427,6 +427,7 @@ class sspmod_sildisco_IdP_SAML2 {
                 /*
                  *  End of GTIS addition
                  */
+
 
                 $state = array(
                         'Responder' => array('sspmod_saml_IdP_SAML2', 'sendResponse'),
