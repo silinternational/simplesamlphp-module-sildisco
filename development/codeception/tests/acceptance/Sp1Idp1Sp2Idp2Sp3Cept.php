@@ -3,7 +3,7 @@
 $waitTime = 10;
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('Ensure I can login to Sp1 through Idp1 and must login to Sp2 through Idp2.');
+$I->wantTo('Ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 and am already logged in for Sp3.');
 
 // Start at sp1
 $I->amOnUrl('http://sp1');
