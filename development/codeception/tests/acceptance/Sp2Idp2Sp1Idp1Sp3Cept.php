@@ -39,3 +39,13 @@ $I->fillField('password', 'a');
 $I->click('//*[@id="regularsubmit"]/td[3]/button');
 
 $I->waitForText("test_admin@idp1.org", $waitTime);
+
+// Logout of both idp's
+$I->click('Logout');
+$I->waitForText("You have been logged out.", $waitTime);
+
+$I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
+$I->waitForText("@IDP2", $waitTime);
+$I->click("Logout");
+$I->waitForText("You have been logged out.", $waitTime);
+

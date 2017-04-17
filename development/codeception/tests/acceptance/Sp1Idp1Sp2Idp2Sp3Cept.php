@@ -31,7 +31,6 @@ $I->waitForText("test_admin@idp1.org", $waitTime);
 
 // Start at sp2. Go through hub to idp2
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
-
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'b');
@@ -42,3 +41,13 @@ $I->waitForText("@IDP2", $waitTime);
 // See that going to sp3 results in immediate authentication to idp1
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
 $I->waitForText("test_admin@idp1.org", $waitTime);
+
+// Logout of both IDP's
+$I->click("Logout");
+$I->waitForText("You have been logged out.", $waitTime);
+
+
+$I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
+$I->waitForText("@IDP2", $waitTime);
+$I->click("Logout");
+$I->waitForText("You have been logged out.", $waitTime);
