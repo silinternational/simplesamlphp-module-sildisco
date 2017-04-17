@@ -1,4 +1,4 @@
 .idea/
 vendor/
 local.env
-development/codeception/tests/_ouput/
+development/codeception/tests/_output/
