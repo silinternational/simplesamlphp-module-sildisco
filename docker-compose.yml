@@ -42,9 +42,12 @@ services:
       - ENABLE_HUB_AUTHPROCS=true
 
   idp1:
-    image: silintl/ssp-base
+    image: silintl/ssp-base:develop
     volumes:
       - ./development/run.sh:/data/run.sh
+      
+      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
       - ./development/idp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -67,9 +70,12 @@ services:
       - SHOW_SAML_ERRORS=true
 
   idp2:
-    image: silintl/ssp-base
+    image: silintl/ssp-base:develop
     volumes:
       - ./development/run.sh:/data/run.sh
+      
+      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
       - ./development/idp2-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -93,7 +99,7 @@ services:
 
 
   sp1:
-    image: silintl/ssp-base
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -117,7 +123,7 @@ services:
 
 
   sp2:
-    image: silintl/ssp-base
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
       - ./development/sp2-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -141,7 +147,7 @@ services:
 
 
   sp3:
-    image: silintl/ssp-base
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
       - ./development/sp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
