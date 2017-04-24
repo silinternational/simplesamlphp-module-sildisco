@@ -217,9 +217,11 @@ services:
       - ./development/codeception.yml:/data/codeception.yml
       - ./development/codeception/tests:/data/tests
     depends_on:
-      - phantomjs       
+      - phantomjs   
     ports:
       - "8091:80"  
+    env_file:
+      - local.env
 
   phantomjs:
     image: davert/phantomjs-env:latest
