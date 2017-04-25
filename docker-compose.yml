@@ -39,7 +39,7 @@ services:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
-      - ENABLE_HUB_AUTHPROCS=true
+      - HUB_MODE=true
 
   idp1:
     image: silintl/ssp-base:develop
@@ -208,7 +208,7 @@ services:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
-      - ENABLE_HUB_AUTHPROCS=true     
+      - HUB_MODE=true 
 
 
   browser_test:
