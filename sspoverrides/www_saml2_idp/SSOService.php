@@ -27,7 +27,7 @@ $hubModeKey = 'hubmode';
 
 try {
 // If in hub mode, then use the sildisco entry script
-    if ($config->getValue($hubModeKey, False)) {
+    if ($config->getValue($hubModeKey, false)) {
         sspmod_sildisco_IdP_SAML2::receiveAuthnRequest($idp);
     } else {
         sspmod_saml_IdP_SAML2::receiveAuthnRequest($idp);        
