@@ -62,6 +62,13 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
                 array($this->returnIdParam => array_keys($idpList)[0])
             );
         }
+        
+        /* Tag if user is a beta tester */
+        $sessionType = 'sildisco:authentication';
+        $sessionKey = 'beta_tester';
+
+        $session = SimpleSAML_Session::getSessionFromRequest();
+        $betaTesterValue = $session->getData($sessionType, $sessionKey);
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
@@ -72,6 +79,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->data['entityID'] = $this->spEntityId;
         $t->data['urlpattern'] = htmlspecialchars(\SimpleSAML\Utils\HTTP::getSelfURLNoQuery());
         $t->data['announcement'] = AnnouncementUtils::getSimpleAnnouncement();
+        $t->data['betatester'] = $betaTesterValue; //  This will be 1 or null.
 
         $t->show();
     }
