@@ -86,7 +86,6 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->data['entityID'] = $this->spEntityId;
         $t->data['urlpattern'] = htmlspecialchars(\SimpleSAML\Utils\HTTP::getSelfURLNoQuery());
         $t->data['announcement'] = AnnouncementUtils::getSimpleAnnouncement();
-        $t->data['betatester'] = $betaTesterValue; //  This will be 1 or null.
 
         $t->show();
     }
