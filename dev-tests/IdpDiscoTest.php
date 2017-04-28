@@ -21,7 +21,7 @@ class AnnouncementTest extends TestCase
 
     public function testEnableBetaEnabledNoChange()
     {
-        $isBetaEnabled = true;
+        $isBetaEnabled = 1;
         $enabledKey = sspmod_sildisco_IdPDisco::$enabledMdKey;
         $idpList = [
             'idp1' => [$enabledKey => false],
