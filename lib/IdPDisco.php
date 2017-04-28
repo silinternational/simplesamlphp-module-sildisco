@@ -14,6 +14,18 @@ use Sil\SspUtils\DiscoUtils;
 class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 {
 
+    /* The session type for this class */
+    public static $sessionType = 'sildisco:authentication';
+
+    /* The session key for checking if the current user has the beta_tester cookie */
+    public static $betaTesterSessionKey = 'beta_tester';
+
+    /* The idp metadata key that says whether an IDP is betaEnabled */
+    public static $betaEnabledMdKey = 'betaEnabled';
+
+    /* The idp metadata key that says whether an IDP is enabled */
+    public static $enabledMdKey = 'enabled';
+
     /**
      * Log a message.
      *
@@ -84,4 +96,35 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->show();
     }
 
+    /**
+     * @param array $idpList the IDPs with their metadata
+     * @param bool $isBetaTester optional (default=null) just for unit testing
+     * @return null
+     *
+     * Changes the idpList array in place.
+     *
+     * If the current user has the beta_tester cookie, then for each IDP in
+     * the idpList that has 'betaEnabled' => true, give it 'enabled' => true
+     *
+     */
+    public static function enableBetaEnabled($idpList, $isBetaTester=null) {
+
+        if ( $isBetaTester === null) {
+            $session = SimpleSAML_Session::getSessionFromRequest();
+            $isBetaTester = $session->getData(
+                self::$sessionType,
+                self::$betaTesterSessionKey
+            );
+        }
+
+        if ( ! $isBetaTester) {
+            return;
+        }
+
+        foreach ($idpList as $idp => $idpMetadata) {
+            if ( ! empty($idpMetadata[self::$betaEnabledMdKey])) {
+                $idpMetadata[self::$enabledMdKey] = true;
+            }
+        }
+    }
 }
