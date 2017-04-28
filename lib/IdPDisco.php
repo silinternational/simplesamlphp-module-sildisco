@@ -63,6 +63,9 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
             $spEntityId
         );
 
+        // idpList gets modified in place
+        self::enableBetaEnabled($idpList);
+
         if (sizeof($idpList) == 1) {
             $this->log(
                 'Choice made [' . array_keys($idpList)[0] . '] (Redirecting the user back. returnIDParam='.
@@ -74,13 +77,6 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
                 array($this->returnIdParam => array_keys($idpList)[0])
             );
         }
-        
-        /* Tag if user is a beta tester */
-        $sessionType = 'sildisco:authentication';
-        $sessionKey = 'beta_tester';
-
-        $session = SimpleSAML_Session::getSessionFromRequest();
-        $betaTesterValue = $session->getData($sessionType, $sessionKey);
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
