@@ -42,7 +42,7 @@ class AnnouncementTest extends TestCase
             'idp1' => [$enabledKey => false],
             'idp2' => [$enabledKey => true, $betaEnabledKey => true],
             'idp3' => [$enabledKey => false, $betaEnabledKey => true],
-            'idp4' => [$enabledKey => true],
+            'idp4' => [$enabledKey => false, $betaEnabledKey => false],
         ];
         $expected = $idpList;
         $expected['idp3'][$enabledKey] = true;
