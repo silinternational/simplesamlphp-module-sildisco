@@ -232,3 +232,27 @@ services:
       - --webdriver=4444
       - --ignore-ssl-errors=true
       - --load-images=false   
+      
+  unit_test:
+    build: .
+    volumes:
+
+      - ./development/run-tests.sh:/data/run-tests.sh
+      - ./development/run-debug.sh:/data/run-debug.sh
+
+      # Utilize this module's files
+      - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib
+      - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
+      - ./dev-tests:/data/dev-tests
+
+    command: /data/run-debug.sh 
+    ports:
+      - "8099:80"
+    environment:
+      - ADMIN_EMAIL=john_doe@there.com
+      - ADMIN_PASS=1234qwer
+      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECURE_COOKIE=false
+      - ADMIN_PROTECT_INDEX_PAGE=false
+      - SHOW_SAML_ERRORS=true
+      - HUB_MODE=true
