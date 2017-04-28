@@ -63,8 +63,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
             $spEntityId
         );
 
-        // idpList gets modified in place
-        self::enableBetaEnabled($idpList);
+        $idpList = self::enableBetaEnabled($idpList);
 
         if (sizeof($idpList) == 1) {
             $this->log(
@@ -95,9 +94,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
     /**
      * @param array $idpList the IDPs with their metadata
      * @param bool $isBetaTester optional (default=null) just for unit testing
-     * @return null
-     *
-     * Changes the idpList array in place.
+     * @return array $idpList
      *
      * If the current user has the beta_tester cookie, then for each IDP in
      * the idpList that has 'betaEnabled' => true, give it 'enabled' => true
@@ -114,13 +111,16 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         }
 
         if ( ! $isBetaTester) {
-            return;
+            return $idpList;
         }
 
         foreach ($idpList as $idp => $idpMetadata) {
             if ( ! empty($idpMetadata[self::$betaEnabledMdKey])) {
                 $idpMetadata[self::$enabledMdKey] = true;
+                $idpList[$idp] = $idpMetadata;
             }
         }
+
+        return $idpList;
     }
 }

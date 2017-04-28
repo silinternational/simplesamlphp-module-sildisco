@@ -14,9 +14,9 @@ class AnnouncementTest extends TestCase
     public function testEnableBetaEnabledEmpty()
     {
         $idpList = [];
-        sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList);
+        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList);
         $expected = [];
-        $this->assertEquals($expected, $idpList);
+        $this->assertEquals($expected, $results);
     }
 
     public function testEnableBetaEnabledNoChange()
@@ -29,13 +29,13 @@ class AnnouncementTest extends TestCase
         ];
         $expected = $idpList;
 
-        sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
-        $this->assertEquals($expected, $idpList);
+        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
+        $this->assertEquals($expected, $results);
     }
 
     public function testEnableBetaEnabledChange()
     {
-        $isBetaEnabled = true;
+        $isBetaEnabled = 1;
         $enabledKey = sspmod_sildisco_IdPDisco::$enabledMdKey;
         $betaEnabledKey = sspmod_sildisco_IdPDisco::$betaEnabledMdKey;
         $idpList = [
@@ -45,10 +45,10 @@ class AnnouncementTest extends TestCase
             'idp4' => [$enabledKey => true],
         ];
         $expected = $idpList;
-        $expected['idp3'][$betaEnabledKey] = true;
+        $expected['idp3'][$enabledKey] = true;
 
-        sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
-        $this->assertEquals($expected, $idpList);
+        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
+        $this->assertEquals($expected, $results);
     }
 
 }
