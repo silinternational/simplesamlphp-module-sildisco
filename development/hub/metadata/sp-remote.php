@@ -23,6 +23,7 @@ return [
     'http://ssp-hub-sp3.local' => [
         'AssertionConsumerService' => 'http://ssp-hub-sp3.local:8083/module.php/saml/sp/saml2-acs.php/ssp-hub',
         'SingleLogoutService' => 'http://ssp-hub-sp3.local:8083/module.php/saml/sp/saml2-logout.php/ssp-hub',
+        'IDPList' => ['http://ssp-hub-idp.local:8085'],
     ],
 
 ];
