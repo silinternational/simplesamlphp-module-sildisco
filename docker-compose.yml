@@ -6,6 +6,9 @@ services:
 
       - ./development/run.sh:/data/run.sh
 
+      # The slightly modified file that hides non enabled idps      
+      - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
+
       # Utilize custom certs 
       - ./development/hub/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
@@ -97,6 +100,28 @@ services:
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
 
+  idp3:
+    build: .
+    volumes:
+      # Utilize custom certs
+      - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert  
+
+      # Utilize custom configs
+      - ./development/idp3-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
+      - ./development/idp3-local/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
+
+      # Utilize custom metadata
+      - ./development/idp3-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
+      - ./development/idp3-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
+    command: /data/run.sh
+    ports:
+      - "8087:80"
+    environment:
+      ADMIN_EMAIL: "john_doe@there.com"
+      ADMIN_PASS: "c"
+      SECRET_SALT: "h57fjem34fh*nsJFGNjweJ"
+      SECURE_COOKIE: "false"
+      SHOW_SAML_ERRORS: "true"
 
   sp1:
     image: silintl/ssp-base:develop
@@ -174,6 +199,9 @@ services:
     volumes:
 
       - ./development/run.sh:/data/run.sh
+      
+      # The slightly modified file that hides non enabled idps
+      - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
       # Utilize custom certs 
       - ./development/hub4tests/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
