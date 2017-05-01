@@ -194,7 +194,7 @@ sp3:
       - ADMIN_PROTECT_INDEX_PAGE=false      
       
 
-  browser_test:
+browser_test:
     build: ./development/browser_test/
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
@@ -206,7 +206,7 @@ sp3:
     env_file:
       - local.env
 
-  phantomjs:
+phantomjs:
     image: davert/phantomjs-env:latest
     ports:
       - "4444"
@@ -216,7 +216,7 @@ sp3:
       - --ignore-ssl-errors=true
       - --load-images=false   
       
-  unit_test:
+unit_test:
     build: .
     volumes:
 
