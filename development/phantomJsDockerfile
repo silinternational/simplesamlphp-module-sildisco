@@ -2,7 +2,7 @@
 FROM ubuntu:trusty
 
 # We need wget to download PhantomJS and other libraries that need to be installed for PhantomJS to work
-RUN apt-get install -y wget libfontconfig1 libfreetype6
+RUN apt-get update && apt-get install -y wget libfontconfig1 libfreetype6
 
 # Set up Environment variables for PhantomJS
 ENV PHANTOMJS_VERSION 1.9.8
