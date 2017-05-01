@@ -192,7 +192,8 @@ browser_test:
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
       - ./development/codeception/tests:/data/tests 
-
+    links:
+      - phantomjs
     env_file:
       - local.env
 
@@ -200,6 +201,17 @@ phantomjs:
     build:
         path: ./development
         dockerfile: ./phantomJsDockerfile
+    ports:
+      - "4444"
+    links:
+      - hub4tests
+      - idp1
+      - idp2
+      - idp3
+      - sp1
+      - sp2
+      - sp3
+    command: "phantomjs --webdriver=4444 --ignore-ssl-errors=true --load-images=false"
       
 unit_test:
     build: .
