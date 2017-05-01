@@ -31,8 +31,7 @@ hub4tests:
       # Configure the debugger
       - ./development/hub4tests/run-debug.sh:/data/run-debug.sh
     command: /data/run-debug.sh 
-    ports:
-      - "8090:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
@@ -62,8 +61,7 @@ idp1:
       - ./development/idp-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
     command: /data/run.sh
-    ports:
-      - "8085:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=a
@@ -90,8 +88,7 @@ idp2:
       - ./development/idp2-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp2-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
     command: /data/run.sh
-    ports:
-      - "8086:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=b
@@ -113,8 +110,7 @@ idp3:
       - ./development/idp3-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp3-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
     command: /data/run.sh
-    ports:
-      - "8087:80"
+
     environment:
       ADMIN_EMAIL: "john_doe@there.com"
       ADMIN_PASS: "c"
@@ -134,8 +130,7 @@ sp1:
 
       # Utilize custom metadata
       - ./development/sp-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
-    ports:
-      - "8081:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp1
@@ -158,8 +153,7 @@ sp2:
 
       # Utilize custom metadata
       - ./development/sp2-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
-    ports:
-      - "8082:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp2
@@ -182,8 +176,7 @@ sp3:
 
       # Utilize custom metadata
       - ./development/sp3-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
-    ports:
-      - "8083:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp3
@@ -198,23 +191,14 @@ browser_test:
     build: ./development/browser_test/
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
-      - ./development/codeception/tests:/data/tests
-    depends_on:
-      - phantomjs   
-    ports:
-      - "8091:80"  
+      - ./development/codeception/tests:/data/tests 
+
     env_file:
       - local.env
 
 phantomjs:
-    image: davert/phantomjs-env:latest
-    ports:
-      - "4444"
-    entrypoint:
-      - phantomjs
-      - --webdriver=4444
-      - --ignore-ssl-errors=true
-      - --load-images=false   
+    path: ./development
+    dockerfile: ./phantomJsDockerfile
       
 unit_test:
     build: .
@@ -229,8 +213,7 @@ unit_test:
       - ./dev-tests:/data/dev-tests
 
     command: /data/run-debug.sh 
-    ports:
-      - "8099:80"
+
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
