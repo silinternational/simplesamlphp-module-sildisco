@@ -197,8 +197,9 @@ browser_test:
       - local.env
 
 phantomjs:
-    path: ./development
-    dockerfile: ./phantomJsDockerfile
+    build:
+        path: ./development
+        dockerfile: ./phantomJsDockerfile
       
 unit_test:
     build: .
@@ -211,8 +212,6 @@ unit_test:
       - ./lib:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib
       - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
       - ./dev-tests:/data/dev-tests
-
-    command: /data/run-debug.sh 
 
     environment:
       - ADMIN_EMAIL=john_doe@there.com
