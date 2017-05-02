@@ -12,7 +12,6 @@ hub4tests:
 
       # Utilize custom configs
       - ./development/hub4tests/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
-#      - ./development/hub4tests/config/config.php:/data/vendor/simplesamlphp/simplesamlphp/config/config.php
 
       # Utilize custom metadata
       - ./development/hub4tests/metadata/idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/idp-remote.php
