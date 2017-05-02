@@ -194,8 +194,6 @@ browser_test:
       - ./development/codeception/tests:/data/tests 
     links:
       - phantomjs
-    env_file:
-      - local.env
 
 phantomjs:
     build:
