@@ -424,6 +424,17 @@ class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			$state[$k] = $v;
 		}
 
+        $metadataPath = __DIR__ . '/../../../../../metadata';
+        
+        $spEntityId = $state['SPMetadata']['entityid'];
+        $IDPList = array_keys(DiscoUtils::getIdpsForSp($spEntityId, $metadataPath));   
+
+		if (sizeof($IDPList) > 1) {
+			$state['LoginCompletedHandler'] = array('sspmod_sildisco_Auth_Source_SP', 'reauthPostLogin');
+			$this->authenticate($state);
+			assert('FALSE');
+		} 
+
 		// check if we have an IDPList specified in the request
 		if (isset($state['saml:IDPList']) && sizeof($state['saml:IDPList']) > 0 &&
 			!in_array($state['saml:sp:IdP'], $state['saml:IDPList'], TRUE)) {
