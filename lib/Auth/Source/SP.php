@@ -1,6 +1,9 @@
 <?php
 
-class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
+// added by GTIS for use below
+use Sil\SspUtils\DiscoUtils;
+
+class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
 
 	/**
 	 * The entity ID of this SP.
@@ -339,7 +342,7 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			$discoURL = SimpleSAML_Module::getModuleURL('saml/disco.php');
 		}
 
-		$returnTo = SimpleSAML_Module::getModuleURL('saml/sp/discoresp.php', array('AuthID' => $id));
+		$returnTo = SimpleSAML_Module::getModuleURL('sildisco/sp/discoresp.php', array('AuthID' => $id));
 		
 		$params = array(
 			'entityID' => $this->entityId,
@@ -372,14 +375,26 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 		/* We are going to need the authId in order to retrieve this authentication source later. */
 		$state['saml:sp:AuthId'] = $this->authId;
 
+        $metadataPath = __DIR__ . '/../../../../../metadata';
+        
+        $spEntityId = $state['SPMetadata']['entityid'];
+        
+        $IDPList = array_keys(DiscoUtils::getIdpsForSp($spEntityId, $metadataPath));   
+
+		if (sizeof($IDPList) > 1) {
+			$this->startDisco($state);
+			assert('FALSE');
+		}        
+        
+        
 		$idp = $this->idp;
 
 		if (isset($state['saml:idp'])) {
 			$idp = (string)$state['saml:idp'];
 		}
 
-		if ($idp === NULL && isset($state['saml:IDPList']) && sizeof($state['saml:IDPList']) == 1) {
-			$idp = $state['saml:IDPList'][0];
+		if ($idp === NULL && sizeof($IDPList) == 1) {
+			$idp = $IDPList[0];
 		}
 
 		if ($idp === NULL) {
@@ -423,7 +438,7 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			 *
 			 * TODO: we need to offer the user the possibility to logout before blindly authenticating him again.
 			 */
-			$state['LoginCompletedHandler'] = array('sspmod_saml_Auth_Source_SP', 'reauthPostLogin');
+			$state['LoginCompletedHandler'] = array('sspmod_sildisco_Auth_Source_SP', 'reauthPostLogin');
 			$this->authenticate($state);
 		}
 	}
@@ -544,7 +559,7 @@ class sspmod_saml_Auth_Source_SP extends SimpleSAML_Auth_Source {
 		$authProcState = array(
 			'saml:sp:IdP' => $idp,
 			'saml:sp:State' => $state,
-			'ReturnCall' => array('sspmod_saml_Auth_Source_SP', 'onProcessingCompleted'),
+			'ReturnCall' => array('sspmod_sildisco_Auth_Source_SP', 'onProcessingCompleted'),
 
 			'Attributes' => $attributes,
 			'Destination' => $spMetadataArray,
