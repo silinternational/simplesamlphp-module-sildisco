@@ -405,11 +405,6 @@ class sspmod_sildisco_IdP_SAML2 {
                     $sessionKey = 'authenticated_idps';
                     $authenticatedIdps = $session->getData($sessionDataType, $sessionKey);
                     
-                    // if (count($IDPList) > 1) {
-                        // $session->setAuthorityExpire('hub-discovery', 1);
-                        // $session->save();                             
-                    // }  
-                    
                     if ($authenticatedIdps) {
                         $metadataPath = __DIR__ . '/../../../../metadata/';
                         $allowedIdps = DiscoUtils::getReducedIdpList(
