@@ -386,7 +386,9 @@ class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			assert('FALSE');
 		}        
         
-        
+        /*
+         * If this SP is allowed to use more than one IdP, then send to discovery page
+         */
 		$idp = $this->idp;
 
 		if (isset($state['saml:idp'])) {
@@ -424,6 +426,9 @@ class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
 			$state[$k] = $v;
 		}
 
+        /*
+         * If this SP is allowed to use more than one IdP, then send to discovery page
+         */        
         $metadataPath = __DIR__ . '/../../../../../metadata';
         
         $spEntityId = $state['SPMetadata']['entityid'];
