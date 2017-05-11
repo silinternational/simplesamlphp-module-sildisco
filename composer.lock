@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "530e00e48d0626d77c05f7b8d57f57dd",
+    "content-hash": "6d71b1fdc3b270bad77ad52a241d3dcb",
     "packages": [
         {
             "name": "psr/log",
@@ -231,24 +231,24 @@
         },
         {
             "name": "silinternational/php-env",
-            "version": "0.2.0",
+            "version": "1.0.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/silinternational/php-env.git",
-                "reference": "184c4c76d90a616b22f5a29ed61f10118dd4383f"
+                "reference": "030821eebac6ff1379a1b0eb6cc4ca18bf3804e0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/silinternational/php-env/zipball/184c4c76d90a616b22f5a29ed61f10118dd4383f",
-                "reference": "184c4c76d90a616b22f5a29ed61f10118dd4383f",
+                "url": "https://api.github.com/repos/silinternational/php-env/zipball/030821eebac6ff1379a1b0eb6cc4ca18bf3804e0",
+                "reference": "030821eebac6ff1379a1b0eb6cc4ca18bf3804e0",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.3"
+                "php": ">=5.4"
             },
             "require-dev": {
                 "johnkary/phpunit-speedtrap": "1.*",
-                "phpunit/phpunit": "4.*"
+                "phpunit/phpunit": "^6.1"
             },
             "type": "library",
             "autoload": {
@@ -260,7 +260,7 @@
             "license": [
                 "MIT"
             ],
-            "time": "2016-04-27T14:41:44+00:00"
+            "time": "2017-05-10T16:00:51+00:00"
         },
         {
             "name": "silinternational/ssp-utilities",
