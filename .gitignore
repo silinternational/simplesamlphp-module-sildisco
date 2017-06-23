@@ -1,4 +1,6 @@
 .idea/
+/nbproject/
+.vagrant/
 vendor/
 local.env
 development/codeception/tests/_output/

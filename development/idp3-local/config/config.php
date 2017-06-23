@@ -37,12 +37,6 @@ $FORCE_DISCOVERY = Env::get('FORCE_DISCOVERY', false);
 $config = [
 
     /*
-     * Do not by-pass the discovery page even when there is only ond IdP for the current SP
-     *
-     */
-    'forcediscovery' => $FORCE_DISCOVERY,
-
-    /*
      * Setup the following parameters to match the directory of your installation.
      * See the user manual for more details.
      *
@@ -520,30 +514,19 @@ $config = [
             'type'          => 'saml20-idp-SSO',
         ],
 
-        // prefix the 'member' (urn:oid:2.5.4.31) attribute elements with idp.idp_name.
-        48 => [
-            'class' => 'sildisco:TagGroup',
-        ],
-
-        /*
-         * Copy oid attribute keys to friendly names ...
-         * Remember to have the saml20-sp-remote metadata ask for attributes with their
-         * oid name, if the SP expects that.
-         */
-        49 => [
-            'class' => 'sildisco:AttributeMap',
-            'oid2name',
-        ],
-
         // If no attributes are requested in the SP metadata, then these will be sent through
-  //      50 => [
-    //        'class' => 'core:AttributeLimit',
-      //      'default' => TRUE,
-        //    'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
-//        ],
+        50 => [
+            'class' => 'core:AttributeLimit',
+            'default' => TRUE,
+            'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
+        ],
         
-        // Append the Idp to the Name Id
-        60 => 'sildisco:AddIdp2NameId',
+        // Use the uid value to populate the nameid entry       
+        60 => [
+            'class' => 'saml:AttributeNameID',
+            'attribute' => 'uid',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+        ],
 
         /*
          * Search attribute "distinguishedName" for pattern and replaces if found
@@ -568,13 +551,6 @@ $config = [
         ),
          */
 
-        /*
-         * Add Authenticated Idp to a list in the session, in order to
-         * avoid forcing authentication unnecessarily
-         */
-        95 => [
-            'class' => 'sildisco:TrackIdps',
-        ],
 
         // If language is set in Consent module it will be added as an attribute.
         99 => 'core:LanguageAdaptor',
@@ -789,9 +765,9 @@ $config = [
      * the 'certificate' and 'privatekey' option in the metadata will be used.
      * if those aren't set, signing of metadata will fail.
      */
-    'metadata.sign.privatekey' => 'saml.pem',
+    'metadata.sign.privatekey' => 'ssp-hub.pem',
     'metadata.sign.privatekey_pass' => null,
-    'metadata.sign.certificate' => 'saml.crt',
+    'metadata.sign.certificate' => 'ssp-hub.crt',
 
 
     /*

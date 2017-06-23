@@ -1,0 +1,16 @@
+# Starting from Ubuntu Trusty
+FROM ubuntu:trusty
+
+# We need wget to download PhantomJS and other libraries that need to be installed for PhantomJS to work
+RUN apt-get update && apt-get install -y wget libfontconfig1 libfreetype6
+
+# Set up Environment variables for PhantomJS
+ENV PHANTOMJS_VERSION 1.9.8
+ENV PHANTOMJS_DIR /phantomjs
+
+# Download and untar PhantomJS
+RUN wget -q --continue -P $PHANTOMJS_DIR "https://bitbucket.org/ariya/phantomjs/downloads/phantomjs-${PHANTOMJS_VERSION}-linux-x86_64.tar.bz2"
+RUN tar -xaf $PHANTOMJS_DIR/phantomjs* --strip-components=1 --directory "$PHANTOMJS_DIR"
+
+# Set the PATH to include PhantomJS
+ENV PATH $PHANTOMJS_DIR/bin:$PATH
