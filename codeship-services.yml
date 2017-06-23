@@ -1,13 +1,13 @@
-      
+
 hub4tests:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
       - ./development/run.sh:/data/run.sh
-      
+
       # The slightly modified file that hides non enabled idps
       - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
-      # Utilize custom certs 
+      # Utilize custom certs
       - ./development/hub4tests/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
@@ -29,7 +29,7 @@ hub4tests:
 
       # Configure the debugger
       - ./development/hub4tests/run-debug.sh:/data/run-debug.sh
-    command: /data/run-debug.sh 
+    command: /data/run-debug.sh
 
     environment:
       - ADMIN_EMAIL=john_doe@there.com
@@ -38,14 +38,14 @@ hub4tests:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
-      - HUB_MODE=true 
+      - HUB_MODE=true
 
 
 idp1:
     image: silintl/ssp-base:develop
     volumes:
       - ./development/run.sh:/data/run.sh
-      
+
       # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
       - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
@@ -72,7 +72,7 @@ idp2:
     image: silintl/ssp-base:develop
     volumes:
       - ./development/run.sh:/data/run.sh
-      
+
       # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
       - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
@@ -96,10 +96,10 @@ idp2:
       - SHOW_SAML_ERRORS=true
 
 idp3:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
-      - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert  
+      - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
       - ./development/idp3-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
@@ -183,14 +183,14 @@ sp3:
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false      
-      
+      - ADMIN_PROTECT_INDEX_PAGE=false
+
 
 browser_test:
     build: ./development/browser_test/
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
-      - ./development/codeception/tests:/data/tests 
+      - ./development/codeception/tests:/data/tests
     links:
       - phantomjs
 
@@ -209,9 +209,9 @@ phantomjs:
       - sp2
       - sp3
     command: "phantomjs --webdriver=4444 --ignore-ssl-errors=true --load-images=false"
-      
+
 unit_test:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
 
       - ./development/run-tests.sh:/data/run-tests.sh
