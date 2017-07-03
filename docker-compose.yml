@@ -1,7 +1,7 @@
 version: "2"
 services:
   hub:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
 
       - ./development/run.sh:/data/run.sh
@@ -43,6 +43,7 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
+      - IDP_NAME=Hub
 
   idp1:
     image: silintl/ssp-base:develop
@@ -71,6 +72,7 @@ services:
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
+      - IDP_NAME=IdP1
 
   idp2:
     image: silintl/ssp-base:develop
@@ -99,9 +101,10 @@ services:
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
+      - IDP_NAME=IdP2
 
   idp3:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
       - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert  
@@ -122,6 +125,7 @@ services:
       SECRET_SALT: "h57fjem34fh*nsJFGNjweJ"
       SECURE_COOKIE: "false"
       SHOW_SAML_ERRORS: "true"
+      IDP_NAME: "IdP3"
 
   sp1:
     image: silintl/ssp-base:develop
@@ -195,7 +199,7 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
       
   hub4tests:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
 
       - ./development/run.sh:/data/run.sh
@@ -237,6 +241,7 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true 
+      - IDP_NAME=Hub
 
 
   browser_test:
@@ -262,7 +267,7 @@ services:
       - --load-images=false   
       
   unit_test:
-    build: .
+    image: silintl/ssp-base:develop
     volumes:
 
       - ./development/run-tests.sh:/data/run-tests.sh
@@ -284,3 +289,4 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
+      - IDP_NAME=Hub
