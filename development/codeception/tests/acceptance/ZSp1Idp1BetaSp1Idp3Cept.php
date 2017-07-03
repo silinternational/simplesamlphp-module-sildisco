@@ -6,6 +6,8 @@
  */
 
 $waitTime = 15;
+$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
+$idp3Id =  '//*[@id="http://ssp-hub-idp3.local:8087"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo("Ensure I don't see IdP 3 at first, but after I go to the Beta Tester page I can see and login through IdP 3.");
@@ -22,10 +24,12 @@ $I->makeScreenshot('hub4tests_1');
 // Go to the hub
 $I->click('hub4tests');
 $I->makeScreenshot('hub4tests_2');
-$I->waitForText('IdP 1', $waitTime);
+$I->waitForElement($idp1Id, $waitTime);
 
 $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
-$I->dontSee('IdP 3');
+
+// I make sure Idp3 is disabled
+$I->seeInSource('IdP 3 coming soon');
 
 // Go to beta_tester url
 $I->amOnUrl('http://hub4tests/module.php/sildisco/betatest.php');
@@ -35,11 +39,10 @@ $I->waitForText('beta', $waitTime);
 // Go back to hub
 $I->amOnUrl('http://sp1/module.php/core/authenticate.php?as=hub4tests');
 $I->makeScreenshot('hub4tests_3');
-$I->waitForText('IdP 1', $waitTime);
-$I->see('IdP 3');
+$I->waitForElement($idp1Id, $waitTime);
 
 // Use idp3 for Authentication
-$I->click(["name" => "idp_http://ssp-hub-idp3.local:8087"]);
+$I->click($idp3Id . "/parent::*");
 $I->makeScreenshot('login');
 
 $I->waitForText("Enter your username and password", $waitTime);
