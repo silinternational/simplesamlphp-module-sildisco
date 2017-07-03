@@ -39,6 +39,7 @@ hub4tests:
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
+      - IDP_NAME=Hub4Tests
 
 
 idp1:
@@ -67,6 +68,7 @@ idp1:
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
+      - IDP_NAME=IdP1
 
 idp2:
     image: silintl/ssp-base:develop
@@ -94,6 +96,7 @@ idp2:
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
+      - IDP_NAME=IdP2
 
 idp3:
     image: silintl/ssp-base:develop
@@ -116,6 +119,7 @@ idp3:
       SECRET_SALT: "h57fjem34fh*nsJFGNjweJ"
       SECURE_COOKIE: "false"
       SHOW_SAML_ERRORS: "true"
+      IDP_NAME: "IdP3"
 
 sp1:
     image: silintl/ssp-base:develop
@@ -229,3 +233,4 @@ unit_test:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - HUB_MODE=true
+      - IDP_NAME=UnitTest
