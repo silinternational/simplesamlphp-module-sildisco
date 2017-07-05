@@ -5,12 +5,9 @@ include __DIR__ . '/../vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib/I
 
 use PHPUnit\Framework\TestCase;
 
-class AnnouncementTest extends TestCase
+class IdpDiscoTest extends TestCase
 {
-
-    /**
-     * Ensure the /data/ssp-announcement.php file can be included without an error
-     */
+    
     public function testEnableBetaEnabledEmpty()
     {
         $idpList = [];
