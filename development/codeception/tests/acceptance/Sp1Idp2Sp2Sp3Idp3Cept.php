@@ -1,6 +1,7 @@
 <?php 
 
 $waitTime = 10;
+$idp2Id =  '//*[@id="http://ssp-hub-idp2.local:8086"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Ensure I can login to Sp1 through Idp2, am already logged in for Sp2, and must login to Sp3 through Idp1.');
@@ -15,12 +16,12 @@ $I->waitForText('Test authentication sources', $waitTime);
 
 // Go to the hub
 $I->click('hub4tests');
-$I->waitForText('IdP 2', $waitTime);
+$I->waitForElement($idp2Id, $waitTime);
 
 $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
 
-// Use idp1 for Authentication
-$I->click(["name" => "idp_http://ssp-hub-idp2.local:8086"]);
+// Use idp2 for Authentication
+$I->click($idp2Id . "/parent::*");
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'b');

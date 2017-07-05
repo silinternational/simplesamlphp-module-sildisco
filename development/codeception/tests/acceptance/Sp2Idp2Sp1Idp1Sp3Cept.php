@@ -1,6 +1,7 @@
 <?php 
 
 $waitTime = 10;
+$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo("Ensure I can login to Sp2 through Idp2, must login to Sp1 if I choose Idp1, and don't need to login for Sp3.");
@@ -18,12 +19,12 @@ $I->waitForText("@IDP2", $waitTime);
 $I->amOnUrl('http://sp1/module.php/core/authenticate.php?as=hub4tests');
 
 // Wait for redirect to the hub
-$I->waitForText('IdP 1', $waitTime);
+$I->waitForElement($idp1Id, $waitTime);
 
 $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
 
 // Use idp1 and authenticate
-$I->click(["name" => "idp_http://ssp-hub-idp.local:8085"]);
+$I->click($idp1Id . "/parent::*");
 
 $I->waitForText("Enter your username and password", $waitTime);
 
