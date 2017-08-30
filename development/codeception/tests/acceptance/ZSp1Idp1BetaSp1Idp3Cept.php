@@ -48,7 +48,7 @@ $I->makeScreenshot('login');
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'c');
-$I->click('//*[@id="regularsubmit"]/td[3]/button');
+$I->click('//*[@id="submit"]/td[3]/button');
 $I->makeScreenshot('post_login');
 
 $I->waitForText("@IDP3", $waitTime);
