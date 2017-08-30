@@ -19,7 +19,7 @@ $I->click('hub4tests');
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'a');
-$I->click('//*[@id="regularsubmit"]/td[3]/button');
+$I->click('//*[@id="submit"]/td[3]/button');
 
 $I->waitForText("test_admin@idp1.org", $waitTime);
 
@@ -40,7 +40,7 @@ $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'b');
-$I->click('//*[@id="regularsubmit"]/td[3]/button');
+$I->click('//*[@id="submit"]/td[3]/button');
 
 $I->waitForText("@IDP2", $waitTime);
 
