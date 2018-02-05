@@ -129,7 +129,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
         $samlIDP = $state[self::IDP_KEY];
 
         if (empty($state[self::SP_NAMEID_ATTR])) {
-            SimpleSAML_Logger::warning(
+            SimpleSAML\Logger::warning(
                 self::SP_NAMEID_ATTR . ' attribute not available from ' .
                 $samlIDP . '.'
             );
