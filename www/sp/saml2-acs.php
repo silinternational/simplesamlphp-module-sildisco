@@ -1,5 +1,5 @@
 <?php
-ini_set('display_errors', 1);
+
 /**
  * Assertion consumer service handler for SAML 2.0 SP authentication client.
  *
