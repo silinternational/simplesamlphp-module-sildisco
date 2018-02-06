@@ -115,7 +115,7 @@ if ($message instanceof \SAML2\LogoutResponse) {
 	$lr->setInResponseTo($message->getId());
 
 	if ($numLoggedOut < count($sessionIndexes)) {
-		SimpleSAML_Logger::warning('Logged out of ' . $numLoggedOut  . ' of ' . count($sessionIndexes) . ' sessions.');
+		SimpleSAML\Logger::warning('Logged out of ' . $numLoggedOut  . ' of ' . count($sessionIndexes) . ' sessions.');
 	}
 
 	$dst = $idpMetadata->getEndpointPrioritizedByBinding('SingleLogoutService', array(
