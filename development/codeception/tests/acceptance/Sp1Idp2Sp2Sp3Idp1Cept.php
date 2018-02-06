@@ -35,7 +35,7 @@ $I->waitForText("http://ssp-hub-sp.local", $waitTime);
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
 $I->waitForText("http://ssp-hub-sp2.local", $waitTime);
 
-// See that going to sp3 results bypassing the hub and going straight to idp1
+// See that going to sp3 results in passing through the hub and going straight to idp1
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
 $I->waitForText("Enter your username and password", $waitTime);
 

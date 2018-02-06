@@ -94,7 +94,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
      * @param $nameId \SAML2\XML\saml\NameID
      * @param $IDPNamespace string
      *
-     * Modifies the nameID object but adding text to the end of its value attribute
+     * Modifies the nameID object by adding text to the end of its value attribute
      */
     public function appendIdp($nameId, $IDPNamespace) {
 
