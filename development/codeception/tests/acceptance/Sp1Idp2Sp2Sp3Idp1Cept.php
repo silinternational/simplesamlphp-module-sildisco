@@ -43,7 +43,7 @@ $I->fillField('password', 'a');
 $I->click('//*[@id="submit"]/td[3]/button');
 
 
-$I->waitForText("test_admin@idp1.org", $waitTime);
+$I->waitForText("http://ssp-hub-sp3.local", $waitTime);
 
 // Logout of both IDP's
 $I->click("Logout");

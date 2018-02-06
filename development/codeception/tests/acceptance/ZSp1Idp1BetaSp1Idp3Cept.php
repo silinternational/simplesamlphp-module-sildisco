@@ -51,7 +51,7 @@ $I->fillField('password', 'c');
 $I->click('//*[@id="submit"]/td[3]/button');
 $I->makeScreenshot('post_login');
 
-$I->waitForText("@IDP3", $waitTime);
+$I->waitForText("http://ssp-hub-sp.local", $waitTime);
 
 
 // Logout of IDP3
