@@ -10,6 +10,7 @@ COPY ./composer.json /data/
 COPY ./composer.lock /data/
 COPY ./run.sh /data/
 
+RUN chmod a+x /data/run.sh
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader
 
 RUN ln -s /data/vendor/codeception/codeception/codecept /data/codecept
