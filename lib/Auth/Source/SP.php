@@ -487,46 +487,13 @@ class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
             !in_array($state['saml:sp:IdP'], $state['saml:IDPList'], true))
         {
             /*
-             * The user has an existing, valid session. However, the SP provided a list of IdPs it accepts for
-             * authentication, and the IdP the existing session is related to is not in that list.
-             *
-             * First, check if we recognize any of the IdPs requested.
+             * GTIS:  This is customized (brought over from v 1.14).  We don't
+             *    want the user's previous session to be logged out
+             *    in the case that the new SP can't use a previous IdP
              */
 
-            $mdh = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
-            $known_idps = $mdh->getList();
-            $intersection = array_intersect($state['saml:IDPList'], array_keys($known_idps));
-
-            if (empty($intersection)) { // all requested IdPs are unknown
-                throw new SimpleSAML\Module\saml\Error\NoSupportedIDP(
-                    \SAML2\Constants::STATUS_REQUESTER,
-                    'None of the IdPs requested are supported by this proxy.'
-                );
-            }
-
-            /*
-             * We have at least one IdP in the IDPList that we recognize, and it's not the one currently in use. Let's
-             * see if this proxy enforces the use of one single IdP.
-             */
-            if (!is_null($this->idp) && !in_array($this->idp, $intersection, true)) { // an IdP is enforced but not requested
-                throw new SimpleSAML\Module\saml\Error\NoAvailableIDP(
-                    \SAML2\Constants::STATUS_REQUESTER,
-                    'None of the IdPs requested are available to this proxy.'
-                );
-            }
-
-            /*
-             * We need to inform the user, and ask whether we should logout before starting the authentication process
-             * again with a different IdP, or cancel the current SSO attempt.
-             */
-            SimpleSAML\Logger::warning(
-                "Reauthentication after logout is needed. The IdP '${state['saml:sp:IdP']}' is not in the IDPList ".
-                "provided by the Service Provider '${state['core:SP']}'."
-            );
-
-            $state['saml:sp:IdPMetadata'] = $this->getIdPMetadata($state['saml:sp:IdP']);
-            $state['saml:sp:AuthId'] = $this->authId;
-            self::askForIdPChange($state);
+            $state['LoginCompletedHandler'] = array('sspmod_sildisco_Auth_Source_SP', 'reauthPostLogin');
+            $this->authenticate($state);
         }
     }
 
@@ -802,7 +769,7 @@ class sspmod_sildisco_Auth_Source_SP extends SimpleSAML_Auth_Source {
 		$state = $authProcState['saml:sp:State'];
 
 		$sourceId = $state['saml:sp:AuthId'];
-		$source = SimpleSAML_Auth_Source::getById($sourceId);
+		$source = SimpleSAML_Auth_Source::getById($sourceId, 'sspmod_sildisco_Auth_Source_SP');
 		if ($source === NULL) {
 			throw new Exception('Could not find authentication source with id ' . $sourceId);
 		}
