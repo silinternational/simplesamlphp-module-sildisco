@@ -42,7 +42,7 @@ $I->waitForText("Enter your username and password", $waitTime);
 $I->fillField('password', 'b');
 $I->click('//*[@id="submit"]/td[3]/button');
 
-$I->waitForText("@IDP2", $waitTime);
+$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
 
 // Logout of both idp's
 $I->click('Logout');

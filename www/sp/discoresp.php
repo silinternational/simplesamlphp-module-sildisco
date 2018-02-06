@@ -1,4 +1,7 @@
 <?php
+/**
+ * Modified version of modules/saml/www/sp/discoresp.php
+ */
 
 /**
  * Handler for response from IdP discovery service.

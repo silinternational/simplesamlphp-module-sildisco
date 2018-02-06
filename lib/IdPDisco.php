@@ -35,7 +35,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
      */
     protected function log($message)
     {
-        SimpleSAML_Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
+        SimpleSAML\Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
     }
 
     /**

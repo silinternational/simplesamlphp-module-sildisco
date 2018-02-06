@@ -1,6 +1,5 @@
 <?php
 
-
 use Sil\SspUtils\Metadata;
 
 /**
@@ -92,29 +91,17 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
     }
 
     /**
-     * @param $value array|string The NameID string or array (with a Value entry)
+     * @param $nameId \SAML2\XML\saml\NameID
      * @param $IDPNamespace string
-     * @return array|string
-     * @throws SimpleSAML_Error_Exception
+     *
+     * Modifies the nameID object by adding text to the end of its value attribute
      */
-    public function appendIdp($value, $IDPNamespace) {
+    public function appendIdp($nameId, $IDPNamespace) {
 
         $suffix = self::DELIMITER . $IDPNamespace;
-
-        if (is_string($value)) {
-            $value .= $suffix;
-            return $value;
-        }
-
-        if (!isset($value[self::VALUE_KEY])) {
-            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing '" .
-                self::VALUE_KEY . "' key in NameID entry  for  " .
-                $IDPNamespace . "."
-            );
-        }
-
-        $value[self::VALUE_KEY] = $value[self::VALUE_KEY] . $suffix;
-        return $value;
+        $value = $nameId->value;
+        $nameId->value  = $value . $suffix;
+        return;
     }
 
 
@@ -129,7 +116,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
         $samlIDP = $state[self::IDP_KEY];
 
         if (empty($state[self::SP_NAMEID_ATTR])) {
-            SimpleSAML_Logger::warning(
+            SimpleSAML\Logger::warning(
                 self::SP_NAMEID_ATTR . ' attribute not available from ' .
                 $samlIDP . '.'
             );
