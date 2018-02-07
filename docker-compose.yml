@@ -35,6 +35,8 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "80:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
@@ -66,6 +68,8 @@ services:
     command: /data/run.sh
     ports:
       - "8085:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=a
@@ -95,6 +99,8 @@ services:
     command: /data/run.sh
     ports:
       - "8086:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=b
@@ -119,6 +125,8 @@ services:
     command: /data/run.sh
     ports:
       - "8087:80"
+    env_file:
+      - local.env
     environment:
       ADMIN_EMAIL: "john_doe@there.com"
       ADMIN_PASS: "c"
@@ -141,6 +149,8 @@ services:
       - ./development/sp-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8081:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp1
@@ -165,6 +175,8 @@ services:
       - ./development/sp2-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8082:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp2
@@ -189,6 +201,8 @@ services:
       - ./development/sp3-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8083:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp3
@@ -233,6 +247,8 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "8090:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
@@ -281,6 +297,8 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "8099:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
