@@ -38,7 +38,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
@@ -69,7 +69,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=a
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - IDP_NAME=IdP1
@@ -98,7 +98,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=b
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - IDP_NAME=IdP2
@@ -144,7 +144,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp1
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz1
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz1
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -168,7 +168,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp2
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz2
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz2
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -192,7 +192,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp3
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz3
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz3
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -236,7 +236,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
@@ -284,7 +284,7 @@ services:
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
