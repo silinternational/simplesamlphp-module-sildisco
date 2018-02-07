@@ -514,18 +514,19 @@ $config = [
             'type'          => 'saml20-idp-SSO',
         ],
 
-        // If no attributes are requested in the SP metadata, then these will be sent through
-        50 => [
-            'class' => 'core:AttributeLimit',
-            'default' => true,
-            'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
+        // Add one to help with testing
+       50 => [
+           'class' => 'core:AttributeAdd',
+           'eduPersonPrincipalName' => 'TEST_ADMIN',
+           'urn:oid:0.9.2342.19200300.100.1.3' => 'test_admin@idp2.org',
+           'uid' => '222266',
         ],
         
         // Use the uid value to populate the nameid entry
         60 => [
             'class' => 'saml:AttributeNameID',
             'attribute' => 'uid',
-            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
         ],
 
         /*

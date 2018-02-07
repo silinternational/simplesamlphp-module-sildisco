@@ -50,9 +50,7 @@ services:
   idp1:
     image: silintl/ssp-base:develop
     volumes:
-      - ./development/run.sh:/data/run.sh
-      
-      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
@@ -81,9 +79,7 @@ services:
   idp2:
     image: silintl/ssp-base:develop
     volumes:
-      - ./development/run.sh:/data/run.sh
-      
-      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs

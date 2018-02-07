@@ -28,12 +28,12 @@ $I->waitForText("Enter your username and password", $waitTime);
 $I->fillField('password', 'b');
 $I->click('//*[@id="submit"]/td[3]/button');
 
-$I->waitForText("http://ssp-hub-sp.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
 
 // Start at sp2. Go through hub to idp2
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
-$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
 // See that going to sp3 results in passing through the hub and going straight to idp1
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
@@ -43,7 +43,7 @@ $I->fillField('password', 'a');
 $I->click('//*[@id="submit"]/td[3]/button');
 
 
-$I->waitForText("http://ssp-hub-sp3.local", $waitTime);
+$I->waitForText("test_admin@idp1.org", $waitTime);
 
 // Logout of both IDP's
 $I->click("Logout");
@@ -51,6 +51,6 @@ $I->waitForText("You have been logged out.", $waitTime);
 
 
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
-$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 $I->click("Logout");
 $I->waitForText("You have been logged out.", $waitTime);

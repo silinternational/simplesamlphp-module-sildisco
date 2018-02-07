@@ -42,7 +42,7 @@ $I->waitForText("Enter your username and password", $waitTime);
 $I->fillField('password', 'b');
 $I->click('//*[@id="submit"]/td[3]/button');
 
-$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
 // Logout of both idp's
 $I->click('Logout');
