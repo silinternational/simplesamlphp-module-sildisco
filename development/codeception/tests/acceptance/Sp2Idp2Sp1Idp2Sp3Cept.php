@@ -13,7 +13,7 @@ $I->waitForText("Enter your username and password", $waitTime);
 $I->fillField('password', 'b');
 $I->click('//*[@id="submit"]/td[3]/button');
 
-$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
 // Start at sp1
 $I->amOnUrl('http://sp1/module.php/core/authenticate.php?as=hub4tests');
@@ -25,7 +25,7 @@ $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~")
 // Use idp2 but already Authenticated
 $I->click($idp2Id . "/parent::*");
 
-$I->waitForText("http://ssp-hub-sp.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
 
 // See that going to sp3 requires login
@@ -43,7 +43,7 @@ $I->click('Logout');
 $I->waitForText("You have been logged out.", $waitTime);
 
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
-$I->waitForText("http://ssp-hub-sp2.local", $waitTime);
+$I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 $I->click("Logout");
 $I->waitForText("You have been logged out.", $waitTime);
 
