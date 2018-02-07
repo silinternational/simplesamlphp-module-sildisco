@@ -6,7 +6,7 @@ use Sil\SspUtils\Metadata;
  * Attribute filter for appending IDPNamespace to the NameID.
  * The IdP must have a IDPNamespace entry in its metadata.
  *
- * Also, for this to work, the SP needs to include a line in its 
+ * Also, for this to work, the SP needs to include a line in its
  * authsources.php file in the IdP's entry ...
  *   'NameIDPolicy' => "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
  *
@@ -16,7 +16,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
     const IDP_KEY = "saml:sp:IdP"; // the key that points to the entity id in the state
 
     // the metadata key for the IDP's Namespace code (i.e. short name)
-    const IDP_CODE_KEY = 'IDPNamespace'; 
+    const IDP_CODE_KEY = 'IDPNamespace';
 
     const DELIMITER = '@'; // The symbol between the NameID proper and the Idp code.
 
@@ -137,7 +137,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
         // The IDP metadata must have an IDPNamespace entry
         if ( ! isset($idpEntry[self::IDP_CODE_KEY])) {
             throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing required metadata entry: " .
-                                                 self::IDP_CODE_KEY . ".");
+                self::IDP_CODE_KEY . ".");
         }
 
         // IDPNamespace must be a non-empty string
@@ -156,14 +156,14 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
         $IDPNamespace = $idpEntry[self::IDP_CODE_KEY];
 
         $nameId = $state[self::SP_NAMEID_ATTR];
-        $nameId = self::appendIdp($nameId, $IDPNamespace);
+        self::appendIdp($nameId, $IDPNamespace);
 
         $format =  'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
 
         if ( ! empty($this->format)) {
             $format = $this->format;
-        } elseif ( ! empty($nameId[self::FORMAT_KEY])) {
-            $format = $nameId[self::FORMAT_KEY];
+        } elseif ( ! empty($nameId->Format)) {
+            $format = $nameId->Format;
         }
 
         $state['saml:NameID'][$format] = $nameId;
