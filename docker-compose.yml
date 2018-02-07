@@ -35,10 +35,12 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "80:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
@@ -48,9 +50,7 @@ services:
   idp1:
     image: silintl/ssp-base:develop
     volumes:
-      - ./development/run.sh:/data/run.sh
-      
-      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
@@ -66,10 +66,12 @@ services:
     command: /data/run.sh
     ports:
       - "8085:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=a
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - IDP_NAME=IdP1
@@ -77,9 +79,7 @@ services:
   idp2:
     image: silintl/ssp-base:develop
     volumes:
-      - ./development/run.sh:/data/run.sh
-      
-      # Revert to standard SSOService.php instead of using sildisco'saml20-idp-hosted
+      # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
@@ -95,10 +95,12 @@ services:
     command: /data/run.sh
     ports:
       - "8086:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=b
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - IDP_NAME=IdP2
@@ -119,6 +121,8 @@ services:
     command: /data/run.sh
     ports:
       - "8087:80"
+    env_file:
+      - local.env
     environment:
       ADMIN_EMAIL: "john_doe@there.com"
       ADMIN_PASS: "c"
@@ -141,10 +145,12 @@ services:
       - ./development/sp-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8081:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp1
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz1
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz1
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -165,10 +171,12 @@ services:
       - ./development/sp2-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8082:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp2
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz2
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz2
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -189,10 +197,12 @@ services:
       - ./development/sp3-local/metadata/saml20-idp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-remote.php
     ports:
       - "8083:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=sp3
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJz3
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJz3
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
@@ -233,10 +243,12 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "8090:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
@@ -281,10 +293,12 @@ services:
     command: /data/run-debug.sh 
     ports:
       - "8099:80"
+    env_file:
+      - local.env
     environment:
       - ADMIN_EMAIL=john_doe@there.com
       - ADMIN_PASS=1234qwer
-      - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
+      - SECRET_SALT=h57fjemb&dn^nsJFGNjweJ
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true

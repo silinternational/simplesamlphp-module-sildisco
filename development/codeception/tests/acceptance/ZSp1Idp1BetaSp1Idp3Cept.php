@@ -51,7 +51,7 @@ $I->fillField('password', 'c');
 $I->click('//*[@id="submit"]/td[3]/button');
 $I->makeScreenshot('post_login');
 
-$I->waitForText("http://ssp-hub-sp.local", $waitTime);
+$I->waitForText("@IDP3", $waitTime); // This should be the suffix on the NameId value
 
 
 // Logout of IDP3

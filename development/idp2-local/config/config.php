@@ -140,18 +140,18 @@ $config = [
      * Logging.
      *
      * define the minimum log level to log
-     *		SimpleSAML_Logger::ERR		No statistics, only errors
-     *		SimpleSAML_Logger::WARNING	No statistics, only warnings/errors
-     *		SimpleSAML_Logger::NOTICE	Statistics and errors
-     *		SimpleSAML_Logger::INFO		Verbose logs
-     *		SimpleSAML_Logger::DEBUG	Full debug logs - not reccomended for production
+     *		SimpleSAML\Logger::ERR		No statistics, only errors
+     *		SimpleSAML\Logger::WARNING	No statistics, only warnings/errors
+     *		SimpleSAML\Logger::NOTICE	Statistics and errors
+     *		SimpleSAML\Logger::INFO		Verbose logs
+     *		SimpleSAML\Logger::DEBUG	Full debug logs - not reccomended for production
      *
      * Choose logging handler.
      *
      * Options: [syslog,file,errorlog]
      *
      */
-    'logging.level' => SimpleSAML_Logger::NOTICE,
+    'logging.level' => SimpleSAML\Logger::NOTICE,
     'logging.handler' => $LOGGING_HANDLER,
 
     /*
@@ -514,18 +514,19 @@ $config = [
             'type'          => 'saml20-idp-SSO',
         ],
 
-        // If no attributes are requested in the SP metadata, then these will be sent through
-        50 => [
-            'class' => 'core:AttributeLimit',
-            'default' => TRUE,
-            'eduPersonPrincipalName', 'sn', 'givenName', 'mail',
+        // Add one to help with testing
+       50 => [
+           'class' => 'core:AttributeAdd',
+           'eduPersonPrincipalName' => 'TEST_ADMIN',
+           'urn:oid:0.9.2342.19200300.100.1.3' => 'test_admin@idp2.org',
+           'uid' => '222266',
         ],
         
-        // Use the uid value to populate the nameid entry       
+        // Use the uid value to populate the nameid entry
         60 => [
             'class' => 'saml:AttributeNameID',
             'attribute' => 'uid',
-            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:transient',
+            'Format' => 'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent',
         ],
 
         /*
