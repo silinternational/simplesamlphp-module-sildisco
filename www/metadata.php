@@ -184,7 +184,7 @@ try {
     if ($idpmeta->hasValue('contacts')) {
         $contacts = $idpmeta->getArray('contacts');
         foreach ($contacts as $contact) {
-            $metaArray['contacts'][] = Config\Metadata::getContact($contact);
+            $metaArray['contacts'][] = Metadata::getContact($contact);
         }
     }
 
@@ -193,7 +193,7 @@ try {
         $techcontact['emailAddress'] = $technicalContactEmail;
         $techcontact['name'] = $config->getString('technicalcontact_name', null);
         $techcontact['contactType'] = 'technical';
-        $metaArray['contacts'][] = Config\Metadata::getContact($techcontact);
+        $metaArray['contacts'][] = Metadata::getContact($techcontact);
     }
 
     $metaBuilder = new SimpleSAML_Metadata_SAMLBuilder($idpentityid);
