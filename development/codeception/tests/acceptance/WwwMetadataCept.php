@@ -3,7 +3,7 @@
 $waitTime = 15;
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo("Ensure I see the metadata page formatted in xml.");
+$I->wantTo("Ensure I see the hub's metadata page.");
 
 // default format (php)
 $I->amOnUrl('http://hub4tests/module.php/sildisco/metadata.php');
