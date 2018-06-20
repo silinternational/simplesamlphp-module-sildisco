@@ -82,12 +82,8 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         }
 
         // Get the SP's name
-        $spName = "";
-
         $spEntries = Metadata::getSpMetadataEntries($metadataPath);
-        if (!empty($spEntries[$spEntityId][self::$spNameMdKey])) {
-            $spName = $spEntries[$spEntityId][self::$spNameMdKey];
-        }
+        $spName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
