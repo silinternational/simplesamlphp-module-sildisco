@@ -2,6 +2,7 @@
 
 use Sil\SspUtils\AnnouncementUtils;
 use Sil\SspUtils\DiscoUtils;
+use Sil\SspUtils\Metadata;
 
 /**
  * This class implements a custom IdP discovery service, for use with a ssp hub (proxy)
@@ -25,6 +26,9 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
     /* The idp metadata key that says whether an IDP is enabled */
     public static $enabledMdKey = 'enabled';
+
+    /* The sp metadata key that gives the name of the SP */
+    public static $spNameMdKey = 'name';
 
     /**
      * Log a message.
@@ -77,6 +81,10 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
             );
         }
 
+        // Get the SP's name
+        $spEntries = Metadata::getSpMetadataEntries($metadataPath);
+        $spName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
+
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
         $t = new SimpleSAML_XHTML_Template($this->config, $templateFileName, 'disco');
@@ -84,6 +92,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->data['return'] = $this->returnURL;
         $t->data['returnIDParam'] = $this->returnIdParam;
         $t->data['entityID'] = $this->spEntityId;
+        $t->data['spName'] = $spName;
         $t->data['urlpattern'] = htmlspecialchars(\SimpleSAML\Utils\HTTP::getSelfURLNoQuery());
         $t->data['announcement'] = AnnouncementUtils::getSimpleAnnouncement();
 
