@@ -1,6 +1,7 @@
 <?php 
 
 $waitTime = 10;
+$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
 $idp2Id =  '//*[@id="http://ssp-hub-idp2.local:8086"]';
 $spHomePath = '/module.php/core/frontpage_welcome.php';
 
@@ -35,8 +36,12 @@ $I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId 
 $I->amOnUrl('http://sp2/module.php/core/authenticate.php?as=hub4tests');
 $I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
-// See that going to sp3 results in passing through the hub and going straight to idp1
+// See that going to sp3 and selecting idp1 results in authentication without credentials
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
+// Ensure the SP's name shows up in the header bar
+$I->waitForText('to continue to SP3', $waitTime);
+
+$I->click($idp1Id . "/parent::*");
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'a');
