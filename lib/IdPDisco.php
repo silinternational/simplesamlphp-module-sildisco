@@ -83,11 +83,19 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         // Get the SP's name
         $spEntries = Metadata::getSpMetadataEntries($metadataPath);
-        $spName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
         $t = new SimpleSAML_XHTML_Template($this->config, $templateFileName, 'disco');
+
+        $spName = null;
+
+        $rawSPName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
+        if ($rawSPName !== null) {
+            $spName = htmlspecialchars($t->getTranslator()->getPreferredTranslation(
+                SimpleSAML\Utils\Arrays::arrayize($rawSPName, 'en')))   ;
+        }
+
         $t->data['idplist'] = $idpList;
         $t->data['return'] = $this->returnURL;
         $t->data['returnIDParam'] = $this->returnIdParam;
