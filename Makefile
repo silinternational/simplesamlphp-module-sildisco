@@ -1,5 +1,5 @@
 suite:
-	docker-compose up -d hub sp1 sp2 idp1 idp2 idp3
+	docker-compose up -d hub sp1 sp2 sp3 idp1 idp2 idp3
 
 bash:
 	docker-compose exec hub bash
