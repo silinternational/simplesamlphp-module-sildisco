@@ -93,7 +93,8 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $rawSPName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
         if ($rawSPName !== null) {
             $spName = htmlspecialchars($t->getTranslator()->getPreferredTranslation(
-                SimpleSAML\Utils\Arrays::arrayize($rawSPName, 'en')))   ;
+                SimpleSAML\Utils\Arrays::arrayize($rawSPName, 'en')
+            ))   ;
         }
 
         $t->data['idplist'] = $idpList;
