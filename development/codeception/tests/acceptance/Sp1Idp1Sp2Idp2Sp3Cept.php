@@ -25,7 +25,8 @@ $I->waitForElement($idp1Id, $waitTime);
 
 $I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
 
-
+// Ensure the SP's name shows up in the header bar
+$I->waitForText('to continue to SP1', $waitTime);
 
 // Use idp1 for Authentication
 $I->click($idp1Id . "/parent::*");
@@ -47,8 +48,17 @@ $I->click('//*[@id="submit"]/td[3]/button');
 
 $I->waitForText("@IDP2", $waitTime); // This should be the suffix on the NameId value
 
-// See that going to sp3 results in immediate authentication to idp1
+// See that going to sp3 and selecting idp1 results in authentication without credentials
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
+
+
+$I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
+
+// Ensure the SP's name shows up in the header bar
+$I->waitForText('to continue to SP3', $waitTime);
+
+$I->click($idp1Id . "/parent::*");
+
 $I->waitForText("test_admin@idp1.org", $waitTime);
 
 // Logout of both IDP's
