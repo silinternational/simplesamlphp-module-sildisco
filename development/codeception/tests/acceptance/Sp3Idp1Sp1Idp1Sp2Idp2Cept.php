@@ -16,6 +16,15 @@ $I->waitForText('Test authentication sources', $waitTime);
 
 // Go to the hub and get redirected straight to idp1
 $I->click('hub4tests');
+
+
+$I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
+
+// Ensure the SP's name shows up in the header bar
+$I->waitForText('to continue to SP3', $waitTime);
+
+$I->click($idp1Id . "/parent::*");
+
 $I->waitForText("Enter your username and password", $waitTime);
 
 $I->fillField('password', 'a');
@@ -49,6 +58,12 @@ $I->click('Logout');
 $I->waitForText("You have been logged out.", $waitTime);
 
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
+$I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
+
+$I->waitForText('to continue to SP3', $waitTime);
+
+$I->click($idp1Id . "/parent::*");
+
 $I->waitForText("test_admin@idp1.org", $waitTime);
 $I->click("Logout");
 $I->waitForText("You have been logged out.", $waitTime);

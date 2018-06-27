@@ -35,9 +35,14 @@ $I->click('//*[@id="submit"]/td[3]/button');
 $I->waitForText("test_admin@idp1.org", $waitTime);
 
 
-// See that going to sp3 does not require login
+// See that going to sp3 and selecting idp1 results in authentication without credentials
 $I->amOnUrl('http://sp3/module.php/core/authenticate.php?as=hub4tests');
-$I->waitForText("http://ssp-hub-sp3.local", $waitTime);
+$I->seeCurrentUrlMatches("~/module.php/sildisco/disco.php\?entityID=hub4tests~");
+
+// Ensure the SP's name shows up in the header bar
+$I->waitForText('to continue to SP3', $waitTime);
+
+$I->click($idp1Id . "/parent::*");
 
 // Logout of both idp's
 $I->click('Logout');
