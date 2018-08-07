@@ -140,4 +140,47 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         return $idpList;
     }
+
+    /**
+     * Validates the given IdP entity id.
+     *
+     * Takes a string with the IdP entity id, and returns the entity id if it is valid, or
+     * null if not. Ensures that the selected IdP is allowed for the current SP
+     *
+     * @param string|null $idp The entity id we want to validate. This can be null, in which case we will return null.
+     *
+     * @return string|null The entity id if it is valid, null if not.
+     */
+    protected function validateIdP($idp)
+    {
+        if ($idp === null) {
+            return null;
+        }
+        if (!$this->config->getBoolean('idpdisco.validate', true)) {
+            return $idp;
+        }
+
+        $idpList = $this->getIdPList();
+        $idpList = $this->filterList($idpList);
+
+        $metadataPath = __DIR__ . '/../../../metadata/';
+
+        $sessionDataType = 'sildisco:authentication';
+        $sessionKey = 'spentityid';
+        $spEntityId = $this->session->getData($sessionDataType, $sessionKey);
+
+        $idpList = DiscoUtils::getReducedIdpList(
+            $idpList,
+            $metadataPath,
+            $spEntityId
+        );
+        $idpList = self::enableBetaEnabled($idpList);
+
+        if (array_key_exists($idp, $idpList) && $idpList[$idp]['enabled']) {
+                return $idp;
+        }
+        $this->log('Unable to validate IdP entity id ['.$idp.'].');
+        // the entity id wasn't valid
+        return null;
+    }
 }
