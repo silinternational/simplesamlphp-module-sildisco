@@ -81,15 +81,20 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         list($spEntityId, $idpList) = $this->getSPEntityIDAndReducedIdpList();
 
         if (sizeof($idpList) == 1) {
-            $this->log(
-                'Choice made [' . array_keys($idpList)[0] . '] (Redirecting the user back. returnIDParam='.
-                $this->returnIdParam.')'
-            );
+            $idp = array_keys($idpList)[0];
+            $idp = $this->validateIdP($idp);
+            if ($idp !== null) {
 
-            \SimpleSAML\Utils\HTTP::redirectTrustedURL(
-                $this->returnURL,
-                array($this->returnIdParam => array_keys($idpList)[0])
-            );
+                $this->log(
+                    'Choice made [' . $idp . '] (Redirecting the user back. returnIDParam=' .
+                    $this->returnIdParam . ')'
+                );
+
+                \SimpleSAML\Utils\HTTP::redirectTrustedURL(
+                    $this->returnURL,
+                    array($this->returnIdParam => $idp)
+                );
+            }
         }
 
         // Get the SP's name
