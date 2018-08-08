@@ -176,7 +176,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         if (array_key_exists($idp, $idpList) && $idpList[$idp]['enabled']) {
                 return $idp;
         }
-        $this->log('Unable to validate IdP entity id ['.$idp.'].');
+        $this->log('Invalid IdP entity id ['.$idp.'] received from discovery page.');
         // the entity id wasn't valid
         return null;
     }
