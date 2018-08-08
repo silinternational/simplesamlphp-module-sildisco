@@ -182,7 +182,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
          * session and in the request's 'return' entry.
          *
          * With a hacked process, the SP in the session will not appear in the
-         * request's 'return entry.
+         * request's 'return' entry.
          */
         $returnKey = 'return';
         $requestReturn =  array_key_exists($returnKey, $_REQUEST) ?
