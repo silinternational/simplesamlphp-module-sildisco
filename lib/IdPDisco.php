@@ -173,8 +173,33 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         list($spEntityId, $idpList) = $this->getSPEntityIDAndReducedIdpList();
 
+        /*
+         * All this complication is for security.
+         * Without it a user is able to use his authentication through an
+         * IdP to login to an SP that normally shouldn't accept that IdP.
+         *
+         * With a good process, the current SP's entity ID will appear in the
+         * session and in the request's 'return' entry.
+         *
+         * With a hacked process, the SP in the session will not appear in the
+         * request's 'return entry.
+         */
+        $returnKey = 'return';
+        $requestReturn =  array_key_exists($returnKey, $_REQUEST) ?
+            urldecode(urldecode($_REQUEST[$returnKey])) : "";
+
+        $spEntityIdParam = 'spentityid='.$spEntityId;
+
+        if (strpos($requestReturn, $spEntityIdParam) === false) {
+            $message = 'Invalid SP entity id [' . $spEntityId . ']. ' .
+                'Could not find in return value. ' . PHP_EOL . $requestReturn;
+            $this->log($message);
+            return null;
+        }
+
+
         if (array_key_exists($idp, $idpList) && $idpList[$idp]['enabled']) {
-                return $idp;
+            return $idp;
         }
         $this->log('Invalid IdP entity id ['.$idp.'] received from discovery page.');
         // the entity id wasn't valid
