@@ -30,6 +30,11 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
     /* The sp metadata key that gives the name of the SP */
     public static $spNameMdKey = 'name';
 
+    /* Used to get the SP Entity ID, e.g. $spEntityId = $this->session->getData($sessionDataType, $sessionKeyForSP); */
+    public static $sessionDataType = 'sildisco:authentication';
+    public static $sessionKeyForSP = 'spentityid';
+
+
     /**
      * Log a message.
      *
@@ -42,6 +47,28 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         SimpleSAML\Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
     }
 
+    /* Path to the folder with the SP and IdP metadata */
+    private function getMetadataPath() {
+        return __DIR__ . '/../../../metadata/';
+    }
+
+    private function getSPEntityIDAndReducedIdpList()
+    {
+
+        $idpList = $this->getIdPList();
+        $idpList = $this->filterList($idpList);
+
+        $spEntityId = $this->session->getData(self::$sessionDataType, self::$sessionKeyForSP);
+
+        $idpList = DiscoUtils::getReducedIdpList(
+            $idpList,
+            $this->getMetadataPath(),
+            $spEntityId
+        );
+
+        return array($spEntityId, self::enableBetaEnabled($idpList));
+    }
+
     /**
      * Handles a request to this discovery service.
      *
@@ -49,25 +76,9 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
      */
     public function handleRequest()
     {
+
         $this->start();
-
-        // no choice made. Show discovery service page
-        $idpList = $this->getIdPList();
-        $idpList = $this->filterList($idpList);
-
-        $metadataPath = __DIR__ . '/../../../metadata/';
-
-        $sessionDataType = 'sildisco:authentication';
-        $sessionKey = 'spentityid';
-        $spEntityId = $this->session->getData($sessionDataType, $sessionKey);
-
-        $idpList = DiscoUtils::getReducedIdpList(
-            $idpList,
-            $metadataPath,
-            $spEntityId
-        );
-
-        $idpList = self::enableBetaEnabled($idpList);
+        list($spEntityId, $idpList) = $this->getSPEntityIDAndReducedIdpList();
 
         if (sizeof($idpList) == 1) {
             $this->log(
@@ -82,7 +93,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         }
 
         // Get the SP's name
-        $spEntries = Metadata::getSpMetadataEntries($metadataPath);
+        $spEntries = Metadata::getSpMetadataEntries($this->getMetadataPath());
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
@@ -139,5 +150,34 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         }
 
         return $idpList;
+    }
+
+    /**
+     * Validates the given IdP entity id.
+     *
+     * Takes a string with the IdP entity id, and returns the entity id if it is valid, or
+     * null if not. Ensures that the selected IdP is allowed for the current SP
+     *
+     * @param string|null $idp The entity id we want to validate. This can be null, in which case we will return null.
+     *
+     * @return string|null The entity id if it is valid, null if not.
+     */
+    protected function validateIdP($idp)
+    {
+        if ($idp === null) {
+            return null;
+        }
+        if (!$this->config->getBoolean('idpdisco.validate', true)) {
+            return $idp;
+        }
+
+        list($spEntityId, $idpList) = $this->getSPEntityIDAndReducedIdpList();
+
+        if (array_key_exists($idp, $idpList) && $idpList[$idp]['enabled']) {
+                return $idp;
+        }
+        $this->log('Invalid IdP entity id ['.$idp.'] received from discovery page.');
+        // the entity id wasn't valid
+        return null;
     }
 }
