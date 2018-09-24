@@ -304,3 +304,14 @@ services:
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
       - IDP_NAME=Hub
+
+  composer:
+    image: silintl/ssp-base:develop
+    volumes:
+      - ./development/update-composer-deps.sh:/data/update-composer-deps.sh
+      - ./composer.json:/data/composer.json
+      - ./composer.lock:/data/composer.lock
+      - ./vendor:/data/vendor
+    env_file:
+      - ./local.env
+    working_dir: /data
