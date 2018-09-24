@@ -68,8 +68,6 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         // Get the SP's entity id
         $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
 
-        $user = $this->getUser($state);
-
         // Get the current datetime
         $datetime = date("Y-m-d H:i:s");
 
@@ -82,13 +80,15 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         $dynamodb = $sdk->createDynamoDb();
         $marshaler = new Marshaler();
 
+        $userAttributes = $this->getUserAttributes($state);
+
         $logJson = '
             {
                 "ID": "' . uniqid() . '",
                 "IDP": "' . $idp . '",
-                "SP": "' . $spEntityId . '",
-                "User": "' . $user . '",
-                "Time": "' . $datetime . '"
+                "SP": "' . $spEntityId . '",' .
+                $userAttributes .
+                '"Time": "' . $datetime . '"
             }';
 
         $item = $marshaler->marshalJson($logJson);
@@ -131,33 +131,57 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         return $samlIDP;
     }
 
-    private function getUser($state) {
+    private function getUserAttributes($state) {
         // Get the current user's common name attribute or otherwise eduPersonPrincipalName
         $attributes = $state['Attributes'];
 
         $oidForCn = 'urn:oid:2.5.4.3';
         $cnKey = 'cn';
+        
         $oidForEduPersonPrincipalName = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
-        $eduPPNKey = 'eduPersonPrincipalName';
+        $eduPersonPrincipalNameKey = 'eduPersonPrincipalName';
 
+        $oidForEmployeeNumber = 'urn:oid:2.16.840.1.113730.3.1.3';
+        $employeeNumberKey = 'employeeNumber';
+        
 
+        $cn = '';
         if (!empty($attributes[$oidForCn])) {
-            return $attributes[$oidForCn][0];
+            $cn =  $attributes[$oidForCn][0];
+        } else if (!empty($attributes[$cnKey])) {
+            $cn =  $attributes[$cnKey][0];
         }
 
-        if (!empty($attributes[$cnKey])) {
-            return $attributes[$cnKey][0];
-        }
-
+        $eduPersonPrincipalName = '';
         if (!empty($attributes[$oidForEduPersonPrincipalName])) {
-            return $attributes[$oidForEduPersonPrincipalName][0];
+            $eduPersonPrincipalName = $attributes[$oidForEduPersonPrincipalName][0];
+        } else if (!empty($attributes[$eduPersonPrincipalNameKey])) {
+            $eduPersonPrincipalName = $attributes[$eduPersonPrincipalNameKey][0];
         }
 
-        if (!empty($attributes[$eduPPNKey])) {
-            return $attributes[$eduPPNKey][0];
+        $employeeNumber = '';
+        if (!empty($attributes[$oidForEmployeeNumber])) {
+            $employeeNumber = $attributes[$oidForEmployeeNumber][0];
+        } else if (!empty($attributes[$employeeNumberKey])) {
+            $employeeNumber = $attributes[$employeeNumberKey][0];
         }
 
-        return 'Unnamed_User';
+        $userAttributes = '
+                ';
+        $userAttributes .= $this->addUserAttribute("CN", $cn);
+        $userAttributes .= $this->addUserAttribute("EduPersonPrincipalName", $eduPersonPrincipalName);
+        $userAttributes .= $this->addUserAttribute("EmployeeNumber", $employeeNumber);
+
+        return $userAttributes;
+    }
+
+    private function addUserAttribute($attrKey, $attr) {
+        if (!empty($attr)) {
+            return '"' . $attrKey . '": "' . $attr . '",
+                ';
+        }
+
+        return '';
     }
 
 }
