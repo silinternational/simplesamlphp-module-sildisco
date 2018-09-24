@@ -3,7 +3,6 @@ services:
   hub:
     image: silintl/ssp-base:develop
     volumes:
-
       - ./development/run.sh:/data/run.sh
 
       # The slightly modified file that hides non enabled idps      
@@ -32,7 +31,6 @@ services:
 
       # Configure the debugger
       - ./development/hub/run-debug.sh:/data/run-debug.sh
-
 
     command: /data/run-debug.sh 
     ports:
