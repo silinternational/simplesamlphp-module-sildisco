@@ -2,6 +2,9 @@
 
 use Sil\SspUtils\Metadata;
 
+use Aws\DynamoDb\Exception\DynamoDbException;
+use Aws\DynamoDb\Marshaler;
+
 /**
  *
  */
@@ -12,6 +15,48 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
     // the metadata key for the IDP's Namespace code (i.e. short name)
     const IDP_CODE_KEY = 'IDPNamespace';
 
+    // The host of the aws dynamodb
+    private $awsEndpoint;
+
+    // The region of the aws dynamodb
+    private $awsRegion;
+
+    // The name of the aws dynamodb table that stores the login data
+    private $dbTableName;
+
+    /**
+     * Initialize this filter, parse configuration.
+     *
+     * @param array $config  Configuration information about this filter.
+     * @param mixed $reserved  For future use.
+     */
+    public function __construct($config, $reserved) {
+        parent::__construct($config, $reserved);
+        assert('is_array($config)');
+
+        if (isset($config['AWSEndpoint'])) {
+            $this->awsEndpoint = $config['AWSEndpoint'];
+        } else {
+            $this->awsEndpoint = 'http://aws-endpoint-missing:8000';
+        }
+
+        if (isset($config['AWSRegion'])) {
+            $this->awsRegion = $config['AWSRegion'];
+        } else {
+            $this->awsRegion = 'us-east-1';
+        }
+
+        if (isset($config['DBTableName'])) {
+            $this->dbTableName = $config['DBTableName'];
+        } else {
+            $this->dbTableName = 'sildisco_default_user-log';
+        }
+
+        $this->format = Null;
+        if ( ! empty($config[self::FORMAT_KEY])) {
+            $this->format = (string) $config[self::FORMAT_KEY];
+        }
+    }
 
     /**
      * Apply filter to copy attributes.
@@ -62,7 +107,41 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         }
 
         // Get the current datetime
-        $datetime = date("Y-m-d.H:i:s");
+        $datetime = date("Y-m-d H:i:s");
+
+        $sdk = new Aws\Sdk([
+            'endpoint'   => $this->awsEndpoint,
+            'region'   => $this->awsRegion,
+            'version'  => 'latest'
+        ]);
+
+        $dynamodb = $sdk->createDynamoDb();
+        $marshaler = new Marshaler();
+
+
+        $id = uniqid();
+
+        $item = $marshaler->marshalJson('
+            {
+                "ID": "' . $id . '",
+                "IDP": "' . $IDPNamespace . '",
+                "SP": "' . $spEntityId . '",
+                "User": "' . $user . '",
+                "Time": "' . $datetime . '"
+            }'
+        );
+
+        $params = [
+            'TableName' => $this->TableName,
+            'Item' => $item,
+        ];
+
+        try {
+            $result = $dynamodb->putItem($params);
+        } catch (DynamoDbException $e) {
+            echo "Unable to add item:\n";
+            echo $e->getMessage() . "\n";
+        }
     }
 
 }
