@@ -52,10 +52,6 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             $this->dbTableName = 'sildisco_default_user-log';
         }
 
-        $this->format = Null;
-        if ( ! empty($config[self::FORMAT_KEY])) {
-            $this->format = (string) $config[self::FORMAT_KEY];
-        }
     }
 
     /**
@@ -65,46 +61,14 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
      */
     public function process(&$state) {
         assert('is_array($state)');
-//        assert('is_array($request)');
-//        assert('array_key_exists("Attributes", $request)');
+//        assert('array_key_exists("Attributes", $state)');
 
-
-        $samlIDP = $state[self::IDP_KEY];
-
-        // Get the potential IDPs from idp remote metadata
-        $metadataPath = __DIR__ . '/../../../../../metadata';
-
-        // If a unit test sends a different metadataPath, use it
-        if (isset($state['metadataPath'])) {
-            $metadataPath = $state['metadataPath'];
-        }
-        $idpEntries = \Sil\SspUtils\Metadata::getIdpMetadataEntries($metadataPath);
-
-        // Get the IDPNamespace or else just use the IDP's entity ID
-        $IDPNamespace = $samlIDP;
-        $idpEntry = $idpEntries[$samlIDP];
-
-        // The IDP metadata must have an IDPNamespace entry
-        if (isset($idpEntry[self::IDP_CODE_KEY]) && is_string($idpEntry[self::IDP_CODE_KEY])) {
-            if ( preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
-                $IDPNamespace = $idpEntry[self::IDP_CODE_KEY];
-            }
-        }
+        $idp = $this->getIdp($state);
 
         // Get the SP's entity id
-        $spEntityId = $state['SPMetadata']['entityid'];
+        $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
 
-        // Get the current user's common name attribute
-        $attributes =& $state['Attributes'];
-        $oid4cn = 'urn:oid:2.5.4.3';
-        $cnKey = 'cn';
-        $user = 'Unnamed_User';
-
-        if (!empty($attributes[$oid4cn])) {
-            $user = $attributes[$oid4cn];
-        } else if (!empty($attributes[$cnKey])) {
-            $user = $attributes($cnKey);
-        }
+        $user = $this->getUser($state);
 
         // Get the current datetime
         $datetime = date("Y-m-d H:i:s");
@@ -118,21 +82,19 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         $dynamodb = $sdk->createDynamoDb();
         $marshaler = new Marshaler();
 
-
-        $id = uniqid();
-
-        $item = $marshaler->marshalJson('
+        $logJson = '
             {
-                "ID": "' . $id . '",
-                "IDP": "' . $IDPNamespace . '",
+                "ID": "' . uniqid() . '",
+                "IDP": "' . $idp . '",
                 "SP": "' . $spEntityId . '",
                 "User": "' . $user . '",
                 "Time": "' . $datetime . '"
-            }'
-        );
+            }';
+
+        $item = $marshaler->marshalJson($logJson);
 
         $params = [
-            'TableName' => $this->TableName,
+            'TableName' => $this->dbTableName,
             'Item' => $item,
         ];
 
@@ -142,6 +104,60 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             echo "Unable to add item:\n";
             echo $e->getMessage() . "\n";
         }
+    }
+
+    private function getIdp(&$state) {
+        $samlIDP = $state[self::IDP_KEY];
+
+        // Get the potential IDPs from idp remote metadata
+        $metadataPath = __DIR__ . '/../../../../../metadata';
+
+        // If a unit test sends a different metadataPath, use it
+        if (isset($state['metadataPath'])) {
+            $metadataPath = $state['metadataPath'];
+        }
+        $idpEntries = \Sil\SspUtils\Metadata::getIdpMetadataEntries($metadataPath);
+
+        // Get the IDPNamespace or else just use the IDP's entity ID
+        $idpEntry = $idpEntries[$samlIDP];
+
+        // The IDPNamespace entry is close to being alphanumeric, use it
+        if (isset($idpEntry[self::IDP_CODE_KEY]) && is_string($idpEntry[self::IDP_CODE_KEY])) {
+            if ( preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
+                return $idpEntry[self::IDP_CODE_KEY];
+            }
+        }
+        // Default, just use the idp's entity_id
+        return $samlIDP;
+    }
+
+    private function getUser($state) {
+        // Get the current user's common name attribute or otherwise eduPersonPrincipalName
+        $attributes = $state['Attributes'];
+
+        $oidForCn = 'urn:oid:2.5.4.3';
+        $cnKey = 'cn';
+        $oidForEduPersonPrincipalName = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
+        $eduPPNKey = 'eduPersonPrincipalName';
+
+
+        if (!empty($attributes[$oidForCn])) {
+            return $attributes[$oidForCn][0];
+        }
+
+        if (!empty($attributes[$cnKey])) {
+            return $attributes[$cnKey][0];
+        }
+
+        if (!empty($attributes[$oidForEduPersonPrincipalName])) {
+            return $attributes[$oidForEduPersonPrincipalName][0];
+        }
+
+        if (!empty($attributes[$eduPPNKey])) {
+            return $attributes[$eduPPNKey][0];
+        }
+
+        return 'Unnamed_User';
     }
 
 }
