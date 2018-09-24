@@ -27,6 +27,15 @@ return [
         // NOTE: This breaks being able to test the hub's authentication sources
         //       since the hub doesn't create an SP entry in the session
         'SPList' => ['http://ssp-hub-sp.local', 'http://ssp-hub-sp2.local', 'http://ssp-hub-sp3.local'],
+
+        'authproc' => [
+            97 => [
+                'class' =>'sildisco:LogUser',
+                'AWSEndpoint' => 'http://dynamo:8000',
+                'AWSRegion' => 'us-east-1',
+                'DBTableName' => 'sildisco_local_user-log',
+            ],
+        ],
     ],
 
 
