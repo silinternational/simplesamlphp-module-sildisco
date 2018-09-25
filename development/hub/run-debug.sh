@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+if [[ "x" == "x$LOGENTRIES_KEY" ]]; then
+    echo "Missing LOGENTRIES_KEY environment variable";
+else
+    # Set logentries key based on environment variable
+    sed -i /etc/rsyslog.conf -e "s/LOGENTRIESKEY/${LOGENTRIES_KEY}/"
+    # Start syslog
+    rsyslogd
+    sleep 10
+fi
+
 echo "Installing php-xdebug"
 apt-get update -y
 apt-get install -y php-xdebug
