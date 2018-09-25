@@ -71,7 +71,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
         // Get the SP's entity id
         $spEntityId = "SP entity ID not available";
-        if (isset($state['saml:sp:State']['SPMetadata']['entityid'])) {
+        if (! empty($state['saml:sp:State']['SPMetadata']['entityid'])) {
             $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
         }
 
