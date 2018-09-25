@@ -6,6 +6,12 @@ use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 
 /**
+ * This Auth Proc logs information about each successful login to an AWS Dynamodb table.
+ *
+ *  It requires the following configs
+ *   'DynamoEndpoint' ex. http://arn:aws:dynamodb:us-east-1:1234567
+ *   'DynamoRegion' ex. 'us-east-1'
+ *   'DynamoLogTable' ex. 'sildisco_dev_user-log'
  *
  */
 class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFilter
