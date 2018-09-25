@@ -62,7 +62,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
     }
 
     /**
-     * Apply filter to copy attributes.
+     * Log info for a user's login to Dyanmodb
      *
      * @param array &$state  The current state array
      */
@@ -71,7 +71,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             return;
         }
 
-        assert('is_array($state)');
+        assert(is_array($state));
 
         $idp = $this->getIdp($state);
 
@@ -114,8 +114,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         try {
             $result = $dynamodb->putItem($params);
         } catch (DynamoDbException $e) {
-            echo "Unable to add item:\n";
-            echo $e->getMessage() . "\n";
+            SimpleSAML\Logger::error("Unable to add item: ". $e->getMessage());
         }
     }
 
@@ -158,13 +157,12 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         // Get the IDPNamespace or else just use the IDP's entity ID
         $idpEntry = $idpEntries[$samlIDP];
 
-        // If the IDPNamespace entry is close to being alphanumeric, use it
+        // If the IDPNamespace entry is a string, use it
         if (isset($idpEntry[self::IDP_CODE_KEY]) && is_string($idpEntry[self::IDP_CODE_KEY])) {
-            if ( preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
-                return $idpEntry[self::IDP_CODE_KEY];
-            }
+            return $idpEntry[self::IDP_CODE_KEY];
         }
-        // Default, just use the idp's entity ID
+
+        // Default, use the idp's entity ID
         return $samlIDP;
     }
 
@@ -172,36 +170,19 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
     private function getUserAttributes($state) {
         $attributes = $state['Attributes'];
 
-        $oidForCn = 'urn:oid:2.5.4.3';
-        $cnKey = 'cn';
-        
-        $oidForEduPersonPrincipalName = 'urn:oid:1.3.6.1.4.1.5923.1.1.1.6';
-        $eduPersonPrincipalNameKey = 'eduPersonPrincipalName';
+        $cn = $this->getAttributeFrom($attributes, 'urn:oid:2.5.4.3', 'cn');
 
-        $oidForEmployeeNumber = 'urn:oid:2.16.840.1.113730.3.1.3';
-        $employeeNumberKey = 'employeeNumber';
-        
+        $eduPersonPrincipalName = $this->getAttributeFrom(
+            $attributes,
+            'urn:oid:1.3.6.1.4.1.5923.1.1.1.6',
+            'eduPersonPrincipalName'
+        );
 
-        $cn = '';
-        if (!empty($attributes[$oidForCn])) {
-            $cn =  $attributes[$oidForCn][0];
-        } else if (!empty($attributes[$cnKey])) {
-            $cn =  $attributes[$cnKey][0];
-        }
-
-        $eduPersonPrincipalName = '';
-        if (!empty($attributes[$oidForEduPersonPrincipalName])) {
-            $eduPersonPrincipalName = $attributes[$oidForEduPersonPrincipalName][0];
-        } else if (!empty($attributes[$eduPersonPrincipalNameKey])) {
-            $eduPersonPrincipalName = $attributes[$eduPersonPrincipalNameKey][0];
-        }
-
-        $employeeNumber = '';
-        if (!empty($attributes[$oidForEmployeeNumber])) {
-            $employeeNumber = $attributes[$oidForEmployeeNumber][0];
-        } else if (!empty($attributes[$employeeNumberKey])) {
-            $employeeNumber = $attributes[$employeeNumberKey][0];
-        }
+        $employeeNumber = $this->getAttributeFrom(
+            $attributes,
+            'urn:oid:2.16.840.1.113730.3.1.3',
+            'employeeNumber'
+        );
 
         $userAttributes = '
                 ';
@@ -212,6 +193,20 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         return $userAttributes;
     }
 
+    private function getAttributeFrom($attributes, $oidKey, $friendlyKey) {
+        if (!empty($attributes[$oidKey])) {
+            return $attributes[$oidKey][0];
+        }
+
+        if (!empty($attributes[$friendlyKey])) {
+            return $attributes[$friendlyKey][0];
+        }
+
+        return '';
+    }
+
+    // Dynamodb seems to complain when a value is an empty string.
+    // This ensures that only attributes with a non empty value get included.
     private function addUserAttribute($attrKey, $attr) {
         if (!empty($attr)) {
             return '"' . $attrKey . '": "' . $attr . '",
