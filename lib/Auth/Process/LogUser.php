@@ -15,14 +15,21 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
     // the metadata key for the IDP's Namespace code (i.e. short name)
     const IDP_CODE_KEY = 'IDPNamespace';
 
+    const DYNAMO_ENDPOINT_KEY = 'DynamoEndpoint';
+
+    const DYNAMO_REGION_KEY = 'DynamoRegion';
+
+    const DYNAMO_LOG_TABLE_KEY = 'DynamoLogTable';
+
+
     // The host of the aws dynamodb
-    private $awsEndpoint;
+    private $dynamoEndpoint;
 
     // The region of the aws dynamodb
-    private $awsRegion;
+    private $dynamoRegion;
 
     // The name of the aws dynamodb table that stores the login data
-    private $dbTableName;
+    private $dynamoLogTable;
 
     /**
      * Initialize this filter, parse configuration.
@@ -32,24 +39,18 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
      */
     public function __construct($config, $reserved) {
         parent::__construct($config, $reserved);
-        assert('is_array($config)');
+        assert(is_array($config));
 
-        if (isset($config['AWSEndpoint'])) {
-            $this->awsEndpoint = $config['AWSEndpoint'];
-        } else {
-            $this->awsEndpoint = 'http://aws-endpoint-missing:8000';
+        if (! empty($config[self::DYNAMO_ENDPOINT_KEY])) {
+            $this->dynamoEndpoint = $config[self::DYNAMO_ENDPOINT_KEY];
         }
 
-        if (isset($config['AWSRegion'])) {
-            $this->awsRegion = $config['AWSRegion'];
-        } else {
-            $this->awsRegion = 'us-east-1';
+        if (! empty($config[self::DYNAMO_REGION_KEY])) {
+            $this->dynamoRegion = $config[self::DYNAMO_REGION_KEY];
         }
 
-        if (isset($config['DBTableName'])) {
-            $this->dbTableName = $config['DBTableName'];
-        } else {
-            $this->dbTableName = 'sildisco_default_user-log';
+        if (! empty($config[self::DYNAMO_LOG_TABLE_KEY])) {
+            $this->dynamoLogTable = $config[self::DYNAMO_LOG_TABLE_KEY];
         }
 
     }
@@ -60,20 +61,26 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
      * @param array &$state  The current state array
      */
     public function process(&$state) {
+        if (! $this->configsAreValid()) {
+            return;
+        }
+
         assert('is_array($state)');
-//        assert('array_key_exists("Attributes", $state)');
 
         $idp = $this->getIdp($state);
 
         // Get the SP's entity id
-        $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
+        $spEntityId = "SP entity ID not available";
+        if (isset($state['saml:sp:State']['SPMetadata']['entityid'])) {
+            $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
+        }
 
         // Get the current datetime
         $datetime = date("Y-m-d H:i:s");
 
         $sdk = new Aws\Sdk([
-            'endpoint'   => $this->awsEndpoint,
-            'region'   => $this->awsRegion,
+            'endpoint'   => $this->dynamoEndpoint,
+            'region'   => $this->dynamoRegion,
             'version'  => 'latest'
         ]);
 
@@ -94,7 +101,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         $item = $marshaler->marshalJson($logJson);
 
         $params = [
-            'TableName' => $this->dbTableName,
+            'TableName' => $this->dynamoLogTable,
             'Item' => $item,
         ];
 
@@ -106,7 +113,31 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         }
     }
 
+    private function configsAreValid() {
+        $msg = ' config value not provided to LogUser.';
+        if (empty($this->dynamoEndpoint)) {
+            SimpleSAML\Logger::error(self::DYNAMO_ENDPOINT_KEY . $msg);
+            return false;
+        }
+
+        if (empty($this->dynamoRegion)) {
+            SimpleSAML\Logger::error(self::DYNAMO_REGION_KEY . $msg);
+            return false;
+        }
+
+        if (empty($this->dynamoLogTable)) {
+            SimpleSAML\Logger::error(self::DYNAMO_LOG_TABLE_KEY . $msg);
+            return false;
+        }
+
+        return true;
+    }
+
     private function getIdp(&$state) {
+        if (empty($state[self::IDP_KEY])) {
+            return 'No IDP available';
+        }
+
         $samlIDP = $state[self::IDP_KEY];
 
         // Get the potential IDPs from idp remote metadata
@@ -121,13 +152,13 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         // Get the IDPNamespace or else just use the IDP's entity ID
         $idpEntry = $idpEntries[$samlIDP];
 
-        // The IDPNamespace entry is close to being alphanumeric, use it
+        // If the IDPNamespace entry is close to being alphanumeric, use it
         if (isset($idpEntry[self::IDP_CODE_KEY]) && is_string($idpEntry[self::IDP_CODE_KEY])) {
             if ( preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
                 return $idpEntry[self::IDP_CODE_KEY];
             }
         }
-        // Default, just use the idp's entity_id
+        // Default, just use the idp's entity ID
         return $samlIDP;
     }
 
