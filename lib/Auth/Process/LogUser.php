@@ -73,16 +73,11 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
         assert(is_array($state));
 
-        $idp = $this->getIdp($state);
-
         // Get the SP's entity id
         $spEntityId = "SP entity ID not available";
         if (! empty($state['saml:sp:State']['SPMetadata']['entityid'])) {
             $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
         }
-
-        // Get the current datetime
-        $datetime = date("Y-m-d H:i:s");
 
         $sdk = new Aws\Sdk([
             'endpoint'   => $this->dynamoEndpoint,
@@ -95,14 +90,17 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
         $userAttributes = $this->getUserAttributes($state);
 
-        $logJson = '
-            {
-                "ID": "' . uniqid() . '",
-                "IDP": "' . $idp . '",
-                "SP": "' . $spEntityId . '",' .
-                $userAttributes .
-                '"Time": "' . $datetime . '"
-            }';
+        $logContents = array_merge(
+            $userAttributes,
+            [
+                "ID" => uniqid(),
+                "IDP" => $this->getIdp($state),
+                "SP" => $spEntityId,
+                "Time" => date("Y-m-d H:i:s")
+            ]
+        );
+
+        $logJson = json_encode($logContents);
 
         $item = $marshaler->marshalJson($logJson);
 
@@ -184,13 +182,13 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             'employeeNumber'
         );
 
-        $userAttributes = '
-                ';
-        $userAttributes .= $this->addUserAttribute("CN", $cn);
-        $userAttributes .= $this->addUserAttribute("EduPersonPrincipalName", $eduPersonPrincipalName);
-        $userAttributes .= $this->addUserAttribute("EmployeeNumber", $employeeNumber);
+        $userAttrs = [];
 
-        return $userAttributes;
+        $userAttrs = $this->addUserAttribute($userAttrs, "CN", $cn);
+        $userAttrs = $this->addUserAttribute($userAttrs, "EduPersonPrincipalName", $eduPersonPrincipalName);
+        $userAttrs = $this->addUserAttribute($userAttrs, "EmployeeNumber", $employeeNumber);
+
+        return $userAttrs;
     }
 
     private function getAttributeFrom($attributes, $oidKey, $friendlyKey) {
@@ -207,13 +205,12 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
     // Dynamodb seems to complain when a value is an empty string.
     // This ensures that only attributes with a non empty value get included.
-    private function addUserAttribute($attrKey, $attr) {
+    private function addUserAttribute($attributes, $attrKey, $attr) {
         if (!empty($attr)) {
-            return '"' . $attrKey . '": "' . $attr . '",
-                ';
+            $attributes[$attrKey] = $attr;
         }
 
-        return '';
+        return $attributes;
     }
 
 }
