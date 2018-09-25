@@ -17,3 +17,8 @@ functionaltests:
 
 composer:
 	docker-compose run --rm composer bash -c "/data/update-composer-deps.sh"
+
+dynamo:
+	docker-compose up -d dynamo
+	sleep 5
+	docker-compose run init-dynamo
