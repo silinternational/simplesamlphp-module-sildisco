@@ -48,6 +48,9 @@ services:
       - IDP_NAME=Hub
       - AWS_ACCESS_KEY_ID=anything
       - AWS_SECRET_ACCESS_KEY=anything
+      - DYNAMO_ENDPOINT=http://dynamo:8000
+      - DYNAMO_REGION=us-east-1
+      - DYNAMO_LOG_TABLE=sildisco_local_user-log
 
   idp1:
     image: silintl/ssp-base:develop

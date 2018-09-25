@@ -1,5 +1,12 @@
 <?php
 
+use Sil\PhpEnv\Env;
+
+
+$DYNAMO_ENDPOINT = Env::get('DYNAMO_ENDPOINT', '');
+$DYNAMO_REGION = Env::get('DYNAMO_REGION', '');
+$DYNAMO_LOG_TABLE = Env::get('DYNAMO_LOG_TABLE', '');
+
 /**
  * SAML 2.0 remote IdP metadata for SimpleSAMLphp.
  *
@@ -31,9 +38,9 @@ return [
         'authproc' => [
             97 => [
                 'class' =>'sildisco:LogUser',
-                'AWSEndpoint' => 'http://dynamo:8000',
-                'AWSRegion' => 'us-east-1',
-                'DBTableName' => 'sildisco_local_user-log',
+                'DynamoEndpoint' => $DYNAMO_ENDPOINT,
+                'DynamoRegion' => $DYNAMO_REGION,
+                'DynamoLogTable' => $DYNAMO_LOG_TABLE,
             ],
         ],
     ],
