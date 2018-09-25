@@ -162,8 +162,8 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         return $samlIDP;
     }
 
+    // Get the current user's common name attribute and/or eduPersonPrincipalName and/or employeeNumber
     private function getUserAttributes($state) {
-        // Get the current user's common name attribute or otherwise eduPersonPrincipalName
         $attributes = $state['Attributes'];
 
         $oidForCn = 'urn:oid:2.5.4.3';
