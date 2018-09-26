@@ -46,18 +46,9 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         parent::__construct($config, $reserved);
         assert(is_array($config));
 
-        if (! empty($config[self::DYNAMO_ENDPOINT_KEY])) {
-            $this->dynamoEndpoint = $config[self::DYNAMO_ENDPOINT_KEY];
-        }
-
-        if (! empty($config[self::DYNAMO_REGION_KEY])) {
-            $this->dynamoRegion = $config[self::DYNAMO_REGION_KEY];
-        }
-
-        if (! empty($config[self::DYNAMO_LOG_TABLE_KEY])) {
-            $this->dynamoLogTable = $config[self::DYNAMO_LOG_TABLE_KEY];
-        }
-
+        $this->dynamoEndpoint = $config[self::DYNAMO_ENDPOINT_KEY] ?? null;
+        $this->dynamoRegion = $config[self::DYNAMO_REGION_KEY] ?? null;
+        $this->dynamoLogTable = $config[self::DYNAMO_LOG_TABLE_KEY] ?? null;
     }
 
     /**
@@ -78,11 +69,17 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
         }
 
-        $sdk = new Aws\Sdk([
-            'endpoint'   => $this->dynamoEndpoint,
-            'region'   => $this->dynamoRegion,
-            'version'  => 'latest'
-        ]);
+        $sdkConfig = ['version' => 'latest'];
+
+        if (!empty($this->dynamoEndpoint)) {
+            $sdkConfig['endpoint'] =  $this->dynamoEndpoint;
+        }
+
+        if (!empty($this->dynamoRegion)) {
+            $sdkConfig['region'] =  $this->dynamoRegion;
+        }
+
+        $sdk = new Aws\Sdk($sdkConfig);
 
         $dynamodb = $sdk->createDynamoDb();
         $marshaler = new Marshaler();
