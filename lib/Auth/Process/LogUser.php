@@ -69,14 +69,13 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             $spEntityId = $state['saml:sp:State']['SPMetadata']['entityid'];
         }
 
-        $sdkConfig = ['version' => 'latest'];
+        $sdkConfig = [
+            'region' => $this->dynamoRegion,
+            'version' => 'latest',
+        ];
 
         if (!empty($this->dynamoEndpoint)) {
             $sdkConfig['endpoint'] =  $this->dynamoEndpoint;
-        }
-
-        if (!empty($this->dynamoRegion)) {
-            $sdkConfig['region'] =  $this->dynamoRegion;
         }
 
         $sdk = new Aws\Sdk($sdkConfig);
