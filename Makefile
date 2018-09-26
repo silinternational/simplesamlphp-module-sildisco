@@ -1,4 +1,4 @@
-suite:
+suite: dynamo
 	docker-compose up -d hub sp1 sp2 sp3 idp1 idp2 idp3
 
 bash:
