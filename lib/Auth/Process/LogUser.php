@@ -1,8 +1,5 @@
 <?php
 
-use Sil\SspUtils\Metadata;
-
-use Aws\DynamoDb\Exception\DynamoDbException;
 use Aws\DynamoDb\Marshaler;
 
 /**
@@ -114,7 +111,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
         try {
             $result = $dynamodb->putItem($params);
-        } catch (DynamoDbException $e) {
+        } catch (Exception $e) {
             SimpleSAML\Logger::error("Unable to add item: ". $e->getMessage());
         }
     }
