@@ -27,6 +27,8 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
     const DYNAMO_LOG_TABLE_KEY = 'DynamoLogTable';
 
+    const SECONDS_PER_YEAR = 31536000; // 60 * 60 * 24 * 365
+
 
     // The host of the aws dynamodb
     private $dynamoEndpoint;
@@ -96,7 +98,8 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
                 "ID" => uniqid(),
                 "IDP" => $this->getIdp($state),
                 "SP" => $spEntityId,
-                "Time" => date("Y-m-d H:i:s")
+                "Time" => date("Y-m-d H:i:s"),
+                "ExpiresAt" => time() + self::SECONDS_PER_YEAR,
             ]
         );
 
