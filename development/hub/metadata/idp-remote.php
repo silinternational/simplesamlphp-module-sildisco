@@ -1,5 +1,12 @@
 <?php
 
+use Sil\PhpEnv\Env;
+
+
+$DYNAMO_ENDPOINT = Env::get('DYNAMO_ENDPOINT', '');
+$DYNAMO_REGION = Env::get('DYNAMO_REGION', '');
+$DYNAMO_LOG_TABLE = Env::get('DYNAMO_LOG_TABLE', '');
+
 /**
  * SAML 2.0 remote IdP metadata for SimpleSAMLphp.
  *
@@ -27,6 +34,15 @@ return [
         // NOTE: This breaks being able to test the hub's authentication sources
         //       since the hub doesn't create an SP entry in the session
         'SPList' => ['http://ssp-hub-sp.local', 'http://ssp-hub-sp2.local', 'http://ssp-hub-sp3.local'],
+
+        'authproc' => [
+            97 => [
+                'class' =>'sildisco:LogUser',
+                'DynamoEndpoint' => $DYNAMO_ENDPOINT,
+                'DynamoRegion' => $DYNAMO_REGION,
+                'DynamoLogTable' => $DYNAMO_LOG_TABLE,
+            ],
+        ],
     ],
 
 

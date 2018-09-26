@@ -3,7 +3,6 @@ services:
   hub:
     image: silintl/ssp-base:develop
     volumes:
-
       - ./development/run.sh:/data/run.sh
 
       # The slightly modified file that hides non enabled idps      
@@ -32,6 +31,7 @@ services:
 
       # Configure the debugger
       - ./development/hub/run-debug.sh:/data/run-debug.sh
+
     command: /data/run-debug.sh 
     ports:
       - "80:80"
@@ -46,6 +46,11 @@ services:
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
       - IDP_NAME=Hub
+      - AWS_ACCESS_KEY_ID=anything
+      - AWS_SECRET_ACCESS_KEY=anything
+      - DYNAMO_ENDPOINT=http://dynamo:8000
+      - DYNAMO_REGION=us-east-1
+      - DYNAMO_LOG_TABLE=sildisco_local_user-log
 
   idp1:
     image: silintl/ssp-base:develop
@@ -315,3 +320,25 @@ services:
     env_file:
       - ./local.env
     working_dir: /data
+
+  dynamo:
+    image: cnadiminti/dynamodb-local
+    command: "-sharedDb -inMemory"
+    hostname: dynamo
+    ports:
+      - "8000:8000"
+    environment:
+      reschedule: on-node-failure
+
+  init-dynamo:
+    image: garland/aws-cli-docker
+    command: "/init-dynamodb.sh"
+    volumes:
+      - ./development/init-dynamodb.sh:/init-dynamodb.sh
+    depends_on:
+      - dynamo
+    environment:
+      - AWS_ACCESS_KEY_ID=0
+      - AWS_SECRET_ACCESS_KEY=0
+      - AWS_DEFAULT_REGION=us-east-1
+      - AWS_DYNAMODB_ENDPOINT=http://dynamo:8000
