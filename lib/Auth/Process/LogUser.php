@@ -114,10 +114,6 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
     private function configsAreValid() {
         $msg = ' config value not provided to LogUser.';
-        if (empty($this->dynamoEndpoint)) {
-            SimpleSAML\Logger::error(self::DYNAMO_ENDPOINT_KEY . $msg);
-            return false;
-        }
 
         if (empty($this->dynamoRegion)) {
             SimpleSAML\Logger::error(self::DYNAMO_REGION_KEY . $msg);
