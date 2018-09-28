@@ -6,9 +6,11 @@ use Aws\DynamoDb\Marshaler;
  * This Auth Proc logs information about each successful login to an AWS Dynamodb table.
  *
  *  It requires the following configs
- *   'DynamoEndpoint' ex. https://dynamodb.us-east-1.amazonaws.com/1234567
  *   'DynamoRegion' ex. 'us-east-1'
  *   'DynamoLogTable' ex. 'sildisco_dev_user-log'
+ *
+ *  The following config is not needed on AWS, but it is needed locally
+ *   'DynamoEndpoint' ex. http://dynamo:8000
  *
  */
 class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFilter
@@ -114,10 +116,6 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
     private function configsAreValid() {
         $msg = ' config value not provided to LogUser.';
-        if (empty($this->dynamoEndpoint)) {
-            SimpleSAML\Logger::error(self::DYNAMO_ENDPOINT_KEY . $msg);
-            return false;
-        }
 
         if (empty($this->dynamoRegion)) {
             SimpleSAML\Logger::error(self::DYNAMO_REGION_KEY . $msg);
