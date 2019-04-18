@@ -1,6 +1,6 @@
 
 hub4tests:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       - ./development/run.sh:/data/run.sh
 
@@ -43,7 +43,7 @@ hub4tests:
 
 
 idp1:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       - ./development/run.sh:/data/run.sh
 
@@ -71,7 +71,7 @@ idp1:
       - IDP_NAME=IdP1
 
 idp2:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       - ./development/run.sh:/data/run.sh
 
@@ -99,7 +99,7 @@ idp2:
       - IDP_NAME=IdP2
 
 idp3:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       # Utilize custom certs
       - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -122,7 +122,7 @@ idp3:
       IDP_NAME: "IdP3"
 
 sp1:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       # Utilize custom certs
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -145,7 +145,7 @@ sp1:
 
 
 sp2:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       # Utilize custom certs
       - ./development/sp2-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -168,7 +168,7 @@ sp2:
 
 
 sp3:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
       # Utilize custom certs
       - ./development/sp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -215,7 +215,7 @@ phantomjs:
     command: "phantomjs --webdriver=4444 --ignore-ssl-errors=true --load-images=false"
 
 unit_test:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:4.3.0
     volumes:
 
       - ./development/run-tests.sh:/data/run-tests.sh
