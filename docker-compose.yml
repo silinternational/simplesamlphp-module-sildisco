@@ -51,7 +51,6 @@ services:
       - DYNAMO_ENDPOINT=http://dynamo:8000
       - DYNAMO_REGION=us-east-1
       - DYNAMO_LOG_TABLE=sildisco_local_user-log
-      - HELP_CENTER_URL=https://www.example.org
 
   idp1:
     image: silintl/ssp-base:develop

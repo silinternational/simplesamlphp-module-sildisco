@@ -76,6 +76,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
      */
     public function handleRequest()
     {
+
         $this->start();
         list($spEntityId, $idpList) = $this->getSPEntityIDAndReducedIdpList();
 
@@ -119,7 +120,6 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
         $t->data['spName'] = $spName;
         $t->data['urlpattern'] = htmlspecialchars(\SimpleSAML\Utils\HTTP::getSelfURLNoQuery());
         $t->data['announcement'] = AnnouncementUtils::getSimpleAnnouncement();
-        $t->data['helpCenterUrl'] = $this->config->getString('helpCenterUrl', '');
 
         $t->show();
     }
