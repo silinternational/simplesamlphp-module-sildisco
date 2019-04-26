@@ -2,7 +2,7 @@
 
 /*
  * Note: Once this test is run, the beta_tester cookie is set.  So, the test will
- * fail on a second run, unless the container is killed and restarted.
+ * fail on a second run, unless the hub4tests container is killed and restarted.
  */
 
 $waitTime = 15;
