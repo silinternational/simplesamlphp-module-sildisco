@@ -77,13 +77,13 @@ class AddIdp2NameId extends \SimpleSAML\Auth\ProcessingFilter {
         if (isset($config['NameQualifier'])) {
             $this->nameQualifier = $config['NameQualifier'];
         } else {
-            $this->nameQualifier = FALSE;
+            $this->nameQualifier = false;
         }
 
         if (isset($config['SPNameQualifier'])) {
             $this->spNameQualifier = $config['SPNameQualifier'];
         } else {
-            $this->spNameQualifier = TRUE;
+            $this->spNameQualifier = true;
         }
 
         $this->format = Null;

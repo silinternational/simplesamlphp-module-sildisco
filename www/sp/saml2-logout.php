@@ -103,7 +103,7 @@ if ($message instanceof \SAML2\LogoutResponse) {
 	$sessionIndexes = $message->getSessionIndexes();
 
 	$numLoggedOut = \SimpleSAML\Module\saml\SP\LogoutStore::logoutSessions($sourceId, $nameId, $sessionIndexes);
-	if ($numLoggedOut === FALSE) {
+	if ($numLoggedOut === false) {
 		/* This type of logout was unsupported. Use the old method. */
 		$source->handleLogout($idpEntityId);
 		$numLoggedOut = count($sessionIndexes);

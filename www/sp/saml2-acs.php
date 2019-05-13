@@ -257,4 +257,4 @@ if (isset($state['\SimpleSAML\Auth\Source.ReturnURL'])) {
 $state['PersistentAuthData'][] = 'saml:sp:prevAuth';
 
 $source->handleResponse($state, $idp, $attributes);
-assert('FALSE');
+assert(false);

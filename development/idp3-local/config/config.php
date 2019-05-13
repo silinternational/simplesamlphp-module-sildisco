@@ -250,9 +250,9 @@ $config = [
      *
      * 'module.enable' => array(
      * 	// Setting to TRUE enables.
-     * 	'exampleauth' => TRUE,
+     * 	'exampleauth' => true,
      * 	// Setting to FALSE disables.
-     * 	'saml' => FALSE,
+     * 	'saml' => false,
      * 	// Unset or NULL uses default.
      * 	'core' => NULL,
      * ),
@@ -548,7 +548,7 @@ $config = [
             'class' => 'consent:Consent',
             'store' => 'consent:Cookie',
             'focus' => 'yes',
-            'checked' => TRUE
+            'checked' => true
         ),
          */
 
