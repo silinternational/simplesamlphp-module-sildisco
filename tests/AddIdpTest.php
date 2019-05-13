@@ -28,18 +28,18 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
      */
     private static function processAddIdp2NameId(array $config, array $request)
     {
-        $filter = new sspmod_sildisco_Auth_Process_AddIdp2NameId($config, NULL);
+        $filter = new \SimpleSAML\Module\sildisco\Auth\Process\AddIdp2NameId($config, NULL);
         $filter->process($request);
         return $request;
     }
 
     /*
      * Test with IdP metadata not having an IDPNamespace entry
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testAddIdp2NameId_NoIDPNamespace()
     {
-        $this->setExpectedException('SimpleSAML_Error_Exception');
+        $this->setExpectedException('\SimpleSAML\Error\Exception');
         $config = [ 'test' => ['value1', 'value2'], ];
         $request = self::getNameID('idp-bare');
 
@@ -49,11 +49,11 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
 
     /*
      * Test with IdP metadata not having an IDPNamespace entry
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testAddIdp2NameId_EmptyIDPNamespace()
     {
-        $this->setExpectedException('SimpleSAML_Error_Exception');
+        $this->setExpectedException('\SimpleSAML\Error\Exception');
         $config = [ 'test' => ['value1', 'value2'], ];
         $request = self::getNameID('idp-empty');
         self::processAddIdp2NameId($config, $request);
@@ -61,11 +61,11 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
 
     /*
      * Test with IdP metadata not having an IDPNamespace entry
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testAddIdp2NameId_BadIDPNamespace()
     {
-        $this->setExpectedException('SimpleSAML_Error_Exception');
+        $this->setExpectedException('\SimpleSAML\Error\Exception');
         $config = [
             'test' => ['value1', 'value2'],
         ];

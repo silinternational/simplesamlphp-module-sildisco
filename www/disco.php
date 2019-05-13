@@ -4,6 +4,6 @@
  * Custom IdP discovery service.
  */
 
-$discoHandler = new sspmod_sildisco_IdPDisco(['saml20-idp-remote'], 'saml');
+$discoHandler = new \SimpleSAML\Module\sildisco\IdPDisco(['saml20-idp-remote'], 'saml');
 
 $discoHandler->handleRequest();

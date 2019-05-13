@@ -4,6 +4,7 @@ include __DIR__ . '/../vendor/autoload.php';
 include __DIR__ . '/../vendor/simplesamlphp/simplesamlphp/modules/sildisco/lib/IdPDisco.php';
 
 use PHPUnit\Framework\TestCase;
+use SimpleSAML\Module\sildisco\IdPDisco;
 
 class IdpDiscoTest extends TestCase
 {
@@ -11,7 +12,7 @@ class IdpDiscoTest extends TestCase
     public function testEnableBetaEnabledEmpty()
     {
         $idpList = [];
-        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList);
+        $results = IdPDisco::enableBetaEnabled($idpList);
         $expected = [];
         $this->assertEquals($expected, $results);
     }
@@ -19,22 +20,22 @@ class IdpDiscoTest extends TestCase
     public function testEnableBetaEnabledNoChange()
     {
         $isBetaEnabled = 1;
-        $enabledKey = sspmod_sildisco_IdPDisco::$enabledMdKey;
+        $enabledKey = IdPDisco::$enabledMdKey;
         $idpList = [
             'idp1' => [$enabledKey => false],
             'idp2' => [$enabledKey => true],
         ];
         $expected = $idpList;
 
-        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
+        $results = IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
         $this->assertEquals($expected, $results);
     }
 
     public function testEnableBetaEnabledChange()
     {
         $isBetaEnabled = 1;
-        $enabledKey = sspmod_sildisco_IdPDisco::$enabledMdKey;
-        $betaEnabledKey = sspmod_sildisco_IdPDisco::$betaEnabledMdKey;
+        $enabledKey = IdPDisco::$enabledMdKey;
+        $betaEnabledKey = IdPDisco::$betaEnabledMdKey;
         $idpList = [
             'idp1' => [$enabledKey => false],
             'idp2' => [$enabledKey => true, $betaEnabledKey => true],
@@ -44,7 +45,7 @@ class IdpDiscoTest extends TestCase
         $expected = $idpList;
         $expected['idp3'][$enabledKey] = true;
 
-        $results = sspmod_sildisco_IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
+        $results = IdPDisco::enableBetaEnabled($idpList, $isBetaEnabled);
         $this->assertEquals($expected, $results);
     }
 

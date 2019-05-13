@@ -1,5 +1,7 @@
 <?php
 
+namespace SimpleSAML\Module\sildisco\Auth\Process;
+
 use Sil\SspUtils\Metadata;
 
 /**
@@ -11,7 +13,7 @@ use Sil\SspUtils\Metadata;
  *   'NameIDPolicy' => "urn:oasis:names:tc:SAML:2.0:nameid-format:persistent",
  *
  */
-class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_ProcessingFilter {
+class AddIdp2NameId extends \SimpleSAML\Auth\ProcessingFilter {
 
     const IDP_KEY = "saml:sp:IdP"; // the key that points to the entity id in the state
 
@@ -116,7 +118,7 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
         $samlIDP = $state[self::IDP_KEY];
 
         if (empty($state[self::SP_NAMEID_ATTR])) {
-            SimpleSAML\Logger::warning(
+            \SimpleSAML\Logger::warning(
                 self::SP_NAMEID_ATTR . ' attribute not available from ' .
                 $samlIDP . '.'
             );
@@ -136,19 +138,19 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
 
         // The IDP metadata must have an IDPNamespace entry
         if ( ! isset($idpEntry[self::IDP_CODE_KEY])) {
-            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Missing required metadata entry: " .
+            throw new \SimpleSAML\Error\Exception(self::ERROR_PREFIX . "Missing required metadata entry: " .
                 self::IDP_CODE_KEY . ".");
         }
 
         // IDPNamespace must be a non-empty string
         if ( ! is_string($idpEntry[self::IDP_CODE_KEY])) {
-            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Required metadata " .
+            throw new \SimpleSAML\Error\Exception(self::ERROR_PREFIX . "Required metadata " .
                 "entry, " . self::IDP_CODE_KEY . ", must be a non-empty string.");
         }
 
         // IDPNamespace must not have special characters in it
         if ( ! preg_match("/^[A-Za-z0-9_-]+$/", $idpEntry[self::IDP_CODE_KEY])) {
-            throw new SimpleSAML_Error_Exception(self::ERROR_PREFIX . "Required metadata " .
+            throw new \SimpleSAML\Error\Exception(self::ERROR_PREFIX . "Required metadata " .
                 "entry, " . self::IDP_CODE_KEY . ", must not be empty or contain anything except " .
                 "letters, numbers, hyphens and underscores.");
         }
@@ -171,5 +173,3 @@ class sspmod_sildisco_Auth_Process_AddIdp2NameId extends SimpleSAML_Auth_Process
     }
 
 }
-
-?>
