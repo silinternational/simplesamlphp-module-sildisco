@@ -1,6 +1,6 @@
 <?php
 
-namespace SimpleSAML\Module\saml\IdP;
+namespace SimpleSAML\Module\sildisco\IdP;
 
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Constants;
