@@ -14,7 +14,7 @@ $I->wantTo("Ensure I don't see IdP 3 at first, but after I go to the Beta Tester
 
 // Start at sp1
 $I->amOnUrl('http://sp1');
-$I->waitForText('About SimpleSAMLphp', $waitTime);
+$I->waitForText('Congratulations', $waitTime);
 
 $I->click('Authentication');
 $I->click('Test configured authentication sources');
