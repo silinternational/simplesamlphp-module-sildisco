@@ -140,7 +140,7 @@ $config = [
      * Logging.
      *
      * define the minimum log level to log
-     *		SimpleSAML\Logger::ERR		No statistics, only errors
+      *		\SimpleSAML\Logger::ERR		No statistics, only errors
      *		\SimpleSAML\Logger::WARNING	No statistics, only warnings/errors
      *		\SimpleSAML\Logger::NOTICE	Statistics and errors
      *		\SimpleSAML\Logger::INFO	Verbose logs
