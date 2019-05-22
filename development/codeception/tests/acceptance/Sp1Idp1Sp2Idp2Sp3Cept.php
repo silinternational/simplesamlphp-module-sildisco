@@ -13,7 +13,7 @@ $I->wait(20);
 
 // Start at sp1
 $I->amOnUrl('http://sp1' . $spHomePath);
-$I->waitForText('About SimpleSAMLphp', $waitTime);
+$I->waitForText('Congratulations', $waitTime);
 
 $I->click('Authentication');
 $I->click('Test configured authentication sources');

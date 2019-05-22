@@ -1,5 +1,6 @@
 <?php
 
+namespace SimpleSAML\Module\sildisco\Auth\Process;
 
 use Sil\SspUtils\Metadata;
 
@@ -7,7 +8,7 @@ use Sil\SspUtils\Metadata;
  * Attribute filter for prefixing group names
  *
  */
-class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFilter {
+class TagGroup extends \SimpleSAML\Auth\ProcessingFilter {
 
     const IDP_NAME_KEY = 'name'; // the metadata key for the IDP's name
 
@@ -87,5 +88,3 @@ class sspmod_sildisco_Auth_Process_TagGroup extends SimpleSAML_Auth_ProcessingFi
     }
 
 }
-
-?>

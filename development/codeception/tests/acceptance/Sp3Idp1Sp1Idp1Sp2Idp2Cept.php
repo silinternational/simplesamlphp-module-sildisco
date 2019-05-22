@@ -8,7 +8,7 @@ $I->wantTo('Ensure I can login to Sp3 through Idp1, get the discovery page for S
 
 // Start at sp3
 $I->amOnUrl('http://sp3');
-$I->waitForText('About SimpleSAMLphp', $waitTime);
+$I->waitForText('Congratulations', $waitTime);
 
 $I->click('Authentication');
 $I->click('Test configured authentication sources');

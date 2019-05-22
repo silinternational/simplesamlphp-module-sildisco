@@ -1,5 +1,7 @@
 <?php
 
+namespace SimpleSAML\Module\sildisco\Auth\Process;
+
 use Aws\DynamoDb\Marshaler;
 
 /**
@@ -13,7 +15,7 @@ use Aws\DynamoDb\Marshaler;
  *   'DynamoEndpoint' ex. http://dynamo:8000
  *
  */
-class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFilter
+class LogUser extends \SimpleSAML\Auth\ProcessingFilter
 {
     const IDP_KEY = "saml:sp:IdP"; // the key that points to the entity id in the state
 
@@ -80,7 +82,7 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
             $sdkConfig['endpoint'] =  $this->dynamoEndpoint;
         }
 
-        $sdk = new Aws\Sdk($sdkConfig);
+        $sdk = new \Aws\Sdk($sdkConfig);
 
         $dynamodb = $sdk->createDynamoDb();
         $marshaler = new Marshaler();
@@ -109,8 +111,8 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
 
         try {
             $result = $dynamodb->putItem($params);
-        } catch (Exception $e) {
-            SimpleSAML\Logger::error("Unable to add item: ". $e->getMessage());
+        } catch (\Exception $e) {
+            \SimpleSAML\Logger::error("Unable to add item: ". $e->getMessage());
         }
     }
 
@@ -118,12 +120,12 @@ class sspmod_sildisco_Auth_Process_LogUser extends SimpleSAML_Auth_ProcessingFil
         $msg = ' config value not provided to LogUser.';
 
         if (empty($this->dynamoRegion)) {
-            SimpleSAML\Logger::error(self::DYNAMO_REGION_KEY . $msg);
+            \SimpleSAML\Logger::error(self::DYNAMO_REGION_KEY . $msg);
             return false;
         }
 
         if (empty($this->dynamoLogTable)) {
-            SimpleSAML\Logger::error(self::DYNAMO_LOG_TABLE_KEY . $msg);
+            \SimpleSAML\Logger::error(self::DYNAMO_LOG_TABLE_KEY . $msg);
             return false;
         }
 

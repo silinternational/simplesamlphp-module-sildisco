@@ -12,11 +12,11 @@ use SimpleSAML\Utils\HTTP as HTTP;
 use SimpleSAML\Utils\Config\Metadata as Metadata;
 
 // load SimpleSAMLphp, configuration and metadata
-$config = SimpleSAML_Configuration::getInstance();
-$metadata = SimpleSAML_Metadata_MetaDataStorageHandler::getMetadataHandler();
+$config = \SimpleSAML\Configuration::getInstance();
+$metadata = \SimpleSAML\Metadata\MetaDataStorageHandler::getMetadataHandler();
 
 if (!$config->getBoolean('enable.saml20-idp', false)) {
-    throw new SimpleSAML_Error_Error('NOACCESS');
+    throw new \SimpleSAML\Error\Error('NOACCESS');
 }
 
 // check if valid local session exists
@@ -143,7 +143,7 @@ try {
         );
 
         if (!$idpmeta->hasValue('OrganizationURL')) {
-            throw new SimpleSAML_Error_Exception('If OrganizationName is set, OrganizationURL must also be set.');
+            throw new \SimpleSAML\Error\Exception('If OrganizationName is set, OrganizationURL must also be set.');
         }
         $metaArray['OrganizationURL'] = $idpmeta->getLocalizedString('OrganizationURL');
     }
@@ -196,7 +196,7 @@ try {
         $metaArray['contacts'][] = Metadata::getContact($techcontact);
     }
 
-    $metaBuilder = new SimpleSAML_Metadata_SAMLBuilder($idpentityid);
+    $metaBuilder = new \SimpleSAML\Metadata\SAMLBuilder($idpentityid);
     $metaBuilder->addMetadataIdP20($metaArray);
     $metaBuilder->addOrganizationInfo($metaArray);
 
@@ -205,7 +205,7 @@ try {
     $metaflat = '$metadata['.var_export($idpentityid, true).'] = '.var_export($metaArray, true).';';
 
     // sign the metadata if enabled
-    $metaxml = SimpleSAML_Metadata_Signer::sign($metaxml, $idpmeta->toArray(), 'SAML 2 IdP');
+    $metaxml = \SimpleSAML\Metadata\Signer::sign($metaxml, $idpmeta->toArray(), 'SAML 2 IdP');
 
     if (array_key_exists('format', $_GET) && $_GET['format'] == 'xml') {
         header('Content-Type: application/xml');
@@ -220,5 +220,5 @@ try {
         exit(0);
     }
 } catch (Exception $exception) {
-    throw new SimpleSAML_Error_Error('METADATA', $exception);
+    throw new \SimpleSAML\Error\Error('METADATA', $exception);
 }
