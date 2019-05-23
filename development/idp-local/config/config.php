@@ -86,11 +86,11 @@ $config = [
     'errorreporting' => false,
 
     /*
-     * Custom error show function called from SimpleSAML_Error_Error::show.
+     * Custom error show function called from \SimpleSAML\Error\Error::show.
      * See docs/simplesamlphp-errorhandling.txt for function code example.
      *
      * Example:
-     *   'errors.show_function' => array('sspmod_example_Error_Show', 'show'),
+     *   'errors.show_function' => array('\SimpleSAML\Module\example\Error\Show', 'show'),
      */
 
     /*
@@ -140,18 +140,18 @@ $config = [
      * Logging.
      *
      * define the minimum log level to log
-     *		SimpleSAML\Logger::ERR		No statistics, only errors
-     *		SimpleSAML\Logger::WARNING	No statistics, only warnings/errors
-     *		SimpleSAML\Logger::NOTICE	Statistics and errors
-     *		SimpleSAML\Logger::INFO		Verbose logs
-     *		SimpleSAML\Logger::DEBUG	Full debug logs - not reccomended for production
+     *		\SimpleSAML\Logger::ERR		No statistics, only errors
+     *		\SimpleSAML\Logger::WARNING	No statistics, only warnings/errors
+     *		\SimpleSAML\Logger::NOTICE	Statistics and errors
+     *		\SimpleSAML\Logger::INFO	Verbose logs
+     *		\SimpleSAML\Logger::DEBUG	Full debug logs - not reccomended for production
      *
      * Choose logging handler.
      *
      * Options: [syslog,file,errorlog]
      *
      */
-    'logging.level' => SimpleSAML\Logger::NOTICE,
+    'logging.level' => \SimpleSAML\Logger::NOTICE,
     'logging.handler' => $LOGGING_HANDLER,
 
     /*
@@ -250,9 +250,9 @@ $config = [
      *
      * 'module.enable' => array(
      * 	// Setting to TRUE enables.
-     * 	'exampleauth' => TRUE,
+     * 	'exampleauth' => true,
      * 	// Setting to FALSE disables.
-     * 	'saml' => FALSE,
+     * 	'saml' => false,
      * 	// Unset or NULL uses default.
      * 	'core' => NULL,
      * ),
@@ -379,7 +379,7 @@ $config = [
      * See docs/simplesamlphp-advancedfeatures.txt for function code example.
      *
      * Example:
-     *   'session.check_function' => array('sspmod_example_Util', 'checkSession'),
+     *   'session.check_function' => array('\SimpleSAML\Module\example\Util', 'checkSession'),
      */
 
     /*
@@ -406,15 +406,15 @@ $config = [
     'language.cookie.lifetime' => (60 * 60 * 24 * 900),
 
     /**
-     * Custom getLanguage function called from SimpleSAML_XHTML_Template::getLanguage().
+     * Custom getLanguage function called from \SimpleSAML\XHTML\Template::getLanguage().
      * Function should return language code of one of the available languages or NULL.
-     * See SimpleSAML_XHTML_Template::getLanguage() source code for more info.
+     * See \SimpleSAML\XHTML\Template::getLanguage() source code for more info.
      *
      * This option can be used to implement a custom function for determining
      * the default language for the user.
      *
      * Example:
-     *   'language.get_language_function' => array('sspmod_example_Template', 'getLanguage'),
+     *   'language.get_language_function' => array('\SimpleSAML\Module\example\Template', 'getLanguage'),
      */
 
     /*
@@ -549,7 +549,7 @@ $config = [
             'class' => 'consent:Consent',
             'store' => 'consent:Cookie',
             'focus' => 'yes',
-            'checked' => TRUE
+            'checked' => true
         ),
          */
 

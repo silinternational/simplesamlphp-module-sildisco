@@ -1,5 +1,7 @@
 <?php
 
+namespace SimpleSAML\Module\sildisco;
+
 use Sil\SspUtils\AnnouncementUtils;
 use Sil\SspUtils\DiscoUtils;
 use Sil\SspUtils\Metadata;
@@ -12,7 +14,7 @@ use Sil\SspUtils\Metadata;
  * @author Steve Bagwell SIL GTIS
  * @package SimpleSAMLphp
  */
-class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
+class IdPDisco extends \SimpleSAML\XHTML\IdPDisco
 {
 
     /* The session type for this class */
@@ -44,7 +46,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
      */
     protected function log($message)
     {
-        SimpleSAML\Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
+        \SimpleSAML\Logger::info('SildiscoIdPDisco.'.$this->instance.': '.$message);
     }
 
     /* Path to the folder with the SP and IdP metadata */
@@ -102,14 +104,14 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
 
         $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
 
-        $t = new SimpleSAML_XHTML_Template($this->config, $templateFileName, 'disco');
+        $t = new \SimpleSAML\XHTML\Template($this->config, $templateFileName, 'disco');
 
         $spName = null;
 
         $rawSPName = $spEntries[$spEntityId][self::$spNameMdKey] ?? null;
         if ($rawSPName !== null) {
             $spName = htmlspecialchars($t->getTranslator()->getPreferredTranslation(
-                SimpleSAML\Utils\Arrays::arrayize($rawSPName, 'en')
+                \SimpleSAML\Utils\Arrays::arrayize($rawSPName, 'en')
             ))   ;
         }
 
@@ -137,7 +139,7 @@ class sspmod_sildisco_IdPDisco extends SimpleSAML_XHTML_IdPDisco
     public static function enableBetaEnabled($idpList, $isBetaTester=null) {
 
         if ( $isBetaTester === null) {
-            $session = SimpleSAML_Session::getSessionFromRequest();
+            $session = \SimpleSAML\Session::getSessionFromRequest();
             $isBetaTester = $session->getData(
                 self::$sessionType,
                 self::$betaTesterSessionKey

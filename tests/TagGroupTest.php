@@ -12,14 +12,14 @@ class TagGroupTest extends PHPUnit_Framework_TestCase
      */
     private static function processTagGroup(array $config, array $request)
     {
-        $filter = new sspmod_sildisco_Auth_Process_TagGroup($config, NULL);
+        $filter = new \SimpleSAML\Module\sildisco\Auth\Process\TagGroup($config, NULL);
         $filter->process($request);
         return $request;
     }
 
     /*
      * Test with oid and friendly keys for groups
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testTagGroup_Both()
     {
@@ -43,7 +43,7 @@ class TagGroupTest extends PHPUnit_Framework_TestCase
 
     /*
      * Test with friendly key for groups
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testTagGroup_Member()
     {
@@ -64,7 +64,7 @@ class TagGroupTest extends PHPUnit_Framework_TestCase
 
     /*
      * Test with oid key for groups
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testTagGroup_Oid()
     {
@@ -85,7 +85,7 @@ class TagGroupTest extends PHPUnit_Framework_TestCase
 
     /*
      * Test with oid key for groups
-     * @expectedException SimpleSAML_Error_Exception
+     * @expectedException \SimpleSAML\Error\Exception
      */
     public function testTagGroup_IdpGood()
     {
