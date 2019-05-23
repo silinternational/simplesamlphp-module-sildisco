@@ -2,6 +2,7 @@
 
 namespace SimpleSAML\Module\sildisco\Auth\Source;
 
+// GTIS
 use sil\SspUtils\DiscoUtils;
 
 use SAML2\AuthnRequest;
@@ -512,6 +513,7 @@ class SP extends Source
 
         $ar = Module\saml\Message::buildAuthnRequest($this->metadata, $idpMetadata);
 
+        // GTIS
         $ar->setAssertionConsumerServiceURL(Module::getModuleURL('sildisco/sp/saml2-acs.php/'.$this->authId));
 
         if (isset($state['\SimpleSAML\Auth\Source.ReturnURL'])) {
@@ -741,6 +743,7 @@ class SP extends Source
             $discoURL = Module::getModuleURL('saml/disco.php');
         }
 
+        // GTIS
         $returnTo = Module::getModuleURL('sildisco/sp/discoresp.php', ['AuthID' => $id]);
 
         $params = [
@@ -840,6 +843,7 @@ class SP extends Source
         }
 
         /*
+         * GTIS
          * If this SP is allowed to use more than one IdP, then send to discovery page
          */
         $metadataPath = __DIR__ . '/../../../../../metadata';
@@ -853,30 +857,24 @@ class SP extends Source
             assert(false);
         }
 
-        // check if we have an IDPList specified in the request
+
+        // GTIS  Changed this if block to avoid logging out before authenticating
+        //    with a new IdP
         if (sizeof($IDPList) > 0 &&
             !in_array($state['saml:sp:IdP'], $IDPList, true)) {
             /*
-             * The user has an existing, valid session. However, the SP
-             * provided a list of IdPs it accepts for authentication, and
-             * the IdP the existing session is related to is not in that list.
-             *
-             * First, check if we recognize any of the IdPs requested.
+             * The user has an existing, valid session. However, the list of IdPs
+             * accessible to this SP does not include the IdP from the existing
+             * session.
              */
 
-            /*
-             * We need to inform the user, and ask whether we should logout before
-             * starting the authentication process again with a different IdP, or
-             * cancel the current SSO attempt.
-             */
             Logger::warning(
-                "Reauthentication after logout is needed. The IdP '${state['saml:sp:IdP']}' is not in the IDPList ".
-                "provided by the Service Provider '${state['core:SP']}'."
+                "Reauthentication is needed. The IdP '${state['saml:sp:IdP']}' is not in the IDPList ".
+                "accessible to this Service Provider '${state['core:SP']}'."
             );
 
-            $state['saml:sp:IdPMetadata'] = $this->getIdPMetadata($state['saml:sp:IdP']);
-            $state['saml:sp:AuthId'] = $this->authId;
-            self::askForIdPChange($state);
+            $state['LoginCompletedHandler'] = array(SP::class, 'reauthPostLogin');
+            $this->authenticate($state);
         }
     }
 
