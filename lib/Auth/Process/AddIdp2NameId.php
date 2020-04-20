@@ -101,7 +101,7 @@ class AddIdp2NameId extends \SimpleSAML\Auth\ProcessingFilter {
     public function appendIdp($nameId, $IDPNamespace) {
 
         $suffix = self::DELIMITER . $IDPNamespace;
-        $value = $nameId->getValue;
+        $value = $nameId->getValue();
         $nameId->setValue($value . $suffix);
         return;
     }
