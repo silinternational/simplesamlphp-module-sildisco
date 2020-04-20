@@ -1,7 +1,7 @@
 version: "2"
 services:
   hub:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       - ./development/run.sh:/data/run.sh
 
@@ -53,7 +53,7 @@ services:
       - DYNAMO_LOG_TABLE=sildisco_local_user-log
 
   idp1:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
@@ -82,7 +82,7 @@ services:
       - IDP_NAME=IdP1
 
   idp2:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Revert to standard SSOService.php instead of using sildisco's
       - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
@@ -111,7 +111,7 @@ services:
       - IDP_NAME=IdP2
 
   idp3:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Utilize custom certs
       - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert  
@@ -137,7 +137,7 @@ services:
       IDP_NAME: "IdP3"
 
   sp1:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Utilize custom certs
       - ./development/sp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -163,7 +163,7 @@ services:
 
 
   sp2:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Utilize custom certs
       - ./development/sp2-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -189,7 +189,7 @@ services:
 
 
   sp3:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       # Utilize custom certs
       - ./development/sp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -214,7 +214,7 @@ services:
       - ADMIN_PROTECT_INDEX_PAGE=false
       
   hub4tests:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
 
       - ./development/run.sh:/data/run.sh
@@ -284,7 +284,7 @@ services:
       - --load-images=false   
       
   unit_test:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
 
       - ./development/run-tests.sh:/data/run-tests.sh
@@ -311,7 +311,7 @@ services:
       - IDP_NAME=Hub
 
   composer:
-    image: silintl/ssp-base:develop
+    image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
       - ./development/update-composer-deps.sh:/data/update-composer-deps.sh
       - ./composer.json:/data/composer.json
