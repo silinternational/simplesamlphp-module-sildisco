@@ -261,7 +261,7 @@ services:
       - IDP_NAME=Hub
 
 
-  browser_test:
+  browsertest:
     build: ./development/browser_test/
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
@@ -283,7 +283,7 @@ services:
       - --ignore-ssl-errors=true
       - --load-images=false   
       
-  unit_test:
+  unittest:
     image: silintl/ssp-base:feature_update-ssp-1-18-6
     volumes:
 
