@@ -160,7 +160,7 @@ class AddIdp2NameId extends \SimpleSAML\Auth\ProcessingFilter {
         $nameId = $state[self::SP_NAMEID_ATTR];
         self::appendIdp($nameId, $IDPNamespace);
 
-        $format =  'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified';
+        $format =  'urn:oasis:names:tc:SAML:2.0:nameid-format:persistent';
 
         if ( ! empty($this->format)) {
             $format = $this->format;
