@@ -314,6 +314,7 @@ services:
     image: silintl/ssp-base:develop
     volumes:
       - ./development/update-composer-deps.sh:/data/update-composer-deps.sh
+      - ./development/installed-packages.json:/data/installed-packages.json
       - ./composer.json:/data/composer.json
       - ./composer.lock:/data/composer.lock
       - ./vendor:/data/vendor
