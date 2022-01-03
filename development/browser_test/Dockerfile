@@ -1,7 +1,7 @@
-FROM silintl/php7:latest
-MAINTAINER Phillip Shipley <phillip_shipley@sil.org>
+FROM silintl/php7:7.4
+LABEL maintainer="Matt Henderson <matt_henderson@sil.org>"
 
-ENV REFRESHED_AT 2017-04-11
+ENV REFRESHED_AT 2022-01-03
 
 RUN mkdir -p /data
 WORKDIR /data

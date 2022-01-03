@@ -1,13 +1,7 @@
 {
   "minimum-stability": "stable",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/silinternational/simplesamlphp-module-sildisco.git"
-    }
-  ],
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=7.4.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
