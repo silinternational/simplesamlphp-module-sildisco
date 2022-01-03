@@ -266,6 +266,8 @@ services:
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
       - ./development/codeception/tests:/data/tests
+      - ./development/browser_test/composer.json:/data/composer.json
+      - ./development/browser_test/composer.lock:/data/composer.lock
     depends_on:
       - phantomjs   
     ports:
