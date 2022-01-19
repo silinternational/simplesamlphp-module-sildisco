@@ -1,17 +1,11 @@
 {
   "minimum-stability": "stable",
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": "https://github.com/silinternational/simplesamlphp-module-sildisco.git"
-    }
-  ],
   "require": {
-    "php": ">=5.4.0"
+    "php": ">=7.4.0"
   },
   "require-dev": {
     "roave/security-advisories": "dev-master",
-    "codeception/codeception": "^2.2",
+    "codeception/codeception": "^3.1.3",
     "codeception/specify": "0.*",
     "codeception/verify": "0.*"
   },
