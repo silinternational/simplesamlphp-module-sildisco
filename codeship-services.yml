@@ -204,7 +204,7 @@ phantomjs:
         dockerfile: ./phantomJsDockerfile
     ports:
       - "4444"
-    links:
+    depends_on:
       - hub4tests
       - idp1
       - idp2
