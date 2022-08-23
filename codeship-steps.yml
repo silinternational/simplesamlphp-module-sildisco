@@ -4,4 +4,4 @@
   
 - name: functional_tests
   service: browsertest
-  command: /data/codecept run
+  command: bash -c "/data/codecept build && /data/codecept run"
