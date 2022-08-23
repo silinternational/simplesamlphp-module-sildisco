@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 
-echo "Empty run.sh"
+echo "running \"codecept build\" from run.sh"
 
-codecept build
+/data/codecept build
+# If that failed, exit.
+rc=$?; if [[ $rc != 0 ]]; then exit $rc; fi
 
 # Run apache in foreground
 apache2ctl -D FOREGROUND

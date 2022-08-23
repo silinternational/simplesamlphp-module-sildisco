@@ -13,7 +13,7 @@ unittests:
 
 functionaltests:
 	docker-compose up -d hub4tests sp1 sp2 sp3 idp1 idp2 idp3
-	docker-compose run --rm browsertest /data/codecept run
+	docker-compose run --rm browsertest bash -c "/data/codecept build && /data/codecept run"
 
 composer:
 	docker-compose run --rm composer bash -c "/data/update-composer-deps.sh"
