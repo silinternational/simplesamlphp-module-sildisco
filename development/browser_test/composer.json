@@ -6,8 +6,8 @@
   "require-dev": {
     "roave/security-advisories": "dev-master",
     "codeception/codeception": "^5.0.2",
-    "codeception/module-webdriver": "dev-master",
-    "codeception/module-asserts": "dev-master",
+    "codeception/module-webdriver": "^3.1",
+    "codeception/module-asserts": "^3.0",
     "codeception/specify": "0.*",
     "codeception/verify": "0.*"
   },

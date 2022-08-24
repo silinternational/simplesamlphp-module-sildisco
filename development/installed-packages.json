@@ -4,8 +4,8 @@
             "name": "aws/aws-sdk-php",
             "direct-dependency": true,
             "homepage": "http://aws.amazon.com/sdkforphp",
-            "source": "https://github.com/aws/aws-sdk-php/tree/3.234.1",
-            "version": "3.234.1",
+            "source": "https://github.com/aws/aws-sdk-php/tree/3.234.2",
+            "version": "3.234.2",
             "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
             "abandoned": false
         },
