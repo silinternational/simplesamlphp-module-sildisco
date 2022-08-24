@@ -195,7 +195,7 @@ browsertest:
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
       - ./development/codeception/tests:/data/tests
-    links:
+    depends_on:
       - phantomjs
 
 phantomjs:
@@ -204,7 +204,7 @@ phantomjs:
         dockerfile: ./phantomJsDockerfile
     ports:
       - "4444"
-    links:
+    depends_on:
       - hub4tests
       - idp1
       - idp2
