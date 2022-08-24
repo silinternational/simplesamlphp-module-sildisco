@@ -195,8 +195,8 @@ browsertest:
     volumes:
       - ./development/codeception.yml:/data/codeception.yml
       - ./development/codeception/tests:/data/tests
-#    depends_on:
-#      - phantomjs
+    depends_on:
+      - phantomjs
 
 phantomjs:
     build:
