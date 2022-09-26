@@ -1,7 +1,7 @@
 <?php
 /**
  * Modified version of modules/saml/www/sp/discoresp.php
- * 2020-04-20 -- merged with SimpleSAMLphp 1.18.6
+ * 2022-09-26 -- merged with SimpleSAMLphp 1.19.6
  */
 
 /**
