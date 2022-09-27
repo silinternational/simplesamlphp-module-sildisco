@@ -883,17 +883,12 @@ class SP extends \SimpleSAML\Auth\Source
 
         $spEntityId = $state['SPMetadata']['entityid'];
         $IDPList = array_keys(DiscoUtils::getIdpsForSp($spEntityId, $metadataPath));
- die("111111111111: " . sizeof($IDPList) . " ... " . var_export($IDPList, true) . PHP_EOL );
 
         if (sizeof($IDPList) > 1) {
             $state['LoginCompletedHandler'] = array(SP::class, 'reauthPostLogin');
             $this->authenticate($state);
             assert(false);
         }
-
-
-die("AAAAAAAA: " . var_export($IDPList, true) . " ... " . $state['saml:sp:IdP'] . "<<<");
-
 
         // GTIS  Changed this if block to avoid logging out before authenticating
         //    with a new IdP
