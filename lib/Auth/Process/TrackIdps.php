@@ -23,12 +23,12 @@ class TrackIdps extends \SimpleSAML\Auth\ProcessingFilter {
         if ( ! $sessionValue) {
             $sessionValue = [];
         }
-    
+
         // Will we need to wrap the idp in htmlspecialchars()
         $authIdps = $session->getAuthData("hub-discovery", "saml:AuthenticatingAuthority");
 
         if ( ! in_array($authIdps[0], $sessionValue)) {
-            $sessionValue[] = $authIdps[0];
+            $sessionValue[$authIdps[0]] = $authIdps[0];
         }
     
         $session->setData($sessionDataType, $sessionKey, $sessionValue); 
