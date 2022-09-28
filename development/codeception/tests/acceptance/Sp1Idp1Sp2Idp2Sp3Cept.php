@@ -2,7 +2,7 @@
 
 $waitTime = 10;
 
-$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
+$idp1Id =  '//*[@id="http://ssp-idp1.local:8085"]';
 $spHomePath = '/module.php/core/frontpage_welcome.php';
 
 $I = new AcceptanceTester($scenario);
