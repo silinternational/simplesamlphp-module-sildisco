@@ -6,7 +6,7 @@
  * This endpoint handles both logout requests and logout responses.
  *
  * Similar to modules/saml/www/sp/saml2-logout.php
- * 2020-04-20 -- Merged with simplesamlphp 1.18.6, lines marked with GTIS are modified
+ * 2022-09-26 -- Merged with simplesamlphp 1.19.6, lines marked with GTIS are modified
  */
 
 if (!array_key_exists('PATH_INFO', $_SERVER)) {
@@ -112,6 +112,7 @@ if ($message instanceof \SAML2\LogoutResponse) {
     $nameId = $message->getNameId();
     $sessionIndexes = $message->getSessionIndexes();
 
+    /** @psalm-suppress PossiblyNullArgument  This will be fixed in saml2 5.0 */
     $numLoggedOut = \SimpleSAML\Module\saml\SP\LogoutStore::logoutSessions($sourceId, $nameId, $sessionIndexes);
     if ($numLoggedOut === false) {
         // This type of logout was unsupported. Use the old method

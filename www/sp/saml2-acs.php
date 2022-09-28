@@ -4,7 +4,7 @@
  * Assertion consumer service handler for SAML 2.0 SP authentication client.
  *
  * Similar to modules/saml/www/sp/saml2-acs.php
- * 2020-04-20 -- Merged with simplesamlphp 1.18.6, lines marked with GTIS are modified
+ * 2022-09-26 -- Merged with simplesamlphp 1.19.6, lines marked with GTIS are modified
  */
 
 if (!array_key_exists('PATH_INFO', $_SERVER)) {
@@ -40,6 +40,7 @@ if (!($response instanceof \SAML2\Response)) {
     throw new \SimpleSAML\Error\BadRequest('Invalid message received to AssertionConsumerService endpoint.');
 }
 
+/** @psalm-var null|string|\SAML2\XML\saml\Issuer $issuer   Remove in SSP 2.0 */
 $issuer = $response->getIssuer();
 if ($issuer === null) {
     // no Issuer in the response. Look for an unencrypted assertion with an issuer
@@ -50,6 +51,7 @@ if ($issuer === null) {
             break;
         }
     }
+    /** @psalm-var string|null $issuer  Remove in SSP 2.0 */
     if ($issuer === null) {
         // no issuer found in the assertions
         throw new Exception('Missing <saml:Issuer> in message delivered to AssertionConsumerService.');
@@ -57,6 +59,7 @@ if ($issuer === null) {
 }
 
 if ($issuer instanceof \SAML2\XML\saml\Issuer) {
+    /** @psalm-var string|null $issuer */
     $issuer = $issuer->getValue();
     if ($issuer === null) {
         // no issuer found in the assertions
@@ -66,6 +69,7 @@ if ($issuer instanceof \SAML2\XML\saml\Issuer) {
 
 $session = \SimpleSAML\Session::getSessionFromRequest();
 $prevAuth = $session->getAuthData($sourceId, 'saml:sp:prevAuth');
+/** @psalm-var string $issuer */
 if ($prevAuth !== null && $prevAuth['id'] === $response->getId() && $prevAuth['issuer'] === $issuer) {
     /* OK, it looks like this message has the same issuer
      * and ID as the SP session we already have active. We
@@ -122,15 +126,11 @@ if ($state) {
     }
 } else {
     // this is an unsolicited response
+    $relaystate = $spMetadata->getString('RelayState', $response->getRelayState());
     $state = [
         'saml:sp:isUnsolicited' => true,
         'saml:sp:AuthId'        => $sourceId,
-        'saml:sp:RelayState'    => \SimpleSAML\Utils\HTTP::checkURLAllowed(
-            $spMetadata->getString(
-                'RelayState',
-                $response->getRelayState()
-            )
-        ),
+        'saml:sp:RelayState'    => $relaystate === null ? null : \SimpleSAML\Utils\HTTP::checkURLAllowed($relaystate),
     ];
 }
 
@@ -260,6 +260,7 @@ if ($expire !== null) {
 $state['saml:sp:prevAuth'] = [
     'id'     => $response->getId(),
     'issuer' => $issuer,
+    'inResponseTo' => $response->getInResponseTo(),
 ];
 if (isset($state['\SimpleSAML\Auth\Source.ReturnURL'])) {
     $state['saml:sp:prevAuth']['redirect'] = $state['\SimpleSAML\Auth\Source.ReturnURL'];
