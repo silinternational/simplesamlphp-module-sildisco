@@ -6,8 +6,8 @@
  */
 
 $waitTime = 15;
-$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
-$idp3Id =  '//*[@id="http://ssp-hub-idp3.local:8087"]';
+$idp1Id =  '//*[@id="http://ssp-idp1.local:8085"]';
+$idp3Id =  '//*[@id="http://ssp-idp3.local:8087"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo("Ensure I don't see IdP 3 at first, but after I go to the Beta Tester page I can see and login through IdP 3.");

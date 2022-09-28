@@ -11,7 +11,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
                 [
                     'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:unspecified',
                     'Value' => 'Tester1_Smith',
-                    'SPNameQualifier' => 'http://ssp-hub-sp.local',
+                    'SPNameQualifier' => 'http://ssp-sp1.local',
                 ],
             ],
             'Attributes' => [],
@@ -108,7 +108,7 @@ class AddIdpTest extends PHPUnit_Framework_TestCase
             'saml:sp:NameID' => [
                 'Format' => 'urn:oasis:names:tc:SAML:1.1:nameid-format:transient',
                 'Value' => 'Tester1_SmithA',
-                'SPNameQualifier' => 'http://ssp-hub-sp.local',
+                'SPNameQualifier' => 'http://ssp-sp1.local',
             ],
             'Attributes' => [],
             'metadataPath' => __DIR__ . '/fixtures/metadata/',

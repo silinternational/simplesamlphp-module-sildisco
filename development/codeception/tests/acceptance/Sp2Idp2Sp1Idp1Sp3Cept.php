@@ -1,7 +1,7 @@
 <?php 
 
 $waitTime = 10;
-$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
+$idp1Id =  '//*[@id="http://ssp-idp1.local:8085"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo("Ensure I can login to Sp2 through Idp2, must login to Sp1 if I choose Idp1, and don't need to login for Sp3.");
