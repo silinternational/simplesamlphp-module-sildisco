@@ -2,38 +2,66 @@
     "installed": [
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.208.8",
-            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project"
+            "direct-dependency": true,
+            "homepage": "http://aws.amazon.com/sdkforphp",
+            "source": "https://github.com/aws/aws-sdk-php/tree/3.234.2",
+            "version": "3.234.2",
+            "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
+            "abandoned": false
         },
         {
             "name": "phpunit/phpunit",
+            "direct-dependency": true,
+            "homepage": "https://phpunit.de/",
+            "source": "https://github.com/sebastianbergmann/phpunit.git",
             "version": "5.7.27",
-            "description": "The PHP Unit Testing framework."
+            "description": "The PHP Unit Testing framework.",
+            "abandoned": false
         },
         {
             "name": "roave/security-advisories",
-            "version": "dev-master 31d9d9e",
-            "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it"
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/Roave/SecurityAdvisories/tree/latest",
+            "version": "dev-master bd4a45f",
+            "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
+            "abandoned": false
         },
         {
             "name": "silinternational/php-env",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/silinternational/php-env.git",
             "version": "2.1.1",
-            "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically."
+            "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically.",
+            "abandoned": false
         },
         {
             "name": "silinternational/ssp-utilities",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/silinternational/ssp-utilities/tree/1.0.7",
             "version": "1.0.7",
-            "description": "SimpleSAMLphp related utility classes"
+            "description": "SimpleSAMLphp related utility classes",
+            "abandoned": false
         },
         {
             "name": "simplesamlphp/composer-module-installer",
+            "direct-dependency": true,
+            "homepage": null,
+            "source": "https://github.com/simplesamlphp/composer-module-installer/tree/v1.1.8",
             "version": "v1.1.8",
-            "description": "A Composer plugin that allows installing SimpleSAMLphp modules through Composer."
+            "description": "A Composer plugin that allows installing SimpleSAMLphp modules through Composer.",
+            "abandoned": false
         },
         {
             "name": "simplesamlphp/simplesamlphp",
-            "version": "v1.18.8",
-            "description": "A PHP implementation of a SAML 2.0 service provider and identity provider, also compatible with Shibboleth 1.3 and 2.0."
+            "direct-dependency": true,
+            "homepage": "http://simplesamlphp.org",
+            "source": "https://github.com/simplesamlphp/simplesamlphp",
+            "version": "v1.18.9",
+            "description": "A PHP implementation of a SAML 2.0 service provider and identity provider, also compatible with Shibboleth 1.3 and 2.0.",
+            "abandoned": false
         }
     ]
 }

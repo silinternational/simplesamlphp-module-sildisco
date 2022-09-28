@@ -5,3 +5,8 @@ vendor/
 local.env
 development/codeception/tests/_output/
 development/codeception/tests/_support/_generated/
+
+/testOutput/*.html
+/testOutput/*.png
+/testOutput/failed
+/testOutput/debug/

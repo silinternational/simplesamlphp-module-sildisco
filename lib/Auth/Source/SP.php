@@ -2,8 +2,10 @@
 
 /**
  * Modified from origin: modules/saml/lib/Auth/Source/SP.php
- * 2020-04-20 -- Merged with simplesamlphp 1.18.6, lines/sections marked with GTIS are modified
+ * 2022-09-26 -- Merged with simplesamlphp 1.19.6, lines/sections marked with GTIS are modified
  */
+
+declare(strict_types=1);
 
 namespace SimpleSAML\Module\sildisco\Auth\Source; // GTIS
 
@@ -65,7 +67,7 @@ class SP extends \SimpleSAML\Auth\Source
     /**
      * A list of supported protocols.
      *
-     * @var array
+     * @var string[]
      */
     private $protocols = [];
 
@@ -145,7 +147,7 @@ class SP extends \SimpleSAML\Auth\Source
         ];
 
         // add NameIDPolicy
-        if ($this->metadata->hasValue('NameIDValue')) {
+        if ($this->metadata->hasValue('NameIDPolicy')) {
             $format = $this->metadata->getValue('NameIDPolicy');
             if (is_array($format)) {
                 $metadata['NameIDFormat'] = Configuration::loadFromArray($format)->getString(
@@ -196,7 +198,7 @@ class SP extends \SimpleSAML\Auth\Source
         }
 
         // add contacts
-        $contacts = $this->metadata->getArray('contact', []);
+        $contacts = $this->metadata->getArray('contacts', []);
         foreach ($contacts as $contact) {
             $metadata['contacts'][] = Utils\Config\Metadata::getContact($contact);
         }
@@ -225,15 +227,10 @@ class SP extends \SimpleSAML\Auth\Source
                 'X509Certificate' => $certInfo['certData'],
                 'prefix' => 'new_',
                 'url' => Module::getModuleURL(
-//                    'admin/federation/cert',
-//                    [
-//                        'set' => 'saml20-sp-hosted',
-//                        'source' => $this->getAuthId(),
-//                        'prefix' => 'new_'
-//                    ]
-                    'admin/cert',
+                    'admin/federation/cert',
                     [
-                        'sp' => $this->getAuthId(),
+                        'set' => 'saml20-sp-hosted',
+                        'source' => $this->getAuthId(),
                         'prefix' => 'new_'
                     ]
                 ),
@@ -250,15 +247,10 @@ class SP extends \SimpleSAML\Auth\Source
                 'X509Certificate' => $certInfo['certData'],
                 'prefix' => '',
                 'url' => Module::getModuleURL(
-//                    'admin/federation/cert',
-//                    [
-//                        'set' => 'saml20-sp-hosted',
-//                        'source' => $this->getAuthId(),
-//                        'prefix' => ''
-//                    ]
-                    'admin/cert',
+                    'admin/federation/cert',
                     [
-                        'sp' => $this->getAuthId(),
+                        'set' => 'saml20-sp-hosted',
+                        'source' => $this->getAuthId(),
                         'prefix' => ''
                     ]
                 ),
@@ -282,7 +274,7 @@ class SP extends \SimpleSAML\Auth\Source
         }
 
         // add signature options
-        if ($this->metadata->hasValue('WantAssertiosnsSigned')) {
+        if ($this->metadata->hasValue('WantAssertionsSigned')) {
             $metadata['saml20.sign.assertion'] = $this->metadata->getBoolean('WantAssertionsSigned');
         }
         if ($this->metadata->hasValue('redirect.sign')) {
@@ -362,8 +354,13 @@ class SP extends \SimpleSAML\Auth\Source
      * @return array
      * @throws \Exception
      */
-    private function getACSEndpoints()
+    private function getACSEndpoints(): array
     {
+        // If a list of endpoints is specified in config, take that at face value
+        if ($this->metadata->hasValue('AssertionConsumerService')) {
+            return $this->metadata->getArray('AssertionConsumerService');
+        }
+
         $endpoints = [];
         $default = [
             Constants::BINDING_HTTP_POST,
@@ -444,7 +441,7 @@ class SP extends \SimpleSAML\Auth\Source
      * @return array
      * @throws \SimpleSAML\Error\CriticalConfigurationError
      */
-    private function getSLOEndpoints()
+    private function getSLOEndpoints(): array
     {
         $store = Store::getInstance();
         $bindings = $this->metadata->getArray(
@@ -454,7 +451,8 @@ class SP extends \SimpleSAML\Auth\Source
                 Constants::BINDING_SOAP,
             ]
         );
-        $location = Module::getModuleURL('saml/sp/saml2-logout.php/' . $this->getAuthId());
+        $defaultLocation = Module::getModuleURL('saml/sp/saml2-logout.php/' . $this->getAuthId());
+        $location = $this->metadata->getString('SingleLogoutServiceLocation', $defaultLocation);
 
         $endpoints = [];
         foreach ($bindings as $binding) {
@@ -479,7 +477,7 @@ class SP extends \SimpleSAML\Auth\Source
      * @return void
      * @deprecated will be removed in a future version
      */
-    private function startSSO1(Configuration $idpMetadata, array $state)
+    private function startSSO1(Configuration $idpMetadata, array $state): void
     {
         $idpEntityId = $idpMetadata->getString('entityid');
 
@@ -517,7 +515,7 @@ class SP extends \SimpleSAML\Auth\Source
      * @param array $state  The state array for the current authentication.
      * @return void
      */
-    private function startSSO2(Configuration $idpMetadata, array $state)
+    private function startSSO2(Configuration $idpMetadata, array $state): void
     {
         if (isset($state['saml:ProxyCount']) && $state['saml:ProxyCount'] < 0) {
             Auth\State::throwException(
@@ -563,7 +561,6 @@ class SP extends \SimpleSAML\Auth\Source
         if (isset($state['saml:Audience'])) {
             $ar->setAudiences($state['saml:Audience']);
         }
-
         if (isset($state['ForceAuthn'])) {
             $ar->setForceAuthn((bool) $state['ForceAuthn']);
         }
@@ -664,9 +661,19 @@ class SP extends \SimpleSAML\Auth\Source
 
         $ar->setRequesterID($requesterID);
 
-        if (isset($state['saml:Extensions'])) {
+        // If the downstream SP has set extensions then use them.
+        // Otherwise use extensions that might be defined in the local SP (only makes sense in a proxy scenario)
+        if (isset($state['saml:Extensions']) && count($state['saml:Extensions']) > 0) {
             $ar->setExtensions($state['saml:Extensions']);
+        } else if ($this->metadata->getArray('saml:Extensions', null) !== null) {
+            $ar->setExtensions($this->metadata->getArray('saml:Extensions'));
         }
+
+        $providerName = $this->metadata->getString("ProviderName", null);
+        if ($providerName !== null) {
+            $ar->setProviderName($providerName);
+        }
+
 
         // save IdP entity ID as part of the state
         $state['ExpectedIssuer'] = $idpMetadata->getString('entityid');
@@ -758,7 +765,7 @@ class SP extends \SimpleSAML\Auth\Source
      * @param array $state  The state array.
      * @return void
      */
-    private function startDisco(array $state)
+    private function startDisco(array $state): void
     {
         $id = Auth\State::saveState($state, 'saml:sp:sso');
 
@@ -859,6 +866,7 @@ class SP extends \SimpleSAML\Auth\Source
     {
         $session = Session::getSessionFromRequest();
         $data = $session->getAuthState($this->authId);
+        $data = $session->getAuthState($this->authId);
         if ($data === null) {
             throw new Error\NoState();
         }
@@ -882,7 +890,6 @@ class SP extends \SimpleSAML\Auth\Source
             assert(false);
         }
 
-
         // GTIS  Changed this if block to avoid logging out before authenticating
         //    with a new IdP
         if (sizeof($IDPList) > 0 &&
@@ -901,6 +908,7 @@ class SP extends \SimpleSAML\Auth\Source
             $state['LoginCompletedHandler'] = array(SP::class, 'reauthPostLogin');
             $this->authenticate($state);
         }
+        // End GTIS
     }
 
 

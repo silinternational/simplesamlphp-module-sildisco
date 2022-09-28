@@ -5,11 +5,13 @@
  * Copied from the built-in simplesamlphp module modules/saml/lib/IdP/SAML2.php with code inserted.
  *  See comment below about GTIS.
  *
- * 2020-04-20 -- Merged with simplesamlphp 1.18.6, lines marked with GTIS are modified
+ * 2022-09-26 -- Merged with simplesamlphp 1.19.6, lines marked with GTIS are modified
  */
+declare(strict_types=1);
 
 namespace SimpleSAML\Module\sildisco\IdP; // GTIS
 
+use Exception;
 use DOMNodeList;
 use RobRichards\XMLSecLibs\XMLSecurityKey;
 use SAML2\Assertion;
@@ -21,6 +23,7 @@ use SAML2\EncryptedAssertion;
 use SAML2\HTTPRedirect;
 use SAML2\LogoutRequest;
 use SAML2\LogoutResponse;
+use SAML2\Response;
 use SAML2\SOAP;
 use SAML2\XML\ds\X509Certificate;
 use SAML2\XML\ds\X509Data;
@@ -133,7 +136,7 @@ class SAML2
      * @param array $state The error state.
      * @return void
      */
-    public static function handleAuthError(\SimpleSAML\Error\Exception $exception, array $state)
+    public static function handleAuthError(Error\Exception $exception, array $state)
     {
         assert(isset($state['SPMetadata']));
         assert(isset($state['saml:ConsumerURL']));
@@ -202,14 +205,10 @@ class SAML2
     private static function getAssertionConsumerService(
         array $supportedBindings,
         Configuration $spMetadata,
-        $AssertionConsumerServiceURL,
-        $ProtocolBinding,
-        $AssertionConsumerServiceIndex
-    ) {
-        assert(is_string($AssertionConsumerServiceURL) || $AssertionConsumerServiceURL === null);
-        assert(is_string($ProtocolBinding) || $ProtocolBinding === null);
-        assert(is_int($AssertionConsumerServiceIndex) || $AssertionConsumerServiceIndex === null);
-
+        string $AssertionConsumerServiceURL = null,
+        string $ProtocolBinding = null,
+        int $AssertionConsumerServiceIndex = null
+    ): ?array {
         /* We want to pick the best matching endpoint in the case where for example
          * only the ProtocolBinding is given. We therefore pick endpoints with the
          * following priority:
@@ -364,7 +363,12 @@ class SAML2
                 'SAML2.0 - IdP.SSOService: IdP initiated authentication: ' . var_export($spEntityId, true)
             );
         } else {
-            $binding = Binding::getCurrentBinding();
+            try {
+                $binding = Binding::getCurrentBinding();
+            } catch (Exception $e) {
+                header($_SERVER["SERVER_PROTOCOL"]." 405 Method Not Allowed", true, 405);
+                exit;
+            }
             $request = $binding->receive();
 
             if (!($request instanceof AuthnRequest)) {
@@ -373,12 +377,14 @@ class SAML2
                 );
             }
 
+            /** @psalm-var null|string|\SAML2\XML\saml\Issuer $issuer   Remove in SSP 2.0 */
             $issuer = $request->getIssuer();
             if ($issuer === null) {
                 throw new Error\BadRequest(
                     'Received message on authentication request endpoint without issuer.'
                 );
             } elseif ($issuer instanceof Issuer) {
+                /** @psalm-var string|null $spEntityId */
                 $spEntityId = $issuer->getValue();
                 if ($spEntityId === null) {
                     /* Without an issuer we have no way to respond to the message. */
@@ -444,7 +450,7 @@ class SAML2
             $consumerIndex
         );
         if ($acsEndpoint === null) {
-            throw new \Exception('Unable to use any of the ACS endpoints found for SP \'' . $spEntityId . '\'');
+            throw new Exception('Unable to use any of the ACS endpoints found for SP \'' . $spEntityId . '\'');
         }
 
         $IDPList = array_unique(array_merge($IDPList, $spMetadata->getArrayizeString('IDPList', [])));
@@ -472,6 +478,7 @@ class SAML2
             Utils\HTTP::getSelfURLNoQuery(),
             $sessionLostParams
         );
+
 
         /*
           * Added by GTIS.
@@ -525,8 +532,6 @@ class SAML2
         /*
          *  End of GTIS addition
          */
-
-
 
         $state = [
             'Responder' => ['\SimpleSAML\Module\saml\IdP\SAML2', 'sendResponse'],
@@ -669,11 +674,13 @@ class SAML2
         $binding = Binding::getCurrentBinding();
         $message = $binding->receive();
 
+        /** @psalm-var null|string|\SAML2\XML\saml\Issuer  Remove in SSP 2.0 */
         $issuer = $message->getIssuer();
         if ($issuer === null) {
             /* Without an issuer we have no way to respond to the message. */
             throw new Error\BadRequest('Received message on logout endpoint without issuer.');
         } elseif ($issuer instanceof Issuer) {
+            /** @psalm-var string|null $spEntityId */
             $spEntityId = $issuer->getValue();
             if ($spEntityId === null) {
                 /* Without an issuer we have no way to respond to the message. */
@@ -793,7 +800,7 @@ class SAML2
         $metadata = MetaDataStorageHandler::getMetadataHandler();
         try {
             return $metadata->getMetaDataConfig($association['saml:entityID'], 'saml20-sp-remote');
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             return Configuration::loadFromArray([], 'Unknown SAML 2 entity.');
         }
     }
@@ -1012,8 +1019,7 @@ class SAML2
         Configuration $idpMetadata,
         Configuration $spMetadata,
         array &$state
-    ) {
-
+    ): ?string {
         $attribute = $spMetadata->getString('simplesaml.nameidattribute', null);
         if ($attribute === null) {
             $attribute = $idpMetadata->getString('simplesaml.nameidattribute', null);
@@ -1064,7 +1070,7 @@ class SAML2
         Configuration $idpMetadata,
         Configuration $spMetadata,
         array $attributes
-    ) {
+    ): array {
         $base64Attributes = $spMetadata->getBoolean('base64attributes', null);
         if ($base64Attributes === null) {
             $base64Attributes = $idpMetadata->getBoolean('base64attributes', false);
@@ -1103,6 +1109,7 @@ class SAML2
 
                 $attrval = $value;
                 if ($value instanceof DOMNodeList) {
+                    /** @psalm-suppress PossiblyNullPropertyFetch */
                     $attrval = new AttributeValue($value->item(0)->parentNode);
                 }
 
@@ -1143,7 +1150,7 @@ class SAML2
     private static function getAttributeNameFormat(
         Configuration $idpMetadata,
         Configuration $spMetadata
-    ) {
+    ): string {
         // try SP metadata first
         $attributeNameFormat = $spMetadata->getString('attributes.NameFormat', null);
         if ($attributeNameFormat !== null) {
@@ -1184,7 +1191,7 @@ class SAML2
         Configuration $idpMetadata,
         Configuration $spMetadata,
         array &$state
-    ) {
+    ): Assertion {
         assert(isset($state['Attributes']));
         assert(isset($state['saml:ConsumerURL']));
 
@@ -1206,7 +1213,9 @@ class SAML2
         $issuer->setValue($idpMetadata->getString('entityid'));
         $issuer->setFormat(Constants::NAMEID_ENTITY);
         $a->setIssuer($issuer);
-        $a->setValidAudiences([$spMetadata->getString('entityid')]);
+
+        $audience = array_merge([$spMetadata->getString('entityid')], $spMetadata->getArray('audience', []));
+        $a->setValidAudiences($audience);
 
         $a->setNotBefore($now - 30);
 
@@ -1393,7 +1402,12 @@ class SAML2
 
         $sharedKey = $spMetadata->getString('sharedkey', null);
         if ($sharedKey !== null) {
-            $key = new XMLSecurityKey(XMLSecurityKey::AES128_CBC);
+            $algo = $spMetadata->getString('sharedkey_algorithm', null);
+            if ($algo === null) {
+                $algo = $idpMetadata->getString('sharedkey_algorithm');
+            }
+
+            $key = new XMLSecurityKey($algo);
             $key->loadKey($sharedKey);
         } else {
             $keys = $spMetadata->getPublicKeys('encryption', true);
@@ -1441,8 +1455,8 @@ class SAML2
         Configuration $idpMetadata,
         Configuration $spMetadata,
         array $association,
-        $relayState
-    ) {
+        string $relayState = null
+    ): LogoutRequest {
         $lr = \SimpleSAML\Module\saml\Message::buildLogoutRequest($idpMetadata, $spMetadata);
         $lr->setRelayState($relayState);
         $lr->setSessionIndex($association['saml:SessionIndex']);
@@ -1478,14 +1492,14 @@ class SAML2
     private static function buildResponse(
         Configuration $idpMetadata,
         Configuration $spMetadata,
-        $consumerURL
-    ) {
+        string $consumerURL
+    ): Response {
         $signResponse = $spMetadata->getBoolean('saml20.sign.response', null);
         if ($signResponse === null) {
             $signResponse = $idpMetadata->getBoolean('saml20.sign.response', true);
         }
 
-        $r = new \SAML2\Response();
+        $r = new Response();
         $issuer = new Issuer();
         $issuer->setValue($idpMetadata->getString('entityid'));
         $issuer->setFormat(Constants::NAMEID_ENTITY);

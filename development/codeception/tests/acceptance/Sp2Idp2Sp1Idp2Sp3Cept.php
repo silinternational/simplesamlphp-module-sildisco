@@ -1,8 +1,8 @@
 <?php 
 
 $waitTime = 10;
-$idp1Id =  '//*[@id="http://ssp-hub-idp.local:8085"]';
-$idp2Id =  '//*[@id="http://ssp-hub-idp2.local:8086"]';
+$idp1Id =  '//*[@id="http://ssp-idp1.local:8085"]';
+$idp2Id =  '//*[@id="http://ssp-idp2.local:8086"]';
 
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Ensure I can login to Sp2 through Idp2, get discovery page for Sp1, and must login to Sp3 through Idp1.');
@@ -44,7 +44,7 @@ $I->waitForText("Enter your username and password", $waitTime);
 $I->fillField('password', 'a');
 $I->click('//*[@id="submit"]/td[3]/button');
 
-$I->waitForText("http://ssp-hub-sp3.local", $waitTime);
+$I->waitForText("http://ssp-sp3.local", $waitTime);
 
 // Logout of both idp's
 $I->click('Logout');
