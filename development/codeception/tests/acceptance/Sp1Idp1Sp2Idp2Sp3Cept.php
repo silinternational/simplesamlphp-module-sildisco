@@ -6,10 +6,10 @@ $idp1Id =  '//*[@id="http://ssp-idp1.local:8085"]';
 $spHomePath = '/module.php/core/frontpage_welcome.php';
 
 $I = new AcceptanceTester($scenario);
-$I->wantTo('Ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 and am already logged in for Sp3.');
+$I->wantTo('Wait for containers and then ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 and am already logged in for Sp3.');
 
 // Give a little extra time for containers to come up.
-$I->wait(20);
+$I->wait(30);
 
 // Start at sp1
 $I->amOnUrl('http://sp1' . $spHomePath);
