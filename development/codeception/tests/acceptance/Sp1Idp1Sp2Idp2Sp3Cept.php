@@ -8,10 +8,7 @@ $spHomePath = '/module.php/core/frontpage_welcome.php';
 $I = new AcceptanceTester($scenario);
 $I->wantTo('Wait for containers and then ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 and am already logged in for Sp3.');
 
-// Give a little extra time for containers to come up.
-$I->wait(30);
-
-// Start at sp1
+// Start at sp1.  If this fails, maybe the containers didn't have enough time to spin up.
 $I->amOnUrl('http://sp1' . $spHomePath);
 $I->waitForText('Congratulations', $waitTime);
 

@@ -11,9 +11,12 @@ clean:
 unittests:
 	docker-compose run --rm unittest /data/run-tests.sh
 
-functionaltests:
+functionaltests: restartphantomjs
 	docker-compose up -d hub4tests sp1 sp2 sp3 idp1 idp2 idp3
-	docker-compose run --rm browsertest bash -c "/data/codecept build && /data/codecept run"
+	docker-compose run --rm browsertest bash -c "whenavail hub4tests 80 60 /data/codecept build && /data/codecept run"
+
+restartphantomjs:
+	docker-compose restart phantomjs
 
 composer:
 	docker-compose run --rm composer bash -c "/data/update-composer-deps.sh"
