@@ -4,8 +4,8 @@
             "name": "aws/aws-sdk-php",
             "direct-dependency": true,
             "homepage": "http://aws.amazon.com/sdkforphp",
-            "source": "https://github.com/aws/aws-sdk-php/tree/3.236.1",
-            "version": "3.236.1",
+            "source": "https://github.com/aws/aws-sdk-php/tree/3.237.0",
+            "version": "3.237.0",
             "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
             "abandoned": false
         },
@@ -23,7 +23,7 @@
             "direct-dependency": true,
             "homepage": null,
             "source": "https://github.com/Roave/SecurityAdvisories/tree/latest",
-            "version": "dev-master d95ffb9",
+            "version": "dev-master 3876a8d",
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
             "abandoned": false
         },
@@ -31,8 +31,8 @@
             "name": "silinternational/php-env",
             "direct-dependency": true,
             "homepage": null,
-            "source": "https://github.com/silinternational/php-env/tree/master",
-            "version": "2.1.1",
+            "source": "https://github.com/silinternational/php-env/tree/3.1.0",
+            "version": "3.1.0",
             "description": "Simple PHP library for getting (or requiring) environment variables, designed to handle true, false, and null more intelligently. If desired, an environment variable's value can be split into an array automatically.",
             "abandoned": false
         },
