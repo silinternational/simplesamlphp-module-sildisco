@@ -4,4 +4,4 @@
   
 - name: functional_tests
   service: browsertest
-  command: bash -c "./codecept run"
+  command: bash -c "whenavail hub4tests 80 60 ./codecept run"
