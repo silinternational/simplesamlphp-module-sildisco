@@ -4,8 +4,8 @@
             "name": "aws/aws-sdk-php",
             "direct-dependency": true,
             "homepage": "http://aws.amazon.com/sdkforphp",
-            "source": "https://github.com/aws/aws-sdk-php/tree/3.237.0",
-            "version": "3.237.0",
+            "source": "https://github.com/aws/aws-sdk-php/tree/3.263.14",
+            "version": "3.263.14",
             "description": "AWS SDK for PHP - Use Amazon Web Services in your PHP project",
             "abandoned": false
         },
@@ -13,8 +13,8 @@
             "name": "phpunit/phpunit",
             "direct-dependency": true,
             "homepage": "https://phpunit.de/",
-            "source": "https://github.com/sebastianbergmann/phpunit/tree/8.5.30",
-            "version": "8.5.30",
+            "source": "https://github.com/sebastianbergmann/phpunit/tree/8.5.33",
+            "version": "8.5.33",
             "description": "The PHP Unit Testing framework.",
             "abandoned": false
         },
@@ -23,7 +23,7 @@
             "direct-dependency": true,
             "homepage": null,
             "source": "https://github.com/Roave/SecurityAdvisories/tree/latest",
-            "version": "dev-master 3876a8d",
+            "version": "dev-master 20f03d2",
             "description": "Prevents installation of composer packages with known security vulnerabilities: no API, simply require it",
             "abandoned": false
         },
@@ -49,8 +49,8 @@
             "name": "simplesamlphp/composer-module-installer",
             "direct-dependency": true,
             "homepage": null,
-            "source": "https://github.com/simplesamlphp/composer-module-installer/tree/v1.2.0",
-            "version": "v1.2.0",
+            "source": "https://github.com/simplesamlphp/composer-module-installer/tree/v1.3.4",
+            "version": "v1.3.4",
             "description": "A Composer plugin that allows installing SimpleSAMLphp modules through Composer.",
             "abandoned": false
         },
@@ -59,7 +59,7 @@
             "direct-dependency": true,
             "homepage": "http://simplesamlphp.org",
             "source": "https://github.com/simplesamlphp/simplesamlphp",
-            "version": "v1.19.5",
+            "version": "v1.18.9",
             "description": "A PHP implementation of a SAML 2.0 service provider and identity provider, also compatible with Shibboleth 1.3 and 2.0.",
             "abandoned": false
         }
