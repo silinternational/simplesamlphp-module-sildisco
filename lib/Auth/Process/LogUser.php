@@ -17,6 +17,12 @@ use Aws\DynamoDb\Marshaler;
  */
 class LogUser extends \SimpleSAML\Auth\ProcessingFilter
 {
+
+    const AWS_ACCESS_KEY_ID_ENV = "DYNAMO_ACCESS_KEY_ID";
+
+    const AWS_SECRET_ACCESS_KEY_ENV = "DYNAMO_SECRET_ACCESS_KEY";
+
+
     const IDP_KEY = "saml:sp:IdP"; // the key that points to the entity id in the state
 
     // the metadata key for the IDP's Namespace code (i.e. short name)
@@ -65,6 +71,17 @@ class LogUser extends \SimpleSAML\Auth\ProcessingFilter
             return;
         }
 
+        $awsKey = getenv(self::AWS_ACCESS_KEY_ID_ENV);
+        if (! $awsKey ) {
+            \SimpleSAML\Logger::error(self::AWS_ACCESS_KEY_ID_ENV . " environment variable is required for LogUser.");
+            return;
+        }
+        $awsSecret = getenv(self::AWS_SECRET_ACCESS_KEY_ENV);
+        if (! $awsSecret ) {
+            \SimpleSAML\Logger::error(self::AWS_SECRET_ACCESS_KEY_ENV . " environment variable is required for LogUser.");
+            return;
+        }
+
         assert(is_array($state));
 
         // Get the SP's entity id
@@ -76,6 +93,10 @@ class LogUser extends \SimpleSAML\Auth\ProcessingFilter
         $sdkConfig = [
             'region' => $this->dynamoRegion,
             'version' => 'latest',
+            'credentials' => [
+                'key'    => $awsKey,
+                'secret' => $awsSecret,
+            ],
         ];
 
         if (!empty($this->dynamoEndpoint)) {
