@@ -1,7 +1,0 @@
-- name: unit_tests
-  service: unittest
-  command: bash -c "chmod a+x /data/run-tests.sh && /data/run-tests.sh"
-  
-- name: functional_tests
-  service: browsertest
-  command: bash -c "whenavail hub4tests 80 60 ./codecept run"
