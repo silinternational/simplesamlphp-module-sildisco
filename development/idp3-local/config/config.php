@@ -28,7 +28,6 @@ $SESSION_COOKIE_LIFETIME = (int)(Env::get('SESSION_COOKIE_LIFETIME', 0));
 $SESSION_REMEMBERME_LIFETIME = (int)(Env::get('SESSION_REMEMBERME_LIFETIME', (14 * 86400))); // 14 days
 $SECURE_COOKIE = Env::get('SECURE_COOKIE', true);
 $THEME_USE = Env::get('THEME_USE', 'default');
-$IDPDISCO_LAYOUT = Env::get('IDPDISCO_LAYOUT', 'dropdown'); // Options: [links,dropdown]
 $MEMCACHE_STORE_EXPIRES = (int)(Env::get('MEMCACHE_STORE_EXPIRES', (36 * 60 * 60))); // 36 hours.
 $SAML20_IDP_ENABLE = Env::get('SAML20_IDP_ENABLE', true);
 $GOOGLE_ENABLE = Env::get('GOOGLE_ENABLE', false);
@@ -476,7 +475,7 @@ $config = [
      * Options: [links,dropdown]
      *
      */
-    'idpdisco.layout' => $IDPDISCO_LAYOUT,
+    'idpdisco.layout' => 'links',
 
     /*
      * Whether simpleSAMLphp should sign the response or the assertion in SAML 1.1 authentication
@@ -521,7 +520,7 @@ $config = [
            'urn:oid:0.9.2342.19200300.100.1.3' => 'test_admin@idp3.org',
            'uid' => '333366',
         ],
-        
+
         // Use the uid value to populate the nameid entry
         60 => [
             'class' => 'saml:AttributeNameID',
