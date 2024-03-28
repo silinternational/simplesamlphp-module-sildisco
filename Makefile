@@ -8,6 +8,8 @@ clean:
 	docker-compose kill
 	docker-compose rm -f
 
+test: unittests functionaltests
+
 unittests:
 	docker-compose run --rm unittest /data/run-tests.sh
 

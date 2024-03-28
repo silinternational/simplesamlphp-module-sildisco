@@ -37,7 +37,6 @@ services:
       - ADMIN_PASS=1234qwer
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
       - HUB_MODE=true
       - IDP_NAME=Hub4Tests
@@ -142,7 +141,6 @@ services:
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false
 
 
   sp2:
@@ -165,7 +163,6 @@ services:
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false
 
 
   sp3:
@@ -188,7 +185,6 @@ services:
       - SECURE_COOKIE=false
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false
 
 
   browsertest:
@@ -234,6 +230,5 @@ services:
       - ADMIN_PASS=1234qwer
       - SECRET_SALT=h57fjemb&d$n^nsJFGNjweJ
       - SECURE_COOKIE=false
-      - ADMIN_PROTECT_INDEX_PAGE=false
       - HUB_MODE=true
       - IDP_NAME=UnitTest
