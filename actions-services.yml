@@ -193,29 +193,8 @@ services:
 
   browsertest:
     build: ./development/browser_test/
-    volumes:
-      - ./development/codeception.yml:/data/codeception.yml
-      - ./development/codeception/tests:/data/tests
-    depends_on:
-      - phantomjs
-
-  phantomjs:
-    image: davert/phantomjs-env:latest
-    ports:
-      - "4444"
-    depends_on:
-      - hub4tests
-      - idp1
-      - idp2
-      - idp3
-      - sp1
-      - sp2
-      - sp3
-    entrypoint:
-      - phantomjs
-      - --webdriver=4444
-      - --ignore-ssl-errors=true
-      - --load-images=false
+    depends_on: [ 'hub4tests', 'sp1', 'sp2', 'sp3', 'idp1', 'idp2', 'idp3', 'test-browser' ]
+    command: ["whenavail", "hub4tests", "80", "60", "vendor/bin/behat"]
 
   unittest:
     image: silintl/ssp-base:develop

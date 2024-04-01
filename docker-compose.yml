@@ -5,10 +5,10 @@ services:
     volumes:
       - ./development/run.sh:/data/run.sh
 
-      # The slightly modified file that hides non enabled idps      
+      # The slightly modified file that hides non enabled idps
       - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
-      # Utilize custom certs 
+      # Utilize custom certs
       - ./development/hub/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
@@ -32,7 +32,7 @@ services:
       # Configure the debugger
       - ./development/hub/run-debug.sh:/data/run-debug.sh
 
-    command: /data/run-debug.sh 
+    command: /data/run-debug.sh
     ports:
       - "80:80"
     env_file:
@@ -114,7 +114,7 @@ services:
     image: silintl/ssp-base:develop
     volumes:
       # Utilize custom certs
-      - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert  
+      - ./development/idp3-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
       - ./development/idp3-local/config/authsources.php:/data/vendor/simplesamlphp/simplesamlphp/config/authsources.php
@@ -212,17 +212,17 @@ services:
       - SHOW_SAML_ERRORS=true
       - SAML20_IDP_ENABLE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
-      
+
   hub4tests:
     image: silintl/ssp-base:develop
     volumes:
 
       - ./development/run.sh:/data/run.sh
-      
+
       # The slightly modified file that hides non enabled idps
       - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
-      # Utilize custom certs 
+      # Utilize custom certs
       - ./development/hub4tests/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
 
       # Utilize custom configs
@@ -245,7 +245,7 @@ services:
 
       # Configure the debugger
       - ./development/hub4tests/run-debug.sh:/data/run-debug.sh
-    command: /data/run-debug.sh 
+    command: /data/run-debug.sh
     ports:
       - "8090:80"
     env_file:
@@ -257,7 +257,7 @@ services:
       - SECURE_COOKIE=false
       - ADMIN_PROTECT_INDEX_PAGE=false
       - SHOW_SAML_ERRORS=true
-      - HUB_MODE=true 
+      - HUB_MODE=true
       - IDP_NAME=Hub
 
 
@@ -265,28 +265,20 @@ services:
     build: ./development/browser_test/
     volumes:
       - ./development/update-composer-deps.sh:/data/update-composer-deps.sh
-      - ./development/codeception.yml:/data/codeception.yml
-      - ./development/codeception/tests:/data/tests
-      - ./development/browser_test/composer.json:/data/composer.json
-      - ./development/browser_test/composer.lock:/data/composer.lock
-      - ./testOutput/:/data/tests/_output/
-    depends_on:
-      - phantomjs   
+      - ./development/browser_test:/data
+      - ./features/:/data/features/
     ports:
-      - "8091:80"  
+      - "8091:80"
     env_file:
       - local.env
+    depends_on: [ 'hub4tests', 'sp1', 'sp2', 'sp3', 'idp1', 'idp2', 'idp3', 'test-browser' ]
+    command: ["whenavail", "hub4tests", "80", "60", "vendor/bin/behat"]
 
-  phantomjs:
-    image: davert/phantomjs-env:latest
-    ports:
-      - "4444"
-    entrypoint:
-      - phantomjs
-      - --webdriver=4444
-      - --ignore-ssl-errors=true
-      - --load-images=false   
-      
+  test-browser:
+    image: justinribeiro/chrome-headless:stable
+    cap_add:
+      - SYS_ADMIN
+
   unittest:
     image: silintl/ssp-base:develop
     volumes:
@@ -299,7 +291,7 @@ services:
       - ./www:/data/vendor/simplesamlphp/simplesamlphp/modules/sildisco/www
       - ./dev-tests:/data/dev-tests
 
-    command: /data/run-debug.sh 
+    command: /data/run-debug.sh
     ports:
       - "8099:80"
     env_file:
