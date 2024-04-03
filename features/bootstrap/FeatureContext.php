@@ -20,7 +20,7 @@ class FeatureContext extends MinkContext
 
     public function __construct()
     {
-        $driver = new ChromeDriver('http://test-browser:9222', null, 'http://ssp-sp1');
+        $driver = new ChromeDriver('http://chrome:9222', null, 'http://ssp-sp1');
         $this->session = new Session($driver);
         $mink = new Mink(['default' => $this->session]);
         $mink->setDefaultSessionName('default');

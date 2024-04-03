@@ -271,10 +271,10 @@ services:
       - "8091:80"
     env_file:
       - local.env
-    depends_on: [ 'hub4tests', 'sp1', 'sp2', 'sp3', 'idp1', 'idp2', 'idp3', 'test-browser' ]
+    depends_on: [ 'hub4tests', 'sp1', 'sp2', 'sp3', 'idp1', 'idp2', 'idp3', 'chrome' ]
     command: ["whenavail", "hub4tests", "80", "60", "vendor/bin/behat"]
 
-  test-browser:
+  chrome:
     image: justinribeiro/chrome-headless:stable
     cap_add:
       - SYS_ADMIN
