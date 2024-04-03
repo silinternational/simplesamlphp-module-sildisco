@@ -193,6 +193,8 @@ services:
 
   browsertest:
     build: ./development/browser_test/
+    volumes:
+      - ./features/:/data/features/
     depends_on: [ 'hub4tests', 'sp1', 'sp2', 'sp3', 'idp1', 'idp2', 'idp3', 'chrome' ]
     command: ["whenavail", "hub4tests", "80", "60", "vendor/bin/behat"]
 
