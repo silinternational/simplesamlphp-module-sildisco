@@ -6,7 +6,6 @@ ENV REFRESHED_AT 2022-01-03
 RUN mkdir -p /data
 WORKDIR /data
 
-COPY ./composer.json /data/
-COPY ./composer.lock /data/
+COPY . .
 
 RUN composer install --prefer-dist --no-interaction --optimize-autoloader
