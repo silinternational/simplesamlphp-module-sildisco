@@ -102,9 +102,7 @@ class IdPDisco extends \SimpleSAML\XHTML\IdPDisco
         // Get the SP's name
         $spEntries = Metadata::getSpMetadataEntries($this->getMetadataPath());
 
-        $templateFileName = 'selectidp-' . $this->config->getString('idpdisco.layout', 'links') . '.php';
-
-        $t = new \SimpleSAML\XHTML\Template($this->config, $templateFileName, 'disco');
+        $t = new \SimpleSAML\XHTML\Template($this->config, 'selectidp-links.php', 'disco');
 
         $spName = null;
 
