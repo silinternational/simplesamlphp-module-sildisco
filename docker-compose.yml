@@ -264,7 +264,6 @@ services:
   browsertest:
     build: ./development/browser_test/
     volumes:
-      - ./development/update-composer-deps.sh:/data/update-composer-deps.sh
       - ./development/browser_test:/data
       - ./features/:/data/features/
     ports:
