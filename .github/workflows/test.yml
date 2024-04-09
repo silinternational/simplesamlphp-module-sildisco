@@ -13,4 +13,4 @@ jobs:
       - name: Unit tests
         run: docker-compose -f actions-services.yml run --rm unittest ./run-tests.sh
       - name: Functional tests
-        run: docker-compose -f actions-services.yml run --rm browsertest bash -c "whenavail hub4tests 80 60 ./codecept run"
+        run: docker-compose -f actions-services.yml run browsertest
