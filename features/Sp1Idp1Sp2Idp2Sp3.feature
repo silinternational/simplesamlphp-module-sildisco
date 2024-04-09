@@ -9,6 +9,7 @@ Feature: Ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 
     Then I should see "test_admin@idp1.org"
 
   Scenario: After IDP1 login, go to SP2 through IDP2
+    Given I have authenticated with IDP1 for SP1
     When I go to the SP2 login page
       And I should see "Enter your username and password"
       And I login using password "b"
@@ -23,9 +24,11 @@ Feature: Ensure I can login to Sp1 through Idp1, must login to Sp2 through Idp2 
     Then I should see "test_admin@idp1.org"
 
   Scenario: Logout of IDP1
+    Given I have authenticated with IDP1 for SP1
     When I log out of IDP1
     Then I should see "You have been logged out."
 
   Scenario: Logout of IDP2
+    Given I have authenticated with IDP2 for SP2
     When I log out of IDP2
     Then I should see "You have been logged out."

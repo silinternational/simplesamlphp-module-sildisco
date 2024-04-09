@@ -130,7 +130,6 @@ class FeatureContext extends MinkContext
     {
         $this->iGoToTheSpLoginPage('SP3');
         $this->iClickOnTheTile('IdP 1');
-        $this->logInAs('admin', 'a');
         $this->clickLink('Logout');
         $this->assertPageContainsText('You have been logged out.');
     }
@@ -141,7 +140,6 @@ class FeatureContext extends MinkContext
     public function iLogOutOfIdp2()
     {
         $this->iGoToTheSpLoginPage('SP2');
-        $this->logInAs('admin', 'b');
         $this->clickLink('Logout');
         $this->assertPageContainsText('You have been logged out.');
     }
