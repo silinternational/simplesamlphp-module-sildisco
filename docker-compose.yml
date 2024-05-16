@@ -56,7 +56,7 @@ services:
     image: silintl/ssp-base:develop
     volumes:
       # Revert to standard SSOService.php instead of using sildisco's
-      - ./development/idp-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
+      - ./development/SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
       - ./development/idp-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
@@ -85,7 +85,7 @@ services:
     image: silintl/ssp-base:develop
     volumes:
       # Revert to standard SSOService.php instead of using sildisco's
-      - ./development/idp2-local/www_saml2_idp_SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
+      - ./development/SSOService.php:/data/vendor/simplesamlphp/simplesamlphp/www/saml2/idp/SSOService.php
 
       # Utilize custom certs
       - ./development/idp2-local/cert:/data/vendor/simplesamlphp/simplesamlphp/cert
