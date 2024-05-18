@@ -3,8 +3,6 @@ services:
   hub:
     image: silintl/ssp-base:develop
     volumes:
-      - ./development/run.sh:/data/run.sh
-
       # The slightly modified file that hides non enabled idps
       - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
@@ -65,7 +63,6 @@ services:
       # Utilize custom metadata
       - ./development/idp-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
-    command: /data/run.sh
     ports:
       - "8085:80"
     env_file:
@@ -91,7 +88,6 @@ services:
       # Utilize custom metadata
       - ./development/idp2-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp2-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
-    command: /data/run.sh
     ports:
       - "8086:80"
     env_file:
@@ -117,7 +113,6 @@ services:
       # Utilize custom metadata
       - ./development/idp3-local/metadata/saml20-idp-hosted.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-idp-hosted.php
       - ./development/idp3-local/metadata/saml20-sp-remote.php:/data/vendor/simplesamlphp/simplesamlphp/metadata/saml20-sp-remote.php
-    command: /data/run.sh
     ports:
       - "8087:80"
     env_file:
@@ -210,9 +205,6 @@ services:
   hub4tests:
     image: silintl/ssp-base:develop
     volumes:
-
-      - ./development/run.sh:/data/run.sh
-
       # The slightly modified file that hides non enabled idps
       - ./development/selectidp-links.php:/data/vendor/simplesamlphp/simplesamlphp/templates/selectidp-links.php
 
